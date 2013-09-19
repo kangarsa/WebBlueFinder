@@ -1,8 +1,12 @@
 dataSource {
     pooled = true
-    driverClassName = "org.h2.Driver"
-    username = "sa"
-    password = ""
+//    driverClassName = "org.h2.Driver"
+	driverClassName = "com.mysql.jdbc.Driver"
+    username = "webbf"
+    password = "webbfpass"
+//	dialect = "org.hibernate.dialect.H2Dialect"
+	dialect = "org.hibernate.dialect.MySQL5InnoDBDialect"
+	logSql = true
 }
 hibernate {
     cache.use_second_level_cache = true
@@ -14,19 +18,22 @@ environments {
     development {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
+            // url = "jdbc:h2:mem:WBFdevDbs;MVCC=TRUE;LOCK_TIMEOUT=10000"
+            url = "jdbc:mysql://localhost/WBFdevDb"
         }
     }
     test {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
+            // url = "jdbc:h2:mem:WBFtestDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
+            url = "jdbc:mysql://localhost/WBFtestDb"
         }
     }
     production {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
+            // url = "jdbc:h2:WBFprodDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
+            url = "jdbc:mysql://localhost/WBFprodDb"
             pooled = true
             properties {
                maxActive = -1
