@@ -1,6 +1,6 @@
 package webbluefinder
 
-class BFWrapper extends IProcess {
+class BFWrapper extends AbstractProcess {
 
     static constraints = {
     }

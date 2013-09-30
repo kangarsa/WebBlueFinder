@@ -1,6 +1,7 @@
 package webbluefinder
 
-abstract class IProcess {
+abstract class AbstractProcess {
+	String state;
 
     static constraints = {
     }

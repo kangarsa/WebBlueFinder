@@ -1,6 +1,6 @@
 package webbluefinder
 
-class DBRetrieverWrapper extends IProcess {
+class DBRetrieverWrapper extends AbstractProcess {
 
     static constraints = {
     }
