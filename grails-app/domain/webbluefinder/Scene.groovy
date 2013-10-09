@@ -5,10 +5,14 @@ class Scene {
     String toType
     String property
 	boolean queryable
+	AbstractProcess process;
 
     static constraints = {
-		queryable default: false
-		
+	    fromType blank:false
+	    toType blank:false
+	    property blank:false
+		queryable default:false
+		process nullable: true
     }
 	
 }
