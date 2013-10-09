@@ -4,4 +4,5 @@ class BFWrapper extends AbstractProcess {
 
     static constraints = {
     }
+	
 }

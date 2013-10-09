@@ -1,8 +1,6 @@
 package webbluefinder
 
 class SceneController {
-
-    def index() { }
-	
+    static scaffold = true
 	
 }
