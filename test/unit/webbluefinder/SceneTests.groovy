@@ -41,7 +41,7 @@ class SceneTests {
 		assertFalse s.isCanceled()
 		assert s.getErrors() == null
 		assert s.getPercent() == 0
-		assert s.getProcessStep() == null
+		assert s.getProcessName() == null
 	}
 	
 	void testStart() {
@@ -60,14 +60,14 @@ class SceneTests {
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
 		assert s.getPercent() == 16
-		assert s.getProcessStep() == "DBRetrieverWrapper"
+		assert s.getProcessName() == "DBRetrieverWrapper"
 		s.start()
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
 		assert s.getPercent() == 16
-		assert s.getProcessStep() == "DBRetrieverWrapper"
+		assert s.getProcessName() == "DBRetrieverWrapper"
 	}
 	
 	void testNext() {
@@ -86,31 +86,31 @@ class SceneTests {
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
 		assert s.getPercent() == 16
-		assert s.getProcessStep() == "DBRetrieverWrapper"
+		assert s.getProcessName() == "DBRetrieverWrapper"
 		s.next()
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
 		assert s.getPercent() == 50
-		assert s.getProcessStep() == "PIAWrapper"
+		assert s.getProcessName() == "PIAWrapper"
 		s.next()
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
 		assert s.getPercent() == 83
-		assert s.getProcessStep() == "BFWrapper"
+		assert s.getProcessName() == "BFWrapper"
 		s.next()
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
 		assert s.getPercent() == 83
-		assert s.getProcessStep() == "BFWrapper"
+		assert s.getProcessName() == "BFWrapper"
 	}
 	
-	void testGetProcessStep() {
+	void testgetProcessName() {
 		String from = 'Place'
 		String to = 'Person'
 		String property = 'birthPlace'
@@ -121,11 +121,11 @@ class SceneTests {
 		s.setToType(to)
 		s.setProperty(property)
 		s.start()
-		assert s.getProcessStep() == "DBRetrieverWrapper"
+		assert s.getProcessName() == "DBRetrieverWrapper"
 		s.next()
-		assert s.getProcessStep() == "PIAWrapper"
+		assert s.getProcessName() == "PIAWrapper"
 		s.next()
-		assert s.getProcessStep() == "BFWrapper"
+		assert s.getProcessName() == "BFWrapper"
 		
 	}
 	

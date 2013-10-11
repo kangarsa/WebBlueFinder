@@ -41,11 +41,14 @@ class Scene {
 	}
 	
 	def getPercent() {
+		if (process == null) {
+			return 0
+		}
 		return Math.floor((((process.getStep()+1) * processStep) / (processesCount * process.totalSteps()))*100)
 	}
 	
 	def getErrors() {
-		if (process.hasErrors()) {
+		if (process != null) {
 			return process.getErrors()
 		}
 		return null
@@ -87,7 +90,7 @@ class Scene {
 		return processStep
 	}
 	
-	def getProcessStep() {
+	def getProcessName() {
 		if (process == null) {
 			return null
 		}
