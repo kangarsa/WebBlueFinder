@@ -13,6 +13,7 @@ class AbstractProcessControllerTests {
         assert params != null
         // TODO: Populate valid properties like...
         //params["name"] = 'someValidName'
+        params["state"] = 'started'
     }
 
     void testIndex() {
@@ -102,6 +103,7 @@ class AbstractProcessControllerTests {
         // test invalid parameters in update
         params.id = abstractProcess.id
         //TODO: add invalid values to params object
+		params.state = 'continued'
 
         controller.update()
 
