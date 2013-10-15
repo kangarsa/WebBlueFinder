@@ -20,6 +20,7 @@ class SceneController {
     }
 
     def save() {
+		if (!params.processStep) params.processStep = 0
         def sceneInstance = new Scene(params)
         if (!sceneInstance.save(flush: true)) {
             render(view: "create", model: [sceneInstance: sceneInstance])

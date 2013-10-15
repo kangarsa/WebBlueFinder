@@ -24,11 +24,19 @@
 				<thead>
 					<tr>
 					
+						<g:sortableColumn property="error" title="${message(code: 'abstractProcess.error.label', default: 'Error')}" />
+					
+						<g:sortableColumn property="state" title="${message(code: 'abstractProcess.state.label', default: 'State')}" />
+					
 					</tr>
 				</thead>
 				<tbody>
 				<g:each in="${abstractProcessInstanceList}" status="i" var="abstractProcessInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+					
+						<td><g:link action="show" id="${abstractProcessInstance.id}">${fieldValue(bean: abstractProcessInstance, field: "error")}</g:link></td>
+					
+						<td>${fieldValue(bean: abstractProcessInstance, field: "state")}</td>
 					
 					</tr>
 				</g:each>

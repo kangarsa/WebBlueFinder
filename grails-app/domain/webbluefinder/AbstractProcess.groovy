@@ -1,16 +1,15 @@
 package webbluefinder
 
 class AbstractProcess {
-	private state
-	private errors
+	String state
+	String errors
 
     static constraints = {
     }
-	
+		
 	def getName() {
 		return 'AbstractProcess'
-	}
-	
+	}	
 	def isFinalized() {
 		return state == 'finalized'
 	}
@@ -20,11 +19,16 @@ class AbstractProcess {
 	def hasErrors() {
 		return errors != null
 	}
+	def getErrors() {
+		return errors
+	}
 	def getResults() {
 		// subclass responsibility
 	}
 	
-	def totalSteps = 3
+	def totalSteps () {
+		return 3
+	}
 	
 	def getStep() {
 		// 0 = notStarted, 1 = isComputing, 2 = isFinalized

@@ -41,4 +41,12 @@
 	</label>
 	<g:select id="process" name="process.id" from="${webbluefinder.AbstractProcess.list()}" optionKey="id" value="${sceneInstance?.process?.id}" class="many-to-one" noSelection="['null': '']"/>
 </div>
-
+<!-- 
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'processStep', 'error')} required">
+	<label for="processStep">
+		<g:message code="scene.processStep.label" default="Process Step" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="processStep" type="number" value="${sceneInstance.processStep}" required=""/>
+</div>
+ -->

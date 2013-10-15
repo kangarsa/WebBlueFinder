@@ -23,6 +23,24 @@
 			</g:if>
 			<ol class="property-list DBRetrieverWrapper">
 			
+				<g:if test="${DBRetrieverWrapperInstance?.error}">
+				<li class="fieldcontain">
+					<span id="error-label" class="property-label"><g:message code="DBRetrieverWrapper.error.label" default="Error" /></span>
+					
+						<span class="property-value" aria-labelledby="error-label"><g:fieldValue bean="${DBRetrieverWrapperInstance}" field="error"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${DBRetrieverWrapperInstance?.state}">
+				<li class="fieldcontain">
+					<span id="state-label" class="property-label"><g:message code="DBRetrieverWrapper.state.label" default="State" /></span>
+					
+						<span class="property-value" aria-labelledby="state-label"><g:fieldValue bean="${DBRetrieverWrapperInstance}" field="state"/></span>
+					
+				</li>
+				</g:if>
+			
 			</ol>
 			<g:form>
 				<fieldset class="buttons">

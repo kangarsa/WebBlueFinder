@@ -24,11 +24,19 @@
 				<thead>
 					<tr>
 					
+						<g:sortableColumn property="error" title="${message(code: 'PIAWrapper.error.label', default: 'Error')}" />
+					
+						<g:sortableColumn property="state" title="${message(code: 'PIAWrapper.state.label', default: 'State')}" />
+					
 					</tr>
 				</thead>
 				<tbody>
 				<g:each in="${PIAWrapperInstanceList}" status="i" var="PIAWrapperInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+					
+						<td><g:link action="show" id="${PIAWrapperInstance.id}">${fieldValue(bean: PIAWrapperInstance, field: "error")}</g:link></td>
+					
+						<td>${fieldValue(bean: PIAWrapperInstance, field: "state")}</td>
 					
 					</tr>
 				</g:each>

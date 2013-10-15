@@ -15,18 +15,18 @@ class Scene {
 	    toType blank:false
 	    property blank:false
 		queryable default:false
-		process nullable:true
-		processStep nullable:false, default:0
+		process nullable:false
+		processStep range:0..3
     }
 	
 //	def processes = ["DBRetrieverWrapper","PiaWrapper","BFWrapper"]
-	def processesCount = 3
+	def totalProcesses = 3
 	
 	def isComplete() {
 		if(process == null){			
 			return false
 		}
-		return processesCount == processStep && process.isFinalized()
+		return totalProcesses == processStep && process.isFinalized()
 	}
 	
 	def isProcessing() {
@@ -44,7 +44,7 @@ class Scene {
 		if (process == null) {
 			return 0
 		}
-		return Math.floor((((process.getStep()+1) * processStep) / (processesCount * process.totalSteps()))*100)
+		return Math.floor(( ((process.totalSteps() * (processStep-1)) + process.getStep()) / ((totalProcesses * process.totalSteps())-1) )*100)
 	}
 	
 	def getErrors() {
@@ -55,7 +55,11 @@ class Scene {
 	}
 	
 	def executeQuery(from, to, property) {
-		
+		if (!canExecuteQuery()) {
+			return null
+		}
+		def result = Scene.findAllByFromTypeAndToTypeAndProperty(from, to, property)
+		return result
 	}
 	
 	def canExecuteQuery() {
@@ -95,5 +99,9 @@ class Scene {
 			return null
 		}
 		return process.getName()
+	}
+	
+	def cancel() {
+		process == null
 	}
 }

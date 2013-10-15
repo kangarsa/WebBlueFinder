@@ -54,20 +54,20 @@ class SceneTests {
 		s.setFromType(from)
 		s.setToType(to)
 		s.setProperty(property)
+		assert s.start() == 1
+		assertFalse s.isComplete()
+		assertTrue s.isProcessing()
+		//assertFalse s.isCanceled()
+		//assert s.getErrors() == null
+		assert s.getProcessName() == "DBRetrieverWrapper"
+		assert s.getPercent() == 12
 		s.start()
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
-		assert s.getPercent() == 16
 		assert s.getProcessName() == "DBRetrieverWrapper"
-		s.start()
-		assertFalse s.isComplete()
-		assertTrue s.isProcessing()
-		//assertFalse s.isCanceled()
-		//assert s.getErrors() == null
-		assert s.getPercent() == 16
-		assert s.getProcessName() == "DBRetrieverWrapper"
+		assert s.getPercent() == 12
 	}
 	
 	void testNext() {
@@ -80,34 +80,34 @@ class SceneTests {
 		s.setFromType(from)
 		s.setToType(to)
 		s.setProperty(property)
-		s.start()
+		assert s.start() == 1
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
-		assert s.getPercent() == 16
 		assert s.getProcessName() == "DBRetrieverWrapper"
-		s.next()
+		assert s.getPercent() == 12
+		assert s.next() == 2
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
-		assert s.getPercent() == 50
 		assert s.getProcessName() == "PIAWrapper"
-		s.next()
+		assert s.getPercent() == 50
+		assert s.next() == 3
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
-		assert s.getPercent() == 83
 		assert s.getProcessName() == "BFWrapper"
-		s.next()
+		assert s.getPercent() == 87
+		assert s.next() == 3
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
 		//assertFalse s.isCanceled()
 		//assert s.getErrors() == null
-		assert s.getPercent() == 83
 		assert s.getProcessName() == "BFWrapper"
+		assert s.getPercent() == 87
 	}
 	
 	void testgetProcessName() {
@@ -152,7 +152,23 @@ class SceneTests {
 	}
 	
 	void testIsProcessing() {
-       fail "Implement me"
+		String from = 'Place'
+		String to = 'Person'
+		String property = 'birthPlace'
+		def testInstances = [from, to, property]
+		mockDomain(Scene,testInstances)
+		def s = new Scene()
+		s.setFromType(from)
+		s.setToType(to)
+		s.setProperty(property)
+		assert s.start() == 1
+		assertTrue s.isProcessing()
+		assert s.next() == 2
+		assertTrue s.isProcessing()
+		assert s.next() == 3
+		assertTrue s.isProcessing()
+		assert s.next() == 3
+		assertTrue s.isProcessing()
 	}
 	
 	void testGetPercent() {

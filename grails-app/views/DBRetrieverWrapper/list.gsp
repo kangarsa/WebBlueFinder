@@ -24,11 +24,19 @@
 				<thead>
 					<tr>
 					
+						<g:sortableColumn property="error" title="${message(code: 'DBRetrieverWrapper.error.label', default: 'Error')}" />
+					
+						<g:sortableColumn property="state" title="${message(code: 'DBRetrieverWrapper.state.label', default: 'State')}" />
+					
 					</tr>
 				</thead>
 				<tbody>
 				<g:each in="${DBRetrieverWrapperInstanceList}" status="i" var="DBRetrieverWrapperInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+					
+						<td><g:link action="show" id="${DBRetrieverWrapperInstance.id}">${fieldValue(bean: DBRetrieverWrapperInstance, field: "error")}</g:link></td>
+					
+						<td>${fieldValue(bean: DBRetrieverWrapperInstance, field: "state")}</td>
 					
 					</tr>
 				</g:each>

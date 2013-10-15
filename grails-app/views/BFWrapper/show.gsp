@@ -23,6 +23,24 @@
 			</g:if>
 			<ol class="property-list BFWrapper">
 			
+				<g:if test="${BFWrapperInstance?.error}">
+				<li class="fieldcontain">
+					<span id="error-label" class="property-label"><g:message code="BFWrapper.error.label" default="Error" /></span>
+					
+						<span class="property-value" aria-labelledby="error-label"><g:fieldValue bean="${BFWrapperInstance}" field="error"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${BFWrapperInstance?.state}">
+				<li class="fieldcontain">
+					<span id="state-label" class="property-label"><g:message code="BFWrapper.state.label" default="State" /></span>
+					
+						<span class="property-value" aria-labelledby="state-label"><g:fieldValue bean="${BFWrapperInstance}" field="state"/></span>
+					
+				</li>
+				</g:if>
+			
 			</ol>
 			<g:form>
 				<fieldset class="buttons">

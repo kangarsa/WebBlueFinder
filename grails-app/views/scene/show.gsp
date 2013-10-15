@@ -59,11 +59,12 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${sceneInstance?.process}">
+			
+				<g:if test="${sceneInstance?.processStep}">
 				<li class="fieldcontain">
-					<span id="process-label" class="property-label"><g:message code="scene.process.label" default="Process" /></span>
+					<span id="processStep-label" class="property-label"><g:message code="scene.processStep.label" default="Process Step" /></span>
 					
-						<span class="property-value" aria-labelledby="process-label"><g:link controller="abstractProcess" action="show" id="${sceneInstance?.process?.id}">${sceneInstance?.process?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="processStep-label"><g:fieldValue bean="${sceneInstance}" field="processStep"/></span>
 					
 				</li>
 				</g:if>

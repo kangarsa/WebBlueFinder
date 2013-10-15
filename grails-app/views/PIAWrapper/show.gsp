@@ -23,6 +23,24 @@
 			</g:if>
 			<ol class="property-list PIAWrapper">
 			
+				<g:if test="${PIAWrapperInstance?.error}">
+				<li class="fieldcontain">
+					<span id="error-label" class="property-label"><g:message code="PIAWrapper.error.label" default="Error" /></span>
+					
+						<span class="property-value" aria-labelledby="error-label"><g:fieldValue bean="${PIAWrapperInstance}" field="error"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${PIAWrapperInstance?.state}">
+				<li class="fieldcontain">
+					<span id="state-label" class="property-label"><g:message code="PIAWrapper.state.label" default="State" /></span>
+					
+						<span class="property-value" aria-labelledby="state-label"><g:fieldValue bean="${PIAWrapperInstance}" field="state"/></span>
+					
+				</li>
+				</g:if>
+			
 			</ol>
 			<g:form>
 				<fieldset class="buttons">

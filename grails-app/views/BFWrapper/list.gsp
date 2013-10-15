@@ -24,11 +24,19 @@
 				<thead>
 					<tr>
 					
+						<g:sortableColumn property="error" title="${message(code: 'BFWrapper.error.label', default: 'Error')}" />
+					
+						<g:sortableColumn property="state" title="${message(code: 'BFWrapper.state.label', default: 'State')}" />
+					
 					</tr>
 				</thead>
 				<tbody>
 				<g:each in="${BFWrapperInstanceList}" status="i" var="BFWrapperInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+					
+						<td><g:link action="show" id="${BFWrapperInstance.id}">${fieldValue(bean: BFWrapperInstance, field: "error")}</g:link></td>
+					
+						<td>${fieldValue(bean: BFWrapperInstance, field: "state")}</td>
 					
 					</tr>
 				</g:each>

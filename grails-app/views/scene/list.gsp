@@ -34,6 +34,8 @@
 					
 						<th><g:message code="scene.process.label" default="Process" /></th>
 					
+						<g:sortableColumn property="processStep" title="${message(code: 'scene.processStep.label', default: 'Process Step')}" />
+					
 					</tr>
 				</thead>
 				<tbody>
@@ -49,6 +51,8 @@
 						<td><g:formatBoolean boolean="${sceneInstance.queryable}" /></td>
 					
 						<td>${fieldValue(bean: sceneInstance, field: "process")}</td>
+					
+						<td>${fieldValue(bean: sceneInstance, field: "processStep")}</td>
 					
 					</tr>
 				</g:each>
