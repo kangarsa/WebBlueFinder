@@ -1,24 +1,42 @@
 package webbluefinder
 
 import java.util.Arrays
+import java.util.Observable;
 
-class Scene {
-    String fromType
+//class Scene implements IProcessObserver {
+class Scene{
+String fromType
     String toType
     String property
 	boolean queryable
-	AbstractProcess process
+//	AbstractProcess process
 	int processStep
-
+	String sceneErrors
+/**
     static constraints = {
-	    fromType blank:false
-	    toType blank:false
+		fromType blank:false
 	    property blank:false
-		queryable default:false
-		process nullable:false
-		processStep range:0..3
+	    toType blank:false
+		queryable default:false, editable:false
+		process editable:false, display:false
+		processStep range:0..3, display:false
+		sceneErrors editable:false
     }
 	
+	Scene(){
+		this.process = new DBRetrieverWrapper()
+		this.processStep = 0
+		this.sceneErrors = ''
+	}
+	
+	Scene(String from,String to,String property){
+		this.fromType = from
+		this.toType = to
+		this.property = property
+		this.process = new DBRetrieverWrapper()
+		this.processStep = 0
+		this.sceneErrors = ''
+	}	
 //	def processes = ["DBRetrieverWrapper","PiaWrapper","BFWrapper"]
 	def totalProcesses = 3
 	
@@ -37,23 +55,20 @@ class Scene {
 	}
 	
 	def isCanceled() {
-		return processStep > 0 && (process == null || process.hasErrors()) 
+		return processStep > 0 && ((process == null) || process.hasProcessErrors()) 
+	}
+	
+	def hasSceneErrors() {
+		return sceneErrors != null
 	}
 	
 	def getPercent() {
-		if (process == null) {
+		if (processStep == 0) {
 			return 0
 		}
 		return Math.floor(( ((process.totalSteps() * (processStep-1)) + process.getStep()) / ((totalProcesses * process.totalSteps())-1) )*100)
 	}
-	
-	def getErrors() {
-		if (process != null) {
-			return process.getErrors()
-		}
-		return null
-	}
-	
+		
 	def executeQuery(from, to, property) {
 		if (!canExecuteQuery()) {
 			return null
@@ -68,16 +83,18 @@ class Scene {
 	
 	def start() {
 		if ((processStep == 0) && (fromType != null) && (toType != null) && (property != null)) {
-			processStep = 1
-			process = new DBRetrieverWrapper()
+			if (process == null) {
+				process = new DBRetrieverWrapper()
+			}
 			process.execute()
+			processStep = 1
 			return processStep
 		}
-		return 0
+		return -1
 	}
 	
 	def next() {
-		if ((process != null) && (process.hasErrors())) {
+		if ((process != null) && process.hasProcessErrors()) {
 			return -1
 		}
 		if (processStep == 0) {
@@ -104,4 +121,17 @@ class Scene {
 	def cancel() {
 		process == null
 	}
+	
+	@Override
+	public void updateProcess() {
+		if (!process.hasProcessErrors() && process.isFinalized()) {
+			this.next()
+		}
+	}
+	
+	@Override
+	public void updateErrors() {
+		this.setSceneErrors(this.getSceneErrors()+"<< Error in "+process.getName()+": "+ process.getErrors()+" >> ")
+	}
+**/
 }

@@ -1,26 +1,40 @@
 package webbluefinder
 
+//class AbstractProcess extends AbstractObservableProcess {
 class AbstractProcess {
 	String state
-	String errors
+	String processErrors
 
     static constraints = {
+		processErrors editable:false
+		state inList: ["", "computing", "finalized"]
     }
 		
 	def getName() {
 		return 'AbstractProcess'
-	}	
+	}
 	def isFinalized() {
 		return state == 'finalized'
 	}
 	def isComputing() {
 		return state == 'computing'
 	}
-	def hasErrors() {
-		return errors != null
+	def setFinalized() {
+		state = 'finalized'
+		notifyFinalizedToObservers()
 	}
-	def getErrors() {
-		return errors
+	def setComputing() {
+		state = 'computing'
+	}
+	def setProcessErrors(e) {
+		processErrors = e
+		notifyErrorsToObservers()
+	}
+	def hasProcessErrors() {
+		return processErrors != null
+	}
+	def getProcessErrorss() {
+		return processErrors
 	}
 	def getResults() {
 		// subclass responsibility

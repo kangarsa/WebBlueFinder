@@ -23,15 +23,6 @@
 			</g:if>
 			<ol class="property-list abstractProcess">
 			
-				<g:if test="${abstractProcessInstance?.error}">
-				<li class="fieldcontain">
-					<span id="error-label" class="property-label"><g:message code="abstractProcess.error.label" default="Error" /></span>
-					
-						<span class="property-value" aria-labelledby="error-label"><g:fieldValue bean="${abstractProcessInstance}" field="error"/></span>
-					
-				</li>
-				</g:if>
-			
 				<g:if test="${abstractProcessInstance?.state}">
 				<li class="fieldcontain">
 					<span id="state-label" class="property-label"><g:message code="abstractProcess.state.label" default="State" /></span>

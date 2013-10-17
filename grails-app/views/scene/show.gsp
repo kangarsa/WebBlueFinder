@@ -32,11 +32,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${sceneInstance?.toType}">
+				<g:if test="${sceneInstance?.processStep}">
 				<li class="fieldcontain">
-					<span id="toType-label" class="property-label"><g:message code="scene.toType.label" default="To Type" /></span>
+					<span id="processStep-label" class="property-label"><g:message code="scene.processStep.label" default="Process Step" /></span>
 					
-						<span class="property-value" aria-labelledby="toType-label"><g:fieldValue bean="${sceneInstance}" field="toType"/></span>
+						<span class="property-value" aria-labelledby="processStep-label"><g:fieldValue bean="${sceneInstance}" field="processStep"/></span>
 					
 				</li>
 				</g:if>
@@ -59,12 +59,20 @@
 				</li>
 				</g:if>
 			
-			
-				<g:if test="${sceneInstance?.processStep}">
+				<g:if test="${sceneInstance?.sceneErrors}">
 				<li class="fieldcontain">
-					<span id="processStep-label" class="property-label"><g:message code="scene.processStep.label" default="Process Step" /></span>
+					<span id="sceneErrors-label" class="property-label"><g:message code="scene.sceneErrors.label" default="Scene Errors" /></span>
 					
-						<span class="property-value" aria-labelledby="processStep-label"><g:fieldValue bean="${sceneInstance}" field="processStep"/></span>
+						<span class="property-value" aria-labelledby="sceneErrors-label"><g:fieldValue bean="${sceneInstance}" field="sceneErrors"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sceneInstance?.toType}">
+				<li class="fieldcontain">
+					<span id="toType-label" class="property-label"><g:message code="scene.toType.label" default="To Type" /></span>
+					
+						<span class="property-value" aria-labelledby="toType-label"><g:fieldValue bean="${sceneInstance}" field="toType"/></span>
 					
 				</li>
 				</g:if>

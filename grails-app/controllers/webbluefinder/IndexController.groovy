@@ -3,8 +3,8 @@ package webbluefinder
 class IndexController {
 	
     def index() { 
-		def sce = new Scene(fromType: "Fred", toType: "tambien", property: "ola")
-		sce.save()
+		//def sce = new Scene(fromType: "Fred", toType: "tambien", property: "ola")
+		//sce.save()
         render "Bienvenido a la página en desarrollo del BlueFinder."/*
         Scene s = new Scene()
         s.setFromType("fromTestComponent")

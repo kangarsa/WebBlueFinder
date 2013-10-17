@@ -26,15 +26,15 @@
 					
 						<g:sortableColumn property="fromType" title="${message(code: 'scene.fromType.label', default: 'From Type')}" />
 					
-						<g:sortableColumn property="toType" title="${message(code: 'scene.toType.label', default: 'To Type')}" />
+						<g:sortableColumn property="processStep" title="${message(code: 'scene.processStep.label', default: 'Process Step')}" />
 					
 						<g:sortableColumn property="property" title="${message(code: 'scene.property.label', default: 'Property')}" />
 					
 						<g:sortableColumn property="queryable" title="${message(code: 'scene.queryable.label', default: 'Queryable')}" />
 					
-						<th><g:message code="scene.process.label" default="Process" /></th>
+						<g:sortableColumn property="sceneErrors" title="${message(code: 'scene.sceneErrors.label', default: 'Scene Errors')}" />
 					
-						<g:sortableColumn property="processStep" title="${message(code: 'scene.processStep.label', default: 'Process Step')}" />
+						<g:sortableColumn property="toType" title="${message(code: 'scene.toType.label', default: 'To Type')}" />
 					
 					</tr>
 				</thead>
@@ -44,15 +44,15 @@
 					
 						<td><g:link action="show" id="${sceneInstance.id}">${fieldValue(bean: sceneInstance, field: "fromType")}</g:link></td>
 					
-						<td>${fieldValue(bean: sceneInstance, field: "toType")}</td>
+						<td>${fieldValue(bean: sceneInstance, field: "processStep")}</td>
 					
 						<td>${fieldValue(bean: sceneInstance, field: "property")}</td>
 					
 						<td><g:formatBoolean boolean="${sceneInstance.queryable}" /></td>
 					
-						<td>${fieldValue(bean: sceneInstance, field: "process")}</td>
+						<td>${fieldValue(bean: sceneInstance, field: "sceneErrors")}</td>
 					
-						<td>${fieldValue(bean: sceneInstance, field: "processStep")}</td>
+						<td>${fieldValue(bean: sceneInstance, field: "toType")}</td>
 					
 					</tr>
 				</g:each>
