@@ -2,11 +2,19 @@
 
 
 
-<div class="fieldcontain ${hasErrors(bean: DBRetrieverWrapperInstance, field: 'state', 'error')} ">
-	<label for="state">
-		<g:message code="DBRetrieverWrapper.state.label" default="State" />
+<div class="fieldcontain ${hasErrors(bean: DBRetrieverWrapperInstance, field: 'processState', 'error')} ">
+	<label for="processState">
+		<g:message code="DBRetrieverWrapper.processState.label" default="Process State" />
 		
 	</label>
-	<g:select name="state" from="${DBRetrieverWrapperInstance.constraints.state.inList}" value="${DBRetrieverWrapperInstance?.state}" valueMessagePrefix="DBRetrieverWrapper.state" noSelection="['': '']"/>
+	<g:select name="processState" from="${DBRetrieverWrapperInstance.constraints.processState.inList}" value="${DBRetrieverWrapperInstance?.processState}" valueMessagePrefix="DBRetrieverWrapper.processState" noSelection="['': '']"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: DBRetrieverWrapperInstance, field: 'processErrors', 'error')} ">
+	<label for="processErrors">
+		<g:message code="DBRetrieverWrapper.processErrors.label" default="Process Errors" />
+		
+	</label>
+	<g:textField name="processErrors" readonly="readonly" value="${DBRetrieverWrapperInstance?.processErrors}"/>
 </div>
 

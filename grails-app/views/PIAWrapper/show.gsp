@@ -23,11 +23,29 @@
 			</g:if>
 			<ol class="property-list PIAWrapper">
 			
-				<g:if test="${PIAWrapperInstance?.state}">
+				<g:if test="${PIAWrapperInstance?.observer}">
 				<li class="fieldcontain">
-					<span id="state-label" class="property-label"><g:message code="PIAWrapper.state.label" default="State" /></span>
+					<span id="observer-label" class="property-label"><g:message code="PIAWrapper.observer.label" default="Observer" /></span>
 					
-						<span class="property-value" aria-labelledby="state-label"><g:fieldValue bean="${PIAWrapperInstance}" field="state"/></span>
+						<span class="property-value" aria-labelledby="observer-label"><g:link controller="scene" action="show" id="${PIAWrapperInstance?.observer?.id}">${PIAWrapperInstance?.observer?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${PIAWrapperInstance?.processState}">
+				<li class="fieldcontain">
+					<span id="processState-label" class="property-label"><g:message code="PIAWrapper.processState.label" default="Process State" /></span>
+					
+						<span class="property-value" aria-labelledby="processState-label"><g:fieldValue bean="${PIAWrapperInstance}" field="processState"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${PIAWrapperInstance?.processErrors}">
+				<li class="fieldcontain">
+					<span id="processErrors-label" class="property-label"><g:message code="PIAWrapper.processErrors.label" default="Process Errors" /></span>
+					
+						<span class="property-value" aria-labelledby="processErrors-label"><g:fieldValue bean="${PIAWrapperInstance}" field="processErrors"/></span>
 					
 				</li>
 				</g:if>

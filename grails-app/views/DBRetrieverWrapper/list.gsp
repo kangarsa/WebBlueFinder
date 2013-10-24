@@ -24,7 +24,11 @@
 				<thead>
 					<tr>
 					
-						<g:sortableColumn property="state" title="${message(code: 'DBRetrieverWrapper.state.label', default: 'State')}" />
+						<th><g:message code="DBRetrieverWrapper.observer.label" default="Observer" /></th>
+					
+						<g:sortableColumn property="processState" title="${message(code: 'DBRetrieverWrapper.processState.label', default: 'Process State')}" />
+					
+						<g:sortableColumn property="processErrors" title="${message(code: 'DBRetrieverWrapper.processErrors.label', default: 'Process Errors')}" />
 					
 					</tr>
 				</thead>
@@ -32,7 +36,11 @@
 				<g:each in="${DBRetrieverWrapperInstanceList}" status="i" var="DBRetrieverWrapperInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${DBRetrieverWrapperInstance.id}">${fieldValue(bean: DBRetrieverWrapperInstance, field: "state")}</g:link></td>
+						<td><g:link action="show" id="${DBRetrieverWrapperInstance.id}">${fieldValue(bean: DBRetrieverWrapperInstance, field: "observer")}</g:link></td>
+					
+						<td>${fieldValue(bean: DBRetrieverWrapperInstance, field: "processState")}</td>
+					
+						<td>${fieldValue(bean: DBRetrieverWrapperInstance, field: "processErrors")}</td>
 					
 					</tr>
 				</g:each>

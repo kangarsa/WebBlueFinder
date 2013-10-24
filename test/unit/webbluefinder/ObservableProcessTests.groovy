@@ -9,8 +9,8 @@ import org.junit.*
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Process)
-class ProcessTests {
+@TestFor(ObservableProcess)
+class ObservableProcessTests {
 
     void testSomething() {
        fail "Implement me"

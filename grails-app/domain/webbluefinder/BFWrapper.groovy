@@ -1,6 +1,7 @@
 package webbluefinder
 
-class BFWrapper extends AbstractProcess {
+
+class BFWrapper extends Process {
 
     static constraints = {
     }
@@ -10,7 +11,7 @@ class BFWrapper extends AbstractProcess {
 	}
 	
 	def execute() {
-		state = 'computing'
+		processState = 'Computing'
 		//do execute
 	}
 }

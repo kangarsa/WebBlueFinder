@@ -1,12 +1,20 @@
-<%@ page import="webbluefinder.AbstractProcess" %>
+<%@ page import="webbluefinder.Process" %>
 
 
 
-<div class="fieldcontain ${hasErrors(bean: abstractProcessInstance, field: 'state', 'error')} ">
-	<label for="state">
-		<g:message code="abstractProcess.state.label" default="State" />
+<div class="fieldcontain ${hasErrors(bean: processInstance, field: 'processState', 'error')} ">
+	<label for="processState">
+		<g:message code="process.processState.label" default="Process State" />
 		
 	</label>
-	<g:select name="state" from="${abstractProcessInstance.constraints.state.inList}" value="${abstractProcessInstance?.state}" valueMessagePrefix="abstractProcess.state" noSelection="['': '']"/>
+	<g:select name="processState" from="${processInstance.constraints.processState.inList}" value="${processInstance?.processState}" valueMessagePrefix="process.processState" noSelection="['': '']"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: processInstance, field: 'processErrors', 'error')} ">
+	<label for="processErrors">
+		<g:message code="process.processErrors.label" default="Process Errors" />
+		
+	</label>
+	<g:textField name="processErrors" readonly="readonly" value="${processInstance?.processErrors}"/>
 </div>
 

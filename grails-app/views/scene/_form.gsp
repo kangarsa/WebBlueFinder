@@ -2,28 +2,28 @@
 
 
 
-<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'fromType', 'error')} ">
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'fromType', 'error')} required">
 	<label for="fromType">
 		<g:message code="scene.fromType.label" default="From Type" />
-		
-	</label>
-	<g:textField name="fromType" value="${sceneInstance?.fromType}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'processStep', 'error')} required">
-	<label for="processStep">
-		<g:message code="scene.processStep.label" default="Process Step" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:field name="processStep" type="number" value="${sceneInstance.processStep}" required=""/>
+	<g:textField name="fromType" required="" value="${sceneInstance?.fromType}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'property', 'error')} ">
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'property', 'error')} required">
 	<label for="property">
 		<g:message code="scene.property.label" default="Property" />
-		
+		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="property" value="${sceneInstance?.property}"/>
+	<g:textField name="property" required="" value="${sceneInstance?.property}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'toType', 'error')} required">
+	<label for="toType">
+		<g:message code="scene.toType.label" default="To Type" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textField name="toType" required="" value="${sceneInstance?.toType}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'queryable', 'error')} ">
@@ -39,14 +39,14 @@
 		<g:message code="scene.sceneErrors.label" default="Scene Errors" />
 		
 	</label>
-	<g:textField name="sceneErrors" value="${sceneInstance?.sceneErrors}"/>
+	<g:textField name="sceneErrors" readonly="readonly" value="${sceneInstance?.sceneErrors}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'toType', 'error')} ">
-	<label for="toType">
-		<g:message code="scene.toType.label" default="To Type" />
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'processState', 'error')} ">
+	<label for="processState">
+		<g:message code="scene.processState.label" default="Process State" />
 		
 	</label>
-	<g:textField name="toType" value="${sceneInstance?.toType}"/>
+	<g:textField name="processState" value="${sceneInstance?.processState}"/>
 </div>
 

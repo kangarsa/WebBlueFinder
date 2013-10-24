@@ -12,7 +12,7 @@ import org.junit.*
 class SceneTests {
 	
 	void testFromType() {
-		String f1 = 'Place'
+		def f1 = 'Place'
 		def testInstances = [f1]
 		mockDomain(Scene,testInstances)
 		def s = new Scene()
@@ -21,39 +21,30 @@ class SceneTests {
 	}
 	
 	void testCreateNew() {
-		String from = 'Place'
-		String to = 'Person'
-		String property = 'birthPlace'
+		def from = 'Place'
+		def to = 'Person'
+		def property = 'birthPlace'
 		def testInstances = [from, to, property]
 		mockDomain(Scene,testInstances)
-		def s = new Scene()
-		assert s.getFromType() == null
-		assert s.getToType() == null
-		assert s.getProperty() == null
-		s.setFromType(from)
-		s.setToType(to)
-		s.setProperty(property)
+		def s = new Scene(from,to,property)
 		assert s.getFromType() == from
 		assert s.getToType() == to
 		assert s.getProperty() == property
 		assertFalse s.isComplete()
 		assertFalse s.isProcessing()
 		assertFalse s.isCanceled()
-		assert s.getErrors() == null
+		assert s.getSceneErrors() == ''
 		assert s.getPercent() == 0
-		assert s.getProcessName() == null
+		assert s.getProcessName() == 'DBRetrieverWrapper'
 	}
 	
 	void testStart() {
-		String from = 'Place'
-		String to = 'Person'
-		String property = 'birthPlace'
+		def from = 'Place'
+		def to = 'Person'
+		def property = 'birthPlace'
 		def testInstances = [from, to, property]
 		mockDomain(Scene,testInstances)
-		def s = new Scene()
-		s.setFromType(from)
-		s.setToType(to)
-		s.setProperty(property)
+		def s = new Scene(from,to,property)
 		assert s.start() == 1
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
@@ -71,15 +62,12 @@ class SceneTests {
 	}
 	
 	void testNext() {
-		String from = 'Place'
-		String to = 'Person'
-		String property = 'birthPlace'
+		def from = 'Place'
+		def to = 'Person'
+		def property = 'birthPlace'
 		def testInstances = [from, to, property]
 		mockDomain(Scene,testInstances)
-		def s = new Scene()
-		s.setFromType(from)
-		s.setToType(to)
-		s.setProperty(property)
+		def s = new Scene(from,to,property)
 		assert s.start() == 1
 		assertFalse s.isComplete()
 		assertTrue s.isProcessing()
@@ -111,15 +99,12 @@ class SceneTests {
 	}
 	
 	void testgetProcessName() {
-		String from = 'Place'
-		String to = 'Person'
-		String property = 'birthPlace'
+		def from = 'Place'
+		def to = 'Person'
+		def property = 'birthPlace'
 		def testInstances = [from, to, property]
 		mockDomain(Scene,testInstances)
-		def s = new Scene()
-		s.setFromType(from)
-		s.setToType(to)
-		s.setProperty(property)
+		def s = new Scene(from,to,property)
 		s.start()
 		assert s.getProcessName() == "DBRetrieverWrapper"
 		s.next()
@@ -130,15 +115,12 @@ class SceneTests {
 	}
 	
 	void testIsComplete() {
-		String from = 'Place'
-		String to = 'Person'
-		String property = 'birthPlace'
+		def from = 'Place'
+		def to = 'Person'
+		def property = 'birthPlace'
 		def testInstances = [from, to, property]
 		mockDomain(Scene,testInstances)
-		def s = new Scene()
-		s.setFromType(from)
-		s.setToType(to)
-		s.setProperty(property)
+		def s = new Scene(from,to,property)
 		s.start()
 		assertFalse s.isComplete()
 		s.next()
@@ -148,19 +130,25 @@ class SceneTests {
 	}
 	
 	void testIsCanceled() {
-       fail "Implement me"
+		def from = 'Place'
+		def to = 'Person'
+		def property = 'birthPlace'
+		def testInstances = [from, to, property]
+		mockDomain(Scene,testInstances)
+		def s = new Scene(from,to,property)
+		assert s.start() == 1
+		assertTrue s.isProcessing()
+		s.cancel()
+		assertTrue s.isCanceled()
 	}
 	
 	void testIsProcessing() {
-		String from = 'Place'
-		String to = 'Person'
-		String property = 'birthPlace'
+		def from = 'Place'
+		def to = 'Person'
+		def property = 'birthPlace'
 		def testInstances = [from, to, property]
 		mockDomain(Scene,testInstances)
-		def s = new Scene()
-		s.setFromType(from)
-		s.setToType(to)
-		s.setProperty(property)
+		def s = new Scene(from,to,property)
 		assert s.start() == 1
 		assertTrue s.isProcessing()
 		assert s.next() == 2
@@ -172,11 +160,33 @@ class SceneTests {
 	}
 	
 	void testGetPercent() {
-       fail "Implement me"
+		def from = 'Place'
+		def to = 'Person'
+		def property = 'birthPlace'
+		def testInstances = [from, to, property]
+		mockDomain(Scene,testInstances)
+		def s = new Scene(from,to,property)
+		assert s.getPercent() == 0
+		assert s.start() == 1
+		assert s.getPercent() == 12
+		assert s.next() == 2
+		assert s.getPercent() == 50
+		assert s.next() == 3
+		assert s.getPercent() == 87
+		assert s.next() == 3
+		assert s.getPercent() == 87
 	}
 		
 	void testGetErrors() {
-       fail "Implement me"
+		def from = 'Place'
+		def to = 'Person'
+		def property = 'birthPlace'
+		def testInstances = [from, to, property]
+		mockDomain(Scene,testInstances)
+		def s = new Scene(from,to,property)
+		assert s.getSceneErrors() == ''
+		assert s.start() == 1
+		assert s.getSceneErrors() == ''
 	}
 		
 	void testExecuteQuery() {

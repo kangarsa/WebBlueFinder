@@ -24,7 +24,11 @@
 				<thead>
 					<tr>
 					
-						<g:sortableColumn property="state" title="${message(code: 'BFWrapper.state.label', default: 'State')}" />
+						<th><g:message code="BFWrapper.observer.label" default="Observer" /></th>
+					
+						<g:sortableColumn property="processState" title="${message(code: 'BFWrapper.processState.label', default: 'Process State')}" />
+					
+						<g:sortableColumn property="processErrors" title="${message(code: 'BFWrapper.processErrors.label', default: 'Process Errors')}" />
 					
 					</tr>
 				</thead>
@@ -32,7 +36,11 @@
 				<g:each in="${BFWrapperInstanceList}" status="i" var="BFWrapperInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${BFWrapperInstance.id}">${fieldValue(bean: BFWrapperInstance, field: "state")}</g:link></td>
+						<td><g:link action="show" id="${BFWrapperInstance.id}">${fieldValue(bean: BFWrapperInstance, field: "observer")}</g:link></td>
+					
+						<td>${fieldValue(bean: BFWrapperInstance, field: "processState")}</td>
+					
+						<td>${fieldValue(bean: BFWrapperInstance, field: "processErrors")}</td>
 					
 					</tr>
 				</g:each>

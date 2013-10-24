@@ -1,16 +1,17 @@
 package webbluefinder
 
-class DBRetrieverWrapper extends AbstractProcess {
+
+class DBRetrieverWrapper extends Process {
 
     static constraints = {
     }
-	
+		
 	def getName() {
 		return 'DBRetrieverWrapper'
 	}
 	
 	def execute() {
-		state = 'computing'
+		processState = 'Computing'
 		//do execute
 	}
 }

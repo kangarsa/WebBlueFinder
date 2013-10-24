@@ -23,11 +23,29 @@
 			</g:if>
 			<ol class="property-list DBRetrieverWrapper">
 			
-				<g:if test="${DBRetrieverWrapperInstance?.state}">
+				<g:if test="${DBRetrieverWrapperInstance?.observer}">
 				<li class="fieldcontain">
-					<span id="state-label" class="property-label"><g:message code="DBRetrieverWrapper.state.label" default="State" /></span>
+					<span id="observer-label" class="property-label"><g:message code="DBRetrieverWrapper.observer.label" default="Observer" /></span>
 					
-						<span class="property-value" aria-labelledby="state-label"><g:fieldValue bean="${DBRetrieverWrapperInstance}" field="state"/></span>
+						<span class="property-value" aria-labelledby="observer-label"><g:link controller="scene" action="show" id="${DBRetrieverWrapperInstance?.observer?.id}">${DBRetrieverWrapperInstance?.observer?.encodeAsHTML()}</g:link></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${DBRetrieverWrapperInstance?.processState}">
+				<li class="fieldcontain">
+					<span id="processState-label" class="property-label"><g:message code="DBRetrieverWrapper.processState.label" default="Process State" /></span>
+					
+						<span class="property-value" aria-labelledby="processState-label"><g:fieldValue bean="${DBRetrieverWrapperInstance}" field="processState"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${DBRetrieverWrapperInstance?.processErrors}">
+				<li class="fieldcontain">
+					<span id="processErrors-label" class="property-label"><g:message code="DBRetrieverWrapper.processErrors.label" default="Process Errors" /></span>
+					
+						<span class="property-value" aria-labelledby="processErrors-label"><g:fieldValue bean="${DBRetrieverWrapperInstance}" field="processErrors"/></span>
 					
 				</li>
 				</g:if>

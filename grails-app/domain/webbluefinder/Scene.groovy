@@ -1,42 +1,42 @@
 package webbluefinder
 
 import java.util.Arrays
-import java.util.Observable;
 
 //class Scene implements IProcessObserver {
-class Scene{
-String fromType
+class Scene {
+	String fromType
     String toType
     String property
 	boolean queryable
-//	AbstractProcess process
+	ObservableProcess process
 	int processStep
 	String sceneErrors
-/**
+	String processState
+	
+	static mapping = {
+		sceneErrors type: 'text'
+	}
+
     static constraints = {
 		fromType blank:false
 	    property blank:false
 	    toType blank:false
 		queryable default:false, editable:false
-		process editable:false, display:false
-		processStep range:0..3, display:false
-		sceneErrors editable:false
+		process nullable:true, editable:false, display:false
+		processStep range:0..3, display:false, default:0
+		sceneErrors editable:false, default:''
     }
-	
-	Scene(){
-		this.process = new DBRetrieverWrapper()
-		this.processStep = 0
-		this.sceneErrors = ''
-	}
-	
-	Scene(String from,String to,String property){
+	Scene(String from,String to,String property) {
 		this.fromType = from
 		this.toType = to
 		this.property = property
 		this.process = new DBRetrieverWrapper()
-		this.processStep = 0
-		this.sceneErrors = ''
-	}	
+	}
+	
+	Scene() {
+		this('1','2','3')
+	}
+
 //	def processes = ["DBRetrieverWrapper","PiaWrapper","BFWrapper"]
 	def totalProcesses = 3
 	
@@ -122,16 +122,21 @@ String fromType
 		process == null
 	}
 	
-	@Override
-	public void updateProcess() {
-		if (!process.hasProcessErrors() && process.isFinalized()) {
+	def updateState() {
+	}
+	
+	def updateProcessErrors() {
+		this.setSceneErrors(this.getSceneErrors()+"<< Error in "+process.getName()+": "+ process.getProcessErrors()+" >> ")
+	}
+	
+	def updateFinalized() {
+		if (!this.getProcess().hasProcessErrors() && process.isFinalized()) {
 			this.next()
 		}
 	}
 	
-	@Override
-	public void updateErrors() {
-		this.setSceneErrors(this.getSceneErrors()+"<< Error in "+process.getName()+": "+ process.getErrors()+" >> ")
+	def updateProcessState() {
+		this.processState = this.process.getProcessState()
 	}
-**/
+
 }

@@ -1,40 +1,61 @@
 package webbluefinder
 
-//class AbstractProcess extends AbstractObservableProcess {
-class AbstractProcess {
-	String state
+
+class Process extends ObservableProcess {
+//class Process {
+	String processState
 	String processErrors
+	
+	static mapping = {
+		processErrors type: 'text'
+	}
 
     static constraints = {
-		processErrors editable:false
-		state inList: ["", "computing", "finalized"]
+		processState inList: ['Not Started', 'Computing', 'Finalized']
+		processErrors editable:false, display:true
     }
-		
+	
+	Process() {
+		processState = 'Not Started'
+		processErrors = ''
+	}
+/**
+	def setProcessErrors(String e) {
+		this.processErrors = e
+		notifyErrorsToObservers()
+	}
+	String getProcessErrors() {
+		return this.processErrors
+	}
+**/
+	def setAndNotifyProcessErrors(String e) {
+		this.processErrors = e
+		notifyErrorsToObservers()
+	}
+	def setProcessState(String s) {
+		this.processState = s
+		notifyStateToObservers()
+	}
+			
 	def getName() {
 		return 'AbstractProcess'
 	}
 	def isFinalized() {
-		return state == 'finalized'
+		return processState == 'Finalized'
 	}
 	def isComputing() {
-		return state == 'computing'
+		return processState == 'Computing'
 	}
 	def setFinalized() {
-		state = 'finalized'
+		processState = 'Finalized'
 		notifyFinalizedToObservers()
 	}
 	def setComputing() {
-		state = 'computing'
+		processState = 'Computing'
 	}
-	def setProcessErrors(e) {
-		processErrors = e
-		notifyErrorsToObservers()
-	}
+
 	def hasProcessErrors() {
 		return processErrors != null
-	}
-	def getProcessErrorss() {
-		return processErrors
 	}
 	def getResults() {
 		// subclass responsibility

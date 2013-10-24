@@ -1,6 +1,7 @@
 package webbluefinder
 
-class PIAWrapper extends AbstractProcess {
+
+class PIAWrapper extends Process {
 
     static constraints = {
     }
@@ -10,7 +11,7 @@ class PIAWrapper extends AbstractProcess {
 	}
 	
 	def execute() {
-		state = 'computing'
+		processState = 'Computing'
 		//do execute
 	}
 }
