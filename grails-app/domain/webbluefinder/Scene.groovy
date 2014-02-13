@@ -2,71 +2,108 @@ package webbluefinder
 
 import java.util.Arrays
 
-//class Scene implements IProcessObserver {
+import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor;
+
 class Scene {
 	String fromType
     String toType
     String property
-	boolean queryable
-	ObservableProcess process
-	int processStep
-	String sceneErrors
 	String processState
+	Process process
+	
+	static hasMany = [previousProcess: Process]
 	
 	static mapping = {
-		sceneErrors type: 'text'
+		process cascade: "all"
 	}
 
     static constraints = {
 		fromType blank:false
 	    property blank:false
 	    toType blank:false
-		queryable default:false, editable:false
-		process nullable:true, editable:false, display:false
-		processStep range:0..3, display:false, default:0
-		sceneErrors editable:false, default:''
+		process nullable:false, editable:false, display:true
+//		previousProcess editable:false, display:true
+		processState nullable:true, editable:false, display:true
     }
-	Scene(String from,String to,String property) {
-		this.fromType = from
-		this.toType = to
-		this.property = property
-		this.process = new DBRetrieverWrapper()
-	}
 	
-	Scene() {
-		this('1','2','3')
+	Scene(String from,String to,String prop,Process dbr){
+		this()
+		fromType = from
+		toType = to
+		property = prop
+		process = dbr
+		dbr.setScene(this)
 	}
 
 //	def processes = ["DBRetrieverWrapper","PiaWrapper","BFWrapper"]
 	def totalProcesses = 3
 	
-	def isComplete() {
-		if(process == null){			
-			return false
+	def setNewProcess(Process p) {
+		if(process != null) {
+			this.addToPreviousProcess(process)
 		}
-		return totalProcesses == processStep && process.isFinalized()
+		process = p
+	}
+	
+	def getSceneErrors() {
+		def e = ''
+		previousProcess.each { p -> 
+			if(p.hasProcessErrors()) {
+				e += p.getProcessName() + ' | '
+				e += p.getStateName() + ' | '
+				e += p.getProcessErrors() + ' || '
+			}
+		}
+		if(process.hasProcessErrors()) {
+			e += process.getProcessName() + ' | '
+			e += process.getStateName() + ' | '
+			e += process.getProcessErrors() + ' || '
+		}
+		return e
+	}
+	
+	def processStep() {
+		return process.getProcessStep()
+	}
+	
+	def getProcessStateName() {
+		return process.getStateName()
+	}
+	
+	def isComplete() {
+		if(process != null) {			
+			return (!process.hasNextProcess()) && process.isFinalized()
+		}
+		return false
 	}
 	
 	def isProcessing() {
-		if(process == null){			
-			return false
+		if(process != null) {	
+			return process.isComputing()
 		}
-		return processStep > 0 && process.isComputing()
+		return false
+	}
+	
+	def isComputing() {
+		if(process != null) {	
+			return process.isComputing()
+		}
+		return false
 	}
 	
 	def isCanceled() {
-		return processStep > 0 && ((process == null) || process.hasProcessErrors()) 
+		return process.isStoped()
 	}
 	
 	def hasSceneErrors() {
-		return sceneErrors != null
+		return process.getProcessErrors() == '' || previousProcess.getProcessErrors().count('') > 0
 	}
 	
 	def getPercent() {
-		if (processStep == 0) {
+		if (this.processStep() <= 0) {
 			return 0
 		}
-		return Math.floor(( ((process.totalSteps() * (processStep-1)) + process.getStep()) / ((totalProcesses * process.totalSteps())-1) )*100)
+		return Math.floor(( ((process.totalSteps() * (this.processStep()-1)) + process.getStateStep()) / ((totalProcesses * process.totalSteps())-1) )*100)
 	}
 		
 	def executeQuery(from, to, property) {
@@ -78,65 +115,65 @@ class Scene {
 	}
 	
 	def canExecuteQuery() {
-		return getPercent() == 100
+		return process.isBFWrapper() && process.isFinalized()
 	}
 	
 	def start() {
-		if ((processStep == 0) && (fromType != null) && (toType != null) && (property != null)) {
-			if (process == null) {
-				process = new DBRetrieverWrapper()
-			}
-			process.execute()
-			processStep = 1
-			return processStep
-		}
-		return -1
+		process.execute()
+		return this.processStep()
 	}
 	
-	def next() {
-		if ((process != null) && process.hasProcessErrors()) {
-			return -1
-		}
-		if (processStep == 0) {
-			processStep = 1
-			process = new DBRetrieverWrapper()
-		} else if (processStep == 1) {
-			processStep = 2
-			process = new PIAWrapper()			
-		} else if (processStep == 2) {
-			processStep = 3
-			process = new BFWrapper()
-		}
+	//HACER ANDAR ESTO
+	def nextProcess() {
+		//def n = this.process
+		//this.addToPreviousProcess(process)
+	//	this.setProcess(process.getNextProcess())
+		this.process.nextProcess()
+		//n.observer = null
+		//n.save()
+		//process.save()
+		this.save()
 		process.execute()
-		return processStep
+		return processStep()
+	}
+	
+	def nextProcessState() {
+		process.nextState()
+		return getProcessStateName()
 	}
 	
 	def getProcessName() {
-		if (process == null) {
-			return null
+		if (process) {
+			return process.getName()
 		}
-		return process.getName()
+		return ''
 	}
 	
-	def cancel() {
-		process == null
+	def stop() {
+		process.setStoped()
 	}
 	
 	def updateState() {
 	}
 	
 	def updateProcessErrors() {
-		this.setSceneErrors(this.getSceneErrors()+"<< Error in "+process.getName()+": "+ process.getProcessErrors()+" >> ")
+//		this.setSceneErrors(this.getSceneErrors()+"<< Error in "+process.getName()+": "+ process.getProcessErrors()+" >> ")
 	}
 	
 	def updateFinalized() {
 		if (!this.getProcess().hasProcessErrors() && process.isFinalized()) {
-			this.next()
+			this.nextProcess()
 		}
 	}
 	
+	def updateComputing() {
+	}
+	
+	def updateStoped() {
+	}
+	
 	def updateProcessState() {
-		this.processState = this.process.getProcessState()
+		//processState = process.getProcessState()
 	}
 
 }

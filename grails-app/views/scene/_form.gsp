@@ -26,27 +26,38 @@
 	<g:textField name="toType" required="" value="${sceneInstance?.toType}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'queryable', 'error')} ">
-	<label for="queryable">
-		<g:message code="scene.queryable.label" default="Queryable" />
-		
+<!--
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'process', 'error')} required">
+	<label for="process">
+		<g:message code="scene.process.label" default="Process" />
+		<span class="required-indicator">*</span>
 	</label>
-	<g:checkBox name="queryable" value="${sceneInstance?.queryable}" />
+	<g:select id="process" name="process.id" from="${webbluefinder.Process.list()}" optionKey="id"  readonly="readonly" required="" value="${sceneInstance?.process?.id}" class="many-to-one"/>
 </div>
-
-<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'sceneErrors', 'error')} ">
-	<label for="sceneErrors">
-		<g:message code="scene.sceneErrors.label" default="Scene Errors" />
-		
-	</label>
-	<g:textField name="sceneErrors" readonly="readonly" value="${sceneInstance?.sceneErrors}"/>
-</div>
+-->
 
 <div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'processState', 'error')} ">
 	<label for="processState">
 		<g:message code="scene.processState.label" default="Process State" />
 		
 	</label>
-	<g:textField name="processState" value="${sceneInstance?.processState}"/>
+	<g:textField name="processState" readonly="readonly" value="${sceneInstance?.processState}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'previousProcess', 'error')} ">
+	<label for="previousProcess">
+		<g:message code="scene.previousProcess.label" default="Previous Process" />
+		
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${sceneInstance?.previousProcess?}" var="p">
+    <li><g:link controller="process" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="process" action="create" params="['scene.id': sceneInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'process.label', default: 'Process')])}</g:link>
+</li>
+</ul>
+
 </div>
 

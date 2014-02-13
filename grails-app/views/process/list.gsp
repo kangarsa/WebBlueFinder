@@ -24,9 +24,9 @@
 				<thead>
 					<tr>
 					
-						<th><g:message code="process.observer.label" default="Observer" /></th>
+						<th><g:message code="process.state.label" default="State" /></th>
 					
-						<g:sortableColumn property="processState" title="${message(code: 'process.processState.label', default: 'Process State')}" />
+						<th><g:message code="process.scene.label" default="Scene" /></th>
 					
 						<g:sortableColumn property="processErrors" title="${message(code: 'process.processErrors.label', default: 'Process Errors')}" />
 					
@@ -36,9 +36,9 @@
 				<g:each in="${processInstanceList}" status="i" var="processInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${processInstance.id}">${fieldValue(bean: processInstance, field: "observer")}</g:link></td>
+						<td><g:link action="show" id="${processInstance.id}">${fieldValue(bean: processInstance, field: "state")}</g:link></td>
 					
-						<td>${fieldValue(bean: processInstance, field: "processState")}</td>
+						<td>${fieldValue(bean: processInstance, field: "scene")}</td>
 					
 						<td>${fieldValue(bean: processInstance, field: "processErrors")}</td>
 					

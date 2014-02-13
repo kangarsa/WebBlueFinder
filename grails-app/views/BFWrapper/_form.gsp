@@ -2,12 +2,12 @@
 
 
 
-<div class="fieldcontain ${hasErrors(bean: BFWrapperInstance, field: 'processState', 'error')} ">
-	<label for="processState">
-		<g:message code="BFWrapper.processState.label" default="Process State" />
+<div class="fieldcontain ${hasErrors(bean: BFWrapperInstance, field: 'scene', 'error')} ">
+	<label for="scene">
+		<g:message code="BFWrapper.scene.label" default="Scene" />
 		
 	</label>
-	<g:select name="processState" from="${BFWrapperInstance.constraints.processState.inList}" value="${BFWrapperInstance?.processState}" valueMessagePrefix="BFWrapper.processState" noSelection="['': '']"/>
+	<g:select id="scene" name="scene.id" from="${webbluefinder.Scene.list()}" optionKey="id" value="${BFWrapperInstance?.scene?.id}" class="many-to-one" noSelection="['null': '']"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: BFWrapperInstance, field: 'processErrors', 'error')} ">

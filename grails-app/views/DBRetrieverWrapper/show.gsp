@@ -23,20 +23,20 @@
 			</g:if>
 			<ol class="property-list DBRetrieverWrapper">
 			
-				<g:if test="${DBRetrieverWrapperInstance?.observer}">
+				<g:if test="${DBRetrieverWrapperInstance?.state}">
 				<li class="fieldcontain">
-					<span id="observer-label" class="property-label"><g:message code="DBRetrieverWrapper.observer.label" default="Observer" /></span>
+					<span id="state-label" class="property-label"><g:message code="DBRetrieverWrapper.state.label" default="State" /></span>
 					
-						<span class="property-value" aria-labelledby="observer-label"><g:link controller="scene" action="show" id="${DBRetrieverWrapperInstance?.observer?.id}">${DBRetrieverWrapperInstance?.observer?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="state-label"><g:link controller="processState" action="show" id="${DBRetrieverWrapperInstance?.state?.id}">${DBRetrieverWrapperInstance?.state?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>
 			
-				<g:if test="${DBRetrieverWrapperInstance?.processState}">
+				<g:if test="${DBRetrieverWrapperInstance?.scene}">
 				<li class="fieldcontain">
-					<span id="processState-label" class="property-label"><g:message code="DBRetrieverWrapper.processState.label" default="Process State" /></span>
+					<span id="scene-label" class="property-label"><g:message code="DBRetrieverWrapper.scene.label" default="Scene" /></span>
 					
-						<span class="property-value" aria-labelledby="processState-label"><g:fieldValue bean="${DBRetrieverWrapperInstance}" field="processState"/></span>
+						<span class="property-value" aria-labelledby="scene-label"><g:link controller="scene" action="show" id="${DBRetrieverWrapperInstance?.scene?.id}">${DBRetrieverWrapperInstance?.scene?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>

@@ -30,11 +30,9 @@
 					
 						<g:sortableColumn property="toType" title="${message(code: 'scene.toType.label', default: 'To Type')}" />
 					
-						<g:sortableColumn property="queryable" title="${message(code: 'scene.queryable.label', default: 'Queryable')}" />
-					
 						<th><g:message code="scene.process.label" default="Process" /></th>
 					
-						<g:sortableColumn property="processStep" title="${message(code: 'scene.processStep.label', default: 'Process Step')}" />
+						<g:sortableColumn property="processState" title="${message(code: 'scene.processState.label', default: 'Process State')}" />
 					
 					</tr>
 				</thead>
@@ -48,11 +46,9 @@
 					
 						<td>${fieldValue(bean: sceneInstance, field: "toType")}</td>
 					
-						<td><g:formatBoolean boolean="${sceneInstance.queryable}" /></td>
-					
 						<td>${fieldValue(bean: sceneInstance, field: "process")}</td>
 					
-						<td>${fieldValue(bean: sceneInstance, field: "processStep")}</td>
+						<td>${fieldValue(bean: sceneInstance, field: "processState")}</td>
 					
 					</tr>
 				</g:each>

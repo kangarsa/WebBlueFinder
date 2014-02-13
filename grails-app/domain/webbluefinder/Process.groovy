@@ -1,83 +1,150 @@
 package webbluefinder
 
-
-class Process extends ObservableProcess {
-//class Process {
-	String processState
+class Process {
 	String processErrors
+	ProcessState state
+	Scene scene
 	
 	static mapping = {
 		processErrors type: 'text'
 	}
 
     static constraints = {
-		processState inList: ['Not Started', 'Computing', 'Finalized']
+		state nullable:true, editable:false, display:false
+		scene nullable:true
 		processErrors editable:false, display:true
     }
 	
 	Process() {
-		processState = 'Not Started'
-		processErrors = ''
+		this.processErrors = ''
+		this.state = new NotStarted()
 	}
-/**
-	def setProcessErrors(String e) {
-		this.processErrors = e
-		notifyErrorsToObservers()
+	
+	Process(Scene s) {
+		this()
+		this.scene = s
 	}
-	String getProcessErrors() {
-		return this.processErrors
-	}
-**/
+
 	def setAndNotifyProcessErrors(String e) {
-		this.processErrors = e
+		//processState.setStateErrors(e)
+		setProcessErrors(e)
 		notifyErrorsToObservers()
 	}
-	def setProcessState(String s) {
-		this.processState = s
+	
+	def setProcessState(ProcessState s) {
+		state = s
 		notifyStateToObservers()
 	}
 			
 	def getName() {
 		return 'AbstractProcess'
 	}
+	
+	def isNotStarted() {
+		return state.isNotStarted()
+	}
+	def isStoped() {
+		return state.isStoped()
+	}
 	def isFinalized() {
-		return processState == 'Finalized'
+		return state.isFinalized()
 	}
 	def isComputing() {
-		return processState == 'Computing'
+		return state.isComputing()
 	}
-	def setFinalized() {
-		processState = 'Finalized'
-		notifyFinalizedToObservers()
+	
+	def setStoped() {
+		this.setState(new Stoped())
+		notifyStopedToObservers()
 	}
 	def setComputing() {
-		processState = 'Computing'
+		this.setState(new Computing())
+		notifyComputingToObservers()
+	}
+	def setFinalized() {
+		this.setState(new Finalized())
+		notifyFinalizedToObservers()
 	}
 
 	def hasProcessErrors() {
-		return processErrors != null
-	}
-	def getResults() {
-		// subclass responsibility
+		return processErrors != ''
 	}
 	
 	def totalSteps () {
 		return 3
 	}
 	
-	def getStep() {
-		// 0 = notStarted, 1 = isComputing, 2 = isFinalized
-		if (isFinalized()) {
-			return 2
-		} else if (isComputing()) {
-			return 1
-		} else {
-			return 0
-		}
+	def getStateStep() {
+		// -1 = stoped, 0 = notStarted, 1 = isComputing, 2 = isFinalized
+		return state.getStep()
+	}
+	
+	def getStateName() {
+		return state.getName()
+	}
+		
+	def nextState() {
+		state = state.getNextState()
+		notifyStateChangeToObservers()
 	}
 	
 	def execute() {
-		// subclass responsibility
+		if(this.isNotStarted()) {
+			this.nextState()
+			this.start()
+		}
+	}
+	
+	def nextProcess() {
+		this.scene.setNewProcess(this.getNextProcess())
+	}
+	
+	/** Observer Methods start **/
+	
+	def removeObserver(Scene o) {
+		scene = null
+	}
+	
+	def removeObserver() {
+		scene = null
+	}
+	
+	def notifyErrorsToObservers() {
+		scene.updateProcessErrors()
+	}
+	
+	def notifyStateToObservers() {
+		scene.updateProcessState()
+	}
+	
+	def notifyFinalizedToObservers() {
+		scene.updateFinalized()
+	}
+	
+	def notifyComputingToObservers() {
+		scene.updateComputing()
+	}
+	
+	def notifyStopedToObservers() {
+		scene.updateStoped()
+	}
+	
+	def notifyStateChangeToObservers() {
+		scene.updateProcessState()
+	}
+	
+	/** Observer Methods ends **/
+	
+	// subclass responsibility:
+	def start() {}
+	def getResults() {}
+	def getNextProcess() {}
+	def isDBRetrieverWrapper() {}
+	def isPIAWrapper() {}
+	def isBFWrapper() {}
+	def hasNextProcess() {}
+	def getProcessStep() {
+		// -1 = stoped, 0 = notStarted, 1 = isComputing, 2 = isFinalized
 	}
 	
 }

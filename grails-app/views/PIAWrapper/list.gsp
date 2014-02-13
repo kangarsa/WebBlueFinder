@@ -24,9 +24,9 @@
 				<thead>
 					<tr>
 					
-						<th><g:message code="PIAWrapper.observer.label" default="Observer" /></th>
+						<th><g:message code="PIAWrapper.state.label" default="State" /></th>
 					
-						<g:sortableColumn property="processState" title="${message(code: 'PIAWrapper.processState.label', default: 'Process State')}" />
+						<th><g:message code="PIAWrapper.scene.label" default="Scene" /></th>
 					
 						<g:sortableColumn property="processErrors" title="${message(code: 'PIAWrapper.processErrors.label', default: 'Process Errors')}" />
 					
@@ -36,9 +36,9 @@
 				<g:each in="${PIAWrapperInstanceList}" status="i" var="PIAWrapperInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${PIAWrapperInstance.id}">${fieldValue(bean: PIAWrapperInstance, field: "observer")}</g:link></td>
+						<td><g:link action="show" id="${PIAWrapperInstance.id}">${fieldValue(bean: PIAWrapperInstance, field: "state")}</g:link></td>
 					
-						<td>${fieldValue(bean: PIAWrapperInstance, field: "processState")}</td>
+						<td>${fieldValue(bean: PIAWrapperInstance, field: "scene")}</td>
 					
 						<td>${fieldValue(bean: PIAWrapperInstance, field: "processErrors")}</td>
 					

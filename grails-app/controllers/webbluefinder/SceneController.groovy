@@ -16,11 +16,12 @@ class SceneController {
     }
 
     def create() {
-        [sceneInstance: new Scene(params)]
+		return [sceneInstance: new Scene(params)] 
     }
 
     def save() {
         def sceneInstance = new Scene(params)
+		sceneInstance.process = new DBRetrieverWrapper()
         if (!sceneInstance.save(flush: true)) {
             render(view: "create", model: [sceneInstance: sceneInstance])
             return

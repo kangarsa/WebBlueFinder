@@ -23,20 +23,20 @@
 			</g:if>
 			<ol class="property-list BFWrapper">
 			
-				<g:if test="${BFWrapperInstance?.observer}">
+				<g:if test="${BFWrapperInstance?.state}">
 				<li class="fieldcontain">
-					<span id="observer-label" class="property-label"><g:message code="BFWrapper.observer.label" default="Observer" /></span>
+					<span id="state-label" class="property-label"><g:message code="BFWrapper.state.label" default="State" /></span>
 					
-						<span class="property-value" aria-labelledby="observer-label"><g:link controller="scene" action="show" id="${BFWrapperInstance?.observer?.id}">${BFWrapperInstance?.observer?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="state-label"><g:link controller="processState" action="show" id="${BFWrapperInstance?.state?.id}">${BFWrapperInstance?.state?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>
 			
-				<g:if test="${BFWrapperInstance?.processState}">
+				<g:if test="${BFWrapperInstance?.scene}">
 				<li class="fieldcontain">
-					<span id="processState-label" class="property-label"><g:message code="BFWrapper.processState.label" default="Process State" /></span>
+					<span id="scene-label" class="property-label"><g:message code="BFWrapper.scene.label" default="Scene" /></span>
 					
-						<span class="property-value" aria-labelledby="processState-label"><g:fieldValue bean="${BFWrapperInstance}" field="processState"/></span>
+						<span class="property-value" aria-labelledby="scene-label"><g:link controller="scene" action="show" id="${BFWrapperInstance?.scene?.id}">${BFWrapperInstance?.scene?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>

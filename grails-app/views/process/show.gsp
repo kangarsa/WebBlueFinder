@@ -23,20 +23,20 @@
 			</g:if>
 			<ol class="property-list process">
 			
-				<g:if test="${processInstance?.observer}">
+				<g:if test="${processInstance?.state}">
 				<li class="fieldcontain">
-					<span id="observer-label" class="property-label"><g:message code="process.observer.label" default="Observer" /></span>
+					<span id="state-label" class="property-label"><g:message code="process.state.label" default="State" /></span>
 					
-						<span class="property-value" aria-labelledby="observer-label"><g:link controller="scene" action="show" id="${processInstance?.observer?.id}">${processInstance?.observer?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="state-label"><g:link controller="processState" action="show" id="${processInstance?.state?.id}">${processInstance?.state?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>
 			
-				<g:if test="${processInstance?.processState}">
+				<g:if test="${processInstance?.scene}">
 				<li class="fieldcontain">
-					<span id="processState-label" class="property-label"><g:message code="process.processState.label" default="Process State" /></span>
+					<span id="scene-label" class="property-label"><g:message code="process.scene.label" default="Scene" /></span>
 					
-						<span class="property-value" aria-labelledby="processState-label"><g:fieldValue bean="${processInstance}" field="processState"/></span>
+						<span class="property-value" aria-labelledby="scene-label"><g:link controller="scene" action="show" id="${processInstance?.scene?.id}">${processInstance?.scene?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>

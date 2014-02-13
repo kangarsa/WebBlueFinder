@@ -2,12 +2,12 @@
 
 
 
-<div class="fieldcontain ${hasErrors(bean: PIAWrapperInstance, field: 'processState', 'error')} ">
-	<label for="processState">
-		<g:message code="PIAWrapper.processState.label" default="Process State" />
+<div class="fieldcontain ${hasErrors(bean: PIAWrapperInstance, field: 'scene', 'error')} ">
+	<label for="scene">
+		<g:message code="PIAWrapper.scene.label" default="Scene" />
 		
 	</label>
-	<g:select name="processState" from="${PIAWrapperInstance.constraints.processState.inList}" value="${PIAWrapperInstance?.processState}" valueMessagePrefix="PIAWrapper.processState" noSelection="['': '']"/>
+	<g:select id="scene" name="scene.id" from="${webbluefinder.Scene.list()}" optionKey="id" value="${PIAWrapperInstance?.scene?.id}" class="many-to-one" noSelection="['null': '']"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: PIAWrapperInstance, field: 'processErrors', 'error')} ">

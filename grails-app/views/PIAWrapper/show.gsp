@@ -23,20 +23,20 @@
 			</g:if>
 			<ol class="property-list PIAWrapper">
 			
-				<g:if test="${PIAWrapperInstance?.observer}">
+				<g:if test="${PIAWrapperInstance?.state}">
 				<li class="fieldcontain">
-					<span id="observer-label" class="property-label"><g:message code="PIAWrapper.observer.label" default="Observer" /></span>
+					<span id="state-label" class="property-label"><g:message code="PIAWrapper.state.label" default="State" /></span>
 					
-						<span class="property-value" aria-labelledby="observer-label"><g:link controller="scene" action="show" id="${PIAWrapperInstance?.observer?.id}">${PIAWrapperInstance?.observer?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="state-label"><g:link controller="processState" action="show" id="${PIAWrapperInstance?.state?.id}">${PIAWrapperInstance?.state?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>
 			
-				<g:if test="${PIAWrapperInstance?.processState}">
+				<g:if test="${PIAWrapperInstance?.scene}">
 				<li class="fieldcontain">
-					<span id="processState-label" class="property-label"><g:message code="PIAWrapper.processState.label" default="Process State" /></span>
+					<span id="scene-label" class="property-label"><g:message code="PIAWrapper.scene.label" default="Scene" /></span>
 					
-						<span class="property-value" aria-labelledby="processState-label"><g:fieldValue bean="${PIAWrapperInstance}" field="processState"/></span>
+						<span class="property-value" aria-labelledby="scene-label"><g:link controller="scene" action="show" id="${PIAWrapperInstance?.scene?.id}">${PIAWrapperInstance?.scene?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>

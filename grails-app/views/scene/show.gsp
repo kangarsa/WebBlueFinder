@@ -50,38 +50,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${sceneInstance?.queryable}">
-				<li class="fieldcontain">
-					<span id="queryable-label" class="property-label"><g:message code="scene.queryable.label" default="Queryable" /></span>
-					
-						<span class="property-value" aria-labelledby="queryable-label"><g:formatBoolean boolean="${sceneInstance?.queryable}" /></span>
-					
-				</li>
-				</g:if>
-			
 				<g:if test="${sceneInstance?.process}">
 				<li class="fieldcontain">
 					<span id="process-label" class="property-label"><g:message code="scene.process.label" default="Process" /></span>
 					
-						<span class="property-value" aria-labelledby="process-label"><g:link controller="${sceneInstance?.process?.name}" action="show" id="${sceneInstance?.process?.id}">${sceneInstance?.process?.encodeAsHTML()}</g:link></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${sceneInstance?.processStep}">
-				<li class="fieldcontain">
-					<span id="processStep-label" class="property-label"><g:message code="scene.processStep.label" default="Process Step" /></span>
-					
-						<span class="property-value" aria-labelledby="processStep-label"><g:fieldValue bean="${sceneInstance}" field="processStep"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${sceneInstance?.sceneErrors}">
-				<li class="fieldcontain">
-					<span id="sceneErrors-label" class="property-label"><g:message code="scene.sceneErrors.label" default="Scene Errors" /></span>
-					
-						<span class="property-value" aria-labelledby="sceneErrors-label"><g:fieldValue bean="${sceneInstance}" field="sceneErrors"/></span>
+						<span class="property-value" aria-labelledby="process-label"><g:link controller="process" action="show" id="${sceneInstance?.process?.id}">${sceneInstance?.process?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>
@@ -91,6 +64,17 @@
 					<span id="processState-label" class="property-label"><g:message code="scene.processState.label" default="Process State" /></span>
 					
 						<span class="property-value" aria-labelledby="processState-label"><g:fieldValue bean="${sceneInstance}" field="processState"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sceneInstance?.previousProcess}">
+				<li class="fieldcontain">
+					<span id="previousProcess-label" class="property-label"><g:message code="scene.previousProcess.label" default="Previous Process" /></span>
+					
+						<g:each in="${sceneInstance.previousProcess}" var="p">
+						<span class="property-value" aria-labelledby="previousProcess-label"><g:link controller="process" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></span>
+						</g:each>
 					
 				</li>
 				</g:if>

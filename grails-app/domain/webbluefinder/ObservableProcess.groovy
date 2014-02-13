@@ -2,20 +2,31 @@ package webbluefinder
 
 
 class ObservableProcess {
-	static belongsTo = [observer : Scene]
-
+	static belongsTo = [observer: Scene]
+	
+	//static belongsTo = [Scene]
+	//static hasOne = [observer : Scene]
+	
     static constraints = {
-		observer display:false
+		observer editable:false, display:true, unique:false
+		//oldObserver nullable:true, editable:false, display:true, unique:false
     }
-
+	
 	ObservableProcess (Scene o) {
+		this()
 		observer = o
 	}
-	
-	def addObserver(Scene o) {
-		observer = o;
+	/*
+	def setObserver(Scene o) {
+		if(o != null) {
+			oldObserver = observer
+		}
+		observer = o
 	}
-	
+	def addObserver(Scene o) {
+		setObserver(o)
+	}
+	*/
 	def removeObserver(Scene o) {
 		observer = null
 	}
@@ -34,5 +45,17 @@ class ObservableProcess {
 	
 	def notifyFinalizedToObservers() {
 		observer.updateFinalized()
+	}
+	
+	def notifyComputingToObservers() {
+		observer.updateComputing()
+	}
+	
+	def notifyStopedToObservers() {
+		observer.updateStoped()
+	}
+	
+	def notifyStateChangeToObservers() {
+		observer.updateProcessState()
 	}
 }
