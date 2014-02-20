@@ -41,6 +41,17 @@ class DBRetrieverWrapperController {
         [DBRetrieverWrapperInstance: DBRetrieverWrapperInstance]
     }
 
+    def start(Long id) {
+        def DBRetrieverWrapperInstance = DBRetrieverWrapper.get(id)
+        if (!DBRetrieverWrapperInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'DBRetrieverWrapper.label', default: 'DBRetrieverWrapper'), id])
+            redirect(action: "list")
+            return
+        }
+		DBRetrieverWrapperInstance.start()
+        render(view: "show", model: [DBRetrieverWrapperInstance: DBRetrieverWrapperInstance])
+    }
+
     def edit(Long id) {
         def DBRetrieverWrapperInstance = DBRetrieverWrapper.get(id)
         if (!DBRetrieverWrapperInstance) {

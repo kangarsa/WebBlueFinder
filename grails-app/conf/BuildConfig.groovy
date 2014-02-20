@@ -41,7 +41,11 @@ grails.project.dependency.resolution = {
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 
-        //runtime 'mysql:mysql-connector-java:5.1.22'
+        runtime 'mysql:mysql-connector-java:5.1.22',
+				'org.openrdf.http:sesame-http-client:2.6.5',
+				'org.openrdf.rio:sesame-rio-api:2.6.5',
+				'org.openrdf.query.resultio:sesame-query-resultio-api:2.6.5',
+				'org.openrdf.query.resultio:sesame-queryresultio-binary:2.6.5'
     }
 
     plugins {

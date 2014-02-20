@@ -1,8 +1,9 @@
 package webbluefinder
 
-import finder.*;
+//import finder.*;
+//import wbflisteners.DBRetrieverRunnable
 import wbflisteners.DBRetrieverRunnable
-import wbflisteners.ObservableProcess;
+import wbflisteners.ObservableProcess
 import wbflisteners.ProcessesListener
 
 
@@ -23,10 +24,12 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 //do execute
 		Runnable task = new DBRetrieverRunnable();
 		Thread worker = new Thread(task);
-		// We can set the name of the thread
+//		// We can set the name of the thread
 		worker.setName(this.scene.fromType + this.scene.toType);
-		// Start the thread, never call method run() direct
+//		// Start the thread, never call method run() direct
+		System.out.println("worker.prestart()");
 		worker.start();
+		System.out.println("worker.poststart()");
 	}
 	
 	def getNextProcess() {
