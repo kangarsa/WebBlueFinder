@@ -23,6 +23,15 @@
 			</g:if>
 			<ol class="property-list scene">
 			
+				<g:if test="${sceneInstance?.name}">
+				<li class="fieldcontain">
+					<span id="name-label" class="property-label"><g:message code="scene.name.label" default="Name" /></span>
+					
+						<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${sceneInstance}" field="name"/></span>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${sceneInstance?.fromType}">
 				<li class="fieldcontain">
 					<span id="fromType-label" class="property-label"><g:message code="scene.fromType.label" default="From Type" /></span>

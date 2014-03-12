@@ -16,12 +16,13 @@ class SceneController {
     }
 
     def create() {
-		return [sceneInstance: new Scene(params)] 
+        [sceneInstance: new Scene(params)]
     }
 
     def save() {
         def sceneInstance = new Scene(params)
 		sceneInstance.process = new DBRetrieverWrapper()
+		sceneInstance.process.scene = sceneInstance
         if (!sceneInstance.save(flush: true)) {
             render(view: "create", model: [sceneInstance: sceneInstance])
             return
@@ -30,16 +31,32 @@ class SceneController {
         flash.message = message(code: 'default.created.message', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.id])
         redirect(action: "show", id: sceneInstance.id)
     }
+	
+	def show(Long id) {
+		def sceneInstance = Scene.get(id)
+		if (!sceneInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'scene.label', default: 'Scene'), id])
+			redirect(action: "list")
+			return
+		}
 
-    def show(Long id) {
+		[sceneInstance: sceneInstance]
+	}
+	
+    def start(Long id) {
         def sceneInstance = Scene.get(id)
         if (!sceneInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'scene.label', default: 'Scene'), id])
             redirect(action: "list")
             return
         }
-
-        [sceneInstance: sceneInstance]
+		
+		if (sceneInstance.start()) {
+			flash.message = message(code: 'scene.started.successful', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.name])
+		} else {
+			flash.message = message(code: 'scene.started.failed', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.name])
+		}
+		render(view: "show", model: [sceneInstance: sceneInstance])
     }
 
     def edit(Long id) {

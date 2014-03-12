@@ -1,7 +1,6 @@
 package webbluefinder
 
-//import finder.*;
-//import wbflisteners.DBRetrieverRunnable
+import wbflisteners.DBRetrieverLauncher;
 import wbflisteners.DBRetrieverRunnable
 import wbflisteners.ObservableProcess
 import wbflisteners.ProcessesListener
@@ -22,14 +21,23 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 	
 	def start() {
 //do execute
-		Runnable task = new DBRetrieverRunnable();
-		Thread worker = new Thread(task);
+		Properties p = Properties.getLast()
+//		Runnable task = new DBRetrieverRunnable(this.scene.id,this.scene.fromType,this.scene.toType,this.scene.property,p.hostname,p.database,p.dbuser,p.dbpass)
+//		task.addObserver(this)
+//		Thread worker = new Thread(task)
 //		// We can set the name of the thread
-		worker.setName(this.scene.fromType + this.scene.toType);
+//		worker.setName(this.scene.name)
 //		// Start the thread, never call method run() direct
-		System.out.println("worker.prestart()");
-		worker.start();
-		System.out.println("worker.poststart()");
+		System.out.println("worker.prestart()")
+		//worker.start()
+		runAsync {
+			def dbr = new DBRetrieverLauncher()
+			def query = "SELECT ?from, ?to WHERE { ?from a <"+scene.fromType+">. ?to a <"+scene.toType+">. ?to <"+scene.property+"> ?from. }";
+			dbr.addObserver(this)
+			System.out.println(query);
+			dbr.launch(p.hostname+"/"+p.database, query, p.dbuser, p.dbpass, scene.id+"_results");
+		}
+		System.out.println("worker.poststart()")
 	}
 	
 	def getNextProcess() {
@@ -72,7 +80,7 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 
 	@Override
 	public void finalized(ObservableProcess dbr) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("en finalized");
+		this.setFinalized()
 	}
 }

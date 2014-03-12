@@ -24,6 +24,8 @@
 				<thead>
 					<tr>
 					
+						<g:sortableColumn property="name" title="${message(code: 'scene.name.label', default: 'Name')}" />
+					
 						<g:sortableColumn property="fromType" title="${message(code: 'scene.fromType.label', default: 'From Type')}" />
 					
 						<g:sortableColumn property="property" title="${message(code: 'scene.property.label', default: 'Property')}" />
@@ -40,7 +42,9 @@
 				<g:each in="${sceneInstanceList}" status="i" var="sceneInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${sceneInstance.id}">${fieldValue(bean: sceneInstance, field: "fromType")}</g:link></td>
+						<td><g:link action="show" id="${sceneInstance.id}">${fieldValue(bean: sceneInstance, field: "name")}</g:link></td>
+					
+						<td>${fieldValue(bean: sceneInstance, field: "fromType")}</td>
 					
 						<td>${fieldValue(bean: sceneInstance, field: "property")}</td>
 					

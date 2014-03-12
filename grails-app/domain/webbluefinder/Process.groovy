@@ -62,8 +62,12 @@ class Process {
 		notifyComputingToObservers()
 	}
 	def setFinalized() {
-		this.setState(new Finalized())
-		notifyFinalizedToObservers()
+		//this.setState(new Finalized())
+		state = new Finalized()
+		//this.merge()
+		this.save()
+		System.out.println(state)
+		//notifyFinalizedToObservers()
 	}
 
 	def hasProcessErrors() {
@@ -88,15 +92,27 @@ class Process {
 		notifyStateChangeToObservers()
 	}
 	
+	
 	def execute() {
 		if(this.isNotStarted()) {
 			this.nextState()
 			this.start()
+			return true
 		}
+		return false
 	}
 	
 	def nextProcess() {
 		this.scene.setNewProcess(this.getNextProcess())
+	}
+	
+	def getPercent(){
+		if(this.isFinalized()) {
+			return 100
+		} else if(this.isComputing()) {
+			return 50
+		}
+		return 0
 	}
 	
 	/** Observer Methods start **/
@@ -132,6 +148,7 @@ class Process {
 	def notifyStateChangeToObservers() {
 		scene.updateProcessState()
 	}
+	
 	
 	/** Observer Methods ends **/
 	

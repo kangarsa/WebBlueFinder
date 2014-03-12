@@ -234,6 +234,11 @@ class AllTests {
 	}
 	
 	void testExecuteQuery() {
-       fail 'Implement me'
+		def from = 'Place'
+		def to = 'Person'
+		def property = 'birthPlace'
+		def DBRetrieverWrapper dbr = new DBRetrieverWrapper()
+		def s = new Scene(from,to,property,dbr)
+		s.start()
 	}
 }

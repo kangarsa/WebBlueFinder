@@ -2,6 +2,14 @@
 
 
 
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'name', 'error')} required">
+	<label for="name">
+		<g:message code="scene.name.label" default="Name" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textField name="name" required="" value="${sceneInstance?.name}"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'fromType', 'error')} required">
 	<label for="fromType">
 		<g:message code="scene.fromType.label" default="From Type" />
@@ -25,17 +33,15 @@
 	</label>
 	<g:textField name="toType" required="" value="${sceneInstance?.toType}"/>
 </div>
-
-<!--
+<!-- 
 <div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'process', 'error')} required">
 	<label for="process">
 		<g:message code="scene.process.label" default="Process" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="process" name="process.id" from="${webbluefinder.Process.list()}" optionKey="id"  readonly="readonly" required="" value="${sceneInstance?.process?.id}" class="many-to-one"/>
+	<g:select id="process" name="process.id" from="${webbluefinder.Process.list()}" optionKey="id" required="" value="${sceneInstance?.process?.id}" class="many-to-one"/>
 </div>
 -->
-
 <div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'processState', 'error')} ">
 	<label for="processState">
 		<g:message code="scene.processState.label" default="Process State" />

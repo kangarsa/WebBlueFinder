@@ -14,18 +14,18 @@ import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryException;
 
-import sesame.QueryRetriever;
+import edu.unlp.info.lifia.DBRetriever.QueryRetriever;
 
-public class DBRetrieverLauncher {
+public class DBRetrieverLauncher extends ObservableProcess {
 
-	public static void launch(String base, String query, String user, String pass, String table) throws MalformedQueryException, RepositoryException, QueryEvaluationException, ClassNotFoundException, SQLException {
+	public void launch(String base, String query, String user, String pass, String table) throws MalformedQueryException, RepositoryException, QueryEvaluationException, ClassNotFoundException, SQLException {
         
       
        if(base.equalsIgnoreCase("localhost/dtorres")){
     	   throw new RepositoryException();
        }
        
-       query = "SELECT ?from ?to WHERE { { " + query + " } }";
+       query = "SELECT ?from ?to WHERE { { " + query + " } } ";
 
            
         //String query = "select ?from, ?to where {?uni a <http://dbpedia.org/ontology/University>. ?uni <http://dbpedia.org/ontology/city> ?city }"; 
@@ -40,7 +40,7 @@ public class DBRetrieverLauncher {
         createST.executeUpdate("truncate table `"+table+"`");
         
         
-        int counter = 0;
+//        int counter = 0;
         QueryRetriever qr = new QueryRetriever(10000, query, 10000000);
         while (qr.hasNext()) {
             TupleQueryResult queryResult = qr.getNextPage();
@@ -48,7 +48,8 @@ public class DBRetrieverLauncher {
                 BindingSet bs = queryResult.next();
                 Value from = bs.getValue("from");
                 Value to = bs.getValue("to");
-                Statement st = conexion.createStatement();
+//                Statement st = 
+                conexion.createStatement();
                 PreparedStatement pst = conexion.prepareStatement("INSERT INTO "+table+" (`from`, `to`) VALUES (?,?)");
                 if(!(from==null || to==null)){
                 pst.setString(1, from.toString());
@@ -57,7 +58,7 @@ public class DBRetrieverLauncher {
                 //System.out.println("INSERT INTO "+table+" (`from`, `to`) VALUES ('" + from.stringValue() + "','" + to.stringValue() + "' )");
                 //st.executeUpdate("INSERT INTO "+table+" (`from`, `to`) VALUES ('" + from.stringValue() + "','" + to.stringValue() + "' )");
                 pst.executeUpdate();
-                counter++;
+//                counter++;
                 pst.close();
                 }
                 else{//System.out.println("NULL EN ALGUNO DE LOS VALORES");}
@@ -67,10 +68,10 @@ public class DBRetrieverLauncher {
             }
             //System.out.println(counter);
 
-        }
-        //System.out.println("Number of Inserts: " + counter);
-    }
-    
+	        }
+	        //System.out.println("Number of Inserts: " + counter);
+	    }
+        this.notifyFinished();
 	}
 	
 }

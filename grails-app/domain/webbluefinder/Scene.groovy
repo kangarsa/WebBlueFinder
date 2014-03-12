@@ -2,9 +2,10 @@ package webbluefinder
 
 import java.util.Arrays
 
-import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor;
+//import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor;
 
 class Scene {
+	String name
 	String fromType
     String toType
     String property
@@ -15,14 +16,16 @@ class Scene {
 	
 	static mapping = {
 		process cascade: "all"
+		previousProcess sort: "id", order: "desc"
 	}
 
     static constraints = {
+		name blank:false, display:true, unique:true
 		fromType blank:false
 	    property blank:false
 	    toType blank:false
 		process nullable:false, editable:false, display:true
-//		previousProcess editable:false, display:true
+		//previousProcess editable:false, display:true
 		processState nullable:true, editable:false, display:true
     }
 	
@@ -119,19 +122,12 @@ class Scene {
 	}
 	
 	def start() {
-		process.execute()
-		return this.processStep()
+		return process.execute()
 	}
 	
-	//HACER ANDAR ESTO
+	//HACER ANDAR ESTO??
 	def nextProcess() {
-		//def n = this.process
-		//this.addToPreviousProcess(process)
-	//	this.setProcess(process.getNextProcess())
 		this.process.nextProcess()
-		//n.observer = null
-		//n.save()
-		//process.save()
 		this.save()
 		process.execute()
 		return processStep()
