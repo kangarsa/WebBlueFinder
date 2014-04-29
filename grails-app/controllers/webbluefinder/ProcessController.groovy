@@ -99,4 +99,20 @@ class ProcessController {
             redirect(action: "show", id: id)
         }
     }
+	
+	def execute(Long id) {
+		def processInstance = Process.get(id)
+		if (!processInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'process.label', default: 'Process'), id])
+			redirect(action: "list")
+			return
+		}
+		
+		if (processInstance.execute()) {
+			flash.message = message(code: 'process.started.successful', args: [message(code: 'process.label', default: 'Process'), processInstance.name])
+		} else {
+			flash.message = message(code: 'process.started.failed', args: [message(code: 'process.label', default: 'Process'), processInstance.name])
+		}
+		redirect(controller: "scene", action: "show", id: processInstance.scene.id)
+	}
 }

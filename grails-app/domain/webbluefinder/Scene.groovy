@@ -11,6 +11,10 @@ class Scene {
     String property
 	String processState
 	Process process
+	int piaMinLimit = 1
+	int piaMaxLimit = 600
+	int piaIterationsLimit = 2
+	boolean piaClean = true
 	
 	static hasMany = [previousProcess: Process]
 	
@@ -27,6 +31,9 @@ class Scene {
 		process nullable:false, editable:false, display:true
 		//previousProcess editable:false, display:true
 		processState nullable:true, editable:false, display:true
+		piaMinLimit min:1
+		piaMaxLimit min:1
+		piaIterationsLimit min:1
     }
 	
 	Scene(String from,String to,String prop,Process dbr){
@@ -128,9 +135,15 @@ class Scene {
 	//HACER ANDAR ESTO??
 	def nextProcess() {
 		this.process.nextProcess()
+		//this.save()
+		return process.execute()
+	}
+	
+	//HACER ANDAR ESTO??
+	def forceNextProcess() {
+		this.process.forceNextProcess()
 		this.save()
-		process.execute()
-		return processStep()
+		return process.execute()
 	}
 	
 	def nextProcessState() {

@@ -1,7 +1,6 @@
 package webbluefinder
 
-import wbflisteners.DBRetrieverLauncher;
-import wbflisteners.DBRetrieverRunnable
+import bflaunchers.DBRetrieverLauncher;
 import wbflisteners.ObservableProcess
 import wbflisteners.ProcessesListener
 
@@ -22,20 +21,15 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 	def start() {
 //do execute
 		Properties p = Properties.getLast()
-//		Runnable task = new DBRetrieverRunnable(this.scene.id,this.scene.fromType,this.scene.toType,this.scene.property,p.hostname,p.database,p.dbuser,p.dbpass)
-//		task.addObserver(this)
-//		Thread worker = new Thread(task)
-//		// We can set the name of the thread
-//		worker.setName(this.scene.name)
-//		// Start the thread, never call method run() direct
 		System.out.println("worker.prestart()")
-		//worker.start()
 		runAsync {
 			def dbr = new DBRetrieverLauncher()
 			def query = "SELECT ?from, ?to WHERE { ?from a <"+scene.fromType+">. ?to a <"+scene.toType+">. ?to <"+scene.property+"> ?from. }";
 			dbr.addObserver(this)
 			System.out.println(query);
+      System.out.println("Async Previo DBRetriever ");
 			dbr.launch(p.hostname+"/"+p.database, query, p.dbuser, p.dbpass, scene.id+"_results");
+      System.out.println("Async Post DBRetriever ");
 		}
 		System.out.println("worker.poststart()")
 	}

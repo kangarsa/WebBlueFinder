@@ -1,7 +1,11 @@
 package webbluefinder
 
+import bflaunchers.PIALauncher
+import wbflisteners.ObservableProcess
+import wbflisteners.ProcessesListener
 
-class PIAWrapper extends Process {
+
+class PIAWrapper extends Process implements ProcessesListener {
 
     static constraints = {
     }
@@ -16,10 +20,19 @@ class PIAWrapper extends Process {
 	
 	def start() {
 		//do execute
+		Properties p = Properties.getLast()
+		System.out.println("workerPIA.prestart()")
+		runAsync {
+			System.out.println("nuevoThread?");
+			def pia = new PIALauncher()
+			pia.addObserver(this)
+			pia.launch(scene.piaMinLimit, scene.piaMaxLimit, scene.piaIterationsLimit, scene.id+"_results", scene.piaClean);
+		}
+		System.out.println("workerPIA.poststart()")
 	}
 	
 	def getNextProcess() {
-		return new BFWrapper(scene)
+		return new BFRecommenderWrapper(scene)
 	}
 	
 	def getProcessStep() {
@@ -36,5 +49,29 @@ class PIAWrapper extends Process {
 	}
 	def hasNextProcess() {
 		return true
+	}
+
+	@Override
+	public void computing(ObservableProcess pia) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stopped(ObservableProcess pia) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notStarted(ObservableProcess pia) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void finalized(ObservableProcess pia) {
+		System.out.println("en finalized");
+		this.setFinalized()
 	}
 }

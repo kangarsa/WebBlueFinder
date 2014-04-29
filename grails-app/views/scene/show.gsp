@@ -77,6 +77,42 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${sceneInstance?.piaMinLimit}">
+				<li class="fieldcontain">
+					<span id="piaMinLimit-label" class="property-label"><g:message code="scene.piaMinLimit.label" default="Pia Min Limit" /></span>
+					
+						<span class="property-value" aria-labelledby="piaMinLimit-label"><g:fieldValue bean="${sceneInstance}" field="piaMinLimit"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sceneInstance?.piaMaxLimit}">
+				<li class="fieldcontain">
+					<span id="piaMaxLimit-label" class="property-label"><g:message code="scene.piaMaxLimit.label" default="Pia Max Limit" /></span>
+					
+						<span class="property-value" aria-labelledby="piaMaxLimit-label"><g:fieldValue bean="${sceneInstance}" field="piaMaxLimit"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sceneInstance?.piaIterationsLimit}">
+				<li class="fieldcontain">
+					<span id="piaIterationsLimit-label" class="property-label"><g:message code="scene.piaIterationsLimit.label" default="Pia Iterations Limit" /></span>
+					
+						<span class="property-value" aria-labelledby="piaIterationsLimit-label"><g:fieldValue bean="${sceneInstance}" field="piaIterationsLimit"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${sceneInstance?.piaClean}">
+				<li class="fieldcontain">
+					<span id="piaClean-label" class="property-label"><g:message code="scene.piaClean.label" default="Pia Clean" /></span>
+					
+						<span class="property-value" aria-labelledby="piaClean-label"><g:formatBoolean boolean="${sceneInstance?.piaClean}" /></span>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${sceneInstance?.previousProcess}">
 				<li class="fieldcontain">
 					<span id="previousProcess-label" class="property-label"><g:message code="scene.previousProcess.label" default="Previous Process" /></span>
@@ -96,6 +132,9 @@
 					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 				</fieldset>
 			</g:form>
+			<fieldset class="actions">
+				<g:render template="actions"/>
+			</fieldset>
 		</div>
 	</body>
 </html>

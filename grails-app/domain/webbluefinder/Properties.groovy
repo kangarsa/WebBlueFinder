@@ -1,11 +1,13 @@
 package webbluefinder
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
+
 class Properties {
-	String title
-	String hostname
-	String database
-	String dbuser
-	String dbpass
+	String title = "Web BlueFinder"
+	String hostname = "localhost"
+	String database = "results"
+	String dbuser = "results"
+	String dbpass = "results"
 
     static constraints = {
 		title blank:false, nullable:false, display:true, default:"Web BlueFinder"
@@ -15,17 +17,16 @@ class Properties {
 		dbpass blank:false, nullable:false, display:true, default:"results"
     }
 	
-	Properties (){
-		this.title = "Web BlueFinder"
-		this.hostname = "localhost"
-		this.database = "results"
-		this.dbuser = "results"
-		this.dbpass = "results"
+	static mapping = {
+		table 'prop'
+		hostname column: 'hname'
+		database column: 'db'
 	}
 	
+	
 	static getLast(){
-		Properties p = Properties.last() 
-		if(p == null){
+		Properties p = Properties.last()		
+		if (p == null) {
 			return new Properties()
 		}
 		return p

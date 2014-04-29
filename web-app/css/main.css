@@ -467,6 +467,18 @@ th.desc a {
 	background-image: url(../images/skin/sorted_desc.gif);
 }
 
+.lowPercent {
+	color: #ff0000;
+}
+
+.mediumPercent {
+	color: #ff9500;
+}
+
+.highPercent {
+	color: #4dde00;
+}
+
 .odd {
 	background: #f7f7f7;
 }
@@ -521,7 +533,7 @@ th:hover, tr:hover {
 
 /* ACTION BUTTONS */
 
-.buttons {
+.buttons, a.buttonStart, .buttonStop  {
 	background-color: #efefef;
 	overflow: hidden;
 	padding: 0.3em;
@@ -533,7 +545,8 @@ th:hover, tr:hover {
 }
 
 .buttons input,
-.buttons a {
+.buttons a, 
+a.buttonStart, .buttonStop {
 	background-color: transparent;
 	border: 0;
 	color: #666666;
@@ -550,7 +563,9 @@ th:hover, tr:hover {
 }
 
 .buttons input:hover, .buttons input:focus,
-.buttons a:hover, .buttons a:focus {
+.buttons a:hover, .buttons a:focus, 
+a.buttonStart:hover, .buttonStop:hover,
+a.buttonStart:focus, .buttonStop:focus {
 	background-color: #999999;
 	color: #ffffff;
 	outline: none;
@@ -561,20 +576,25 @@ th:hover, tr:hover {
 }
 
 .no-borderradius .buttons input:hover, .no-borderradius .buttons input:focus,
-.no-borderradius .buttons a:hover, .no-borderradius .buttons a:focus {
+.no-borderradius .buttons a:hover, .no-borderradius .buttons a:focus,
+.no-borderradius a.buttonStart:hover, .no-borderradius .buttonStop:hover,
+.no-borderradius a.buttonStart:focus, .no-borderradius .buttonStop:focus {
 	background-color: transparent;
 	color: #444444;
 	text-decoration: underline;
 }
 
-.buttons .delete, .buttons .edit, .buttons .save {
+.buttons .delete, .buttons .edit, .buttons .save, 
+.buttons .start, .buttons .stop, 
+a.buttonStart, .buttonStop {
 	background-position: 0.7em center;
 	background-repeat: no-repeat;
 	text-indent: 25px;
 }
 
 .ie6 .buttons input.delete, .ie6 .buttons input.edit, .ie6 .buttons input.save,
-.ie7 .buttons input.delete, .ie7 .buttons input.edit, .ie7 .buttons input.save {
+.ie7 .buttons input.delete, .ie7 .buttons input.edit, .ie7 .buttons input.save
+, .ie7 .buttons input.start, .ie7 .buttons input.stop {
 	padding-left: 36px;
 }
 
@@ -588,6 +608,14 @@ th:hover, tr:hover {
 
 .buttons .save {
 	background-image: url(../images/skin/database_save.png);
+}
+
+.buttons .start, .buttonStart {
+	background-image: url(../images/skin/start25px.png);
+}
+
+.buttons .stop, .buttonStop {
+	background-image: url(../images/skin/stop25px.png);
 }
 
 a.skip {

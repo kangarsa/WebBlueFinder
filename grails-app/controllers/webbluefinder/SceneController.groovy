@@ -56,8 +56,25 @@ class SceneController {
 		} else {
 			flash.message = message(code: 'scene.started.failed', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.name])
 		}
-		render(view: "show", model: [sceneInstance: sceneInstance])
+		redirect(action: "show", id: sceneInstance.id)
     }
+	
+	def next(Long id) {
+		def sceneInstance = Scene.get(id)
+		if (!sceneInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'scene.label', default: 'Scene'), id])
+			redirect(action: "list")
+			return
+		}
+		
+		if (sceneInstance.nextProcess()) {
+			flash.message = message(code: 'scene.started.successful', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.name])
+			sceneInstance.save();
+		} else {
+			flash.message = message(code: 'scene.started.failed', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.name])
+		}
+		redirect(action: "show", id: sceneInstance.id)
+	}
 
     def edit(Long id) {
         def sceneInstance = Scene.get(id)

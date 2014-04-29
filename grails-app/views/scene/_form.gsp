@@ -41,13 +41,45 @@
 	</label>
 	<g:select id="process" name="process.id" from="${webbluefinder.Process.list()}" optionKey="id" required="" value="${sceneInstance?.process?.id}" class="many-to-one"/>
 </div>
--->
+ -->
 <div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'processState', 'error')} ">
 	<label for="processState">
 		<g:message code="scene.processState.label" default="Process State" />
 		
 	</label>
 	<g:textField name="processState" readonly="readonly" value="${sceneInstance?.processState}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'piaMinLimit', 'error')} required">
+	<label for="piaMinLimit">
+		<g:message code="scene.piaMinLimit.label" default="Pia Min Limit" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="piaMinLimit" type="number" min="1" value="${sceneInstance.piaMinLimit}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'piaMaxLimit', 'error')} required">
+	<label for="piaMaxLimit">
+		<g:message code="scene.piaMaxLimit.label" default="Pia Max Limit" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="piaMaxLimit" type="number" min="1" value="${sceneInstance.piaMaxLimit}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'piaIterationsLimit', 'error')} required">
+	<label for="piaIterationsLimit">
+		<g:message code="scene.piaIterationsLimit.label" default="Pia Iterations Limit" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:field name="piaIterationsLimit" type="number" min="1" value="${sceneInstance.piaIterationsLimit}" required=""/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'piaClean', 'error')} ">
+	<label for="piaClean">
+		<g:message code="scene.piaClean.label" default="Pia Clean" />
+		
+	</label>
+	<g:checkBox name="piaClean" value="${sceneInstance?.piaClean}" />
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: sceneInstance, field: 'previousProcess', 'error')} ">

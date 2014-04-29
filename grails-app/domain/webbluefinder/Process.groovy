@@ -53,6 +53,10 @@ class Process {
 		return state.isComputing()
 	}
 	
+	def canExecute() {
+		return isNotStarted()
+	}
+	
 	def setStoped() {
 		this.setState(new Stoped())
 		notifyStopedToObservers()
@@ -103,7 +107,14 @@ class Process {
 	}
 	
 	def nextProcess() {
-		this.scene.setNewProcess(this.getNextProcess())
+		if(isFinalized()) {
+			scene.setNewProcess(this.getNextProcess())
+			return true;
+		}
+		return false;
+	}
+	def forceNextProcess() {
+		scene.setNewProcess(this.getNextProcess())
 	}
 	
 	def getPercent(){
