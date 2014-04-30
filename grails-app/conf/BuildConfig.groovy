@@ -1,9 +1,10 @@
-grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
+grails.servlet.version = "3.0" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
+grails.project.dependency.resolver = "maven" // or ivy
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
 // uncomment (and adjust settings) to fork the JVM to isolate classpaths
@@ -17,7 +18,7 @@ grails.project.dependency.resolution = {
         // specify dependency exclusions here; for example, uncomment this to disable ehcache:
         // excludes 'ehcache'
     }
-    log "debug" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
     legacyResolve false // whether to do a secondary resolve on plugin installation, not advised and here for backwards compatibility
 
@@ -49,20 +50,27 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        runtime ":hibernate:$grailsVersion"
+        //runtime ":hibernate:$grailsVersion"
+		runtime ':hibernate:3.6.10.13' // ':hibernate4:4.3.5.1' for Hibernate 4
         runtime ":jquery:1.8.3"
-        runtime ":resources:1.2"
+        //runtime ":resources:1.2"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.5"
 
-        build ":tomcat:$grailsVersion"
-		//build ":tomcat:7.0.47"
+        //build ":tomcat:$grailsVersion"
+		//build ":tomcat:7.0.42"
 
-        runtime ":database-migration:1.3.2"
+        //runtime ":database-migration:1.3.2"
 
-        compile ':cache:1.0.1'
+        //compile ':cache:1.0.1'
+		compile ":webxml:1.4.1"
+		build ':tomcat:7.0.52.1'
+		runtime ':resources:1.2.7'
+		compile ':scaffolding:2.0.3'
+		runtime ':database-migration:1.4.0'
+		//compile ":neo4j:1.1.1" 
     }
 }
