@@ -3,6 +3,7 @@ package webbluefinder
 import bflaunchers.DBRetrieverLauncher;
 import wbflisteners.ObservableProcess
 import wbflisteners.ProcessesListener
+//import static grails.async.Promises.*
 
 
 class DBRetrieverWrapper extends Process implements ProcessesListener {
@@ -22,15 +23,22 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 //do execute
 		Properties p = Properties.getLast()
 		System.out.println("worker.prestart()")
+		
+		def dbr = new DBRetrieverLauncher()
+		def query = "SELECT ?from, ?to WHERE { ?from a <"+scene.fromType+">. ?to a <"+scene.toType+">. ?to <"+scene.property+"> ?from. }";
+		dbr.addObserver(this)
+		
 		runAsync {
-			def dbr = new DBRetrieverLauncher()
-			def query = "SELECT ?from, ?to WHERE { ?from a <"+scene.fromType+">. ?to a <"+scene.toType+">. ?to <"+scene.property+"> ?from. }";
-			dbr.addObserver(this)
 			System.out.println(query);
-      System.out.println("Async Previo DBRetriever ");
+			System.out.println("Async Previo DBRetriever ");
 			dbr.launch(p.hostname+"/"+p.database, query, p.dbuser, p.dbpass, scene.id+"_results");
-      System.out.println("Async Post DBRetriever ");
+			System.out.println("Async Post DBRetriever ");
+			//return "repiola"
 		}
+		// block until result is called
+		//def result = prom.get()
+		// block for the specified time
+		//def result = p.get(1,MINUTES)
 		System.out.println("worker.poststart()")
 	}
 	

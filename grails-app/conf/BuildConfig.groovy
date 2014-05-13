@@ -72,5 +72,6 @@ grails.project.dependency.resolution = {
 		compile ':scaffolding:2.0.3'
 		runtime ':database-migration:1.4.0'
 		//compile ":neo4j:1.1.1" 
+		compile ":executor:0.3"
     }
 }

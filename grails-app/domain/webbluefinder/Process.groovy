@@ -12,7 +12,7 @@ class Process {
     static constraints = {
 		state nullable:true, editable:false, display:false
 		scene nullable:true
-		processErrors editable:false, display:true
+		processErrors nullable:true, editable:false, display:true
     }
 	
 	Process() {
@@ -67,8 +67,9 @@ class Process {
 	}
 	def setFinalized() {
 		//this.setState(new Finalized())
-		state = new Finalized()
 		//this.merge()
+		System.out.println("acá esta")
+		state = new Finalized()
 		this.save()
 		System.out.println(state)
 		//notifyFinalizedToObservers()
