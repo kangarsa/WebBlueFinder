@@ -22,7 +22,7 @@ Install on Linux (easy way):
 
 1. Download JDK 1.7.0_25.
 
-You can do this manually (preferently on your Home folder) and export PATH:
+    You can do this manually (preferently on your Home folder) and export PATH:
 
     ```sh
     export JAVA_HOME=/path/to/javadir
@@ -33,14 +33,14 @@ You can do this manually (preferently on your Home folder) and export PATH:
 
 2. Download grails 2.3.8.
 
-With GVM (http://gvmtool.net/):
+    With GVM (http://gvmtool.net/):
 
     ```sh
     curl -s get.gvmtool.net | bash
     gvm install grails 2.3.8
     ```
 
-Or with manual download you need to export PATH:
+    Or with manual download you need to export PATH:
 
     ```sh
     export GRAILS_HOME=/path/to/grailsdir
