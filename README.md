@@ -36,8 +36,8 @@ Install on Linux (easy way):
     With GVM (http://gvmtool.net/):
 
     ```sh
-    curl -s get.gvmtool.net | bash
-    gvm install grails 2.3.8
+    $ curl -s get.gvmtool.net | bash
+    $ gvm install grails 2.3.8
     ```
 
     Or with manual download you need to export PATH:
