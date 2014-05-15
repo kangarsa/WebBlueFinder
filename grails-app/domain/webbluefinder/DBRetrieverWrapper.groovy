@@ -29,10 +29,10 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 		dbr.addObserver(this)
 		
 		runAsync {
-			System.out.println(query);
-			System.out.println("Async Previo DBRetriever ");
+			//System.out.println(query);
+			//System.out.println("Async Previo DBRetriever ");
 			dbr.launch(p.hostname+"/"+p.database, query, p.dbuser, p.dbpass, scene.id+"_results");
-			System.out.println("Async Post DBRetriever ");
+			//System.out.println("Async Post DBRetriever ");
 			//return "repiola"
 		}
 		// block until result is called

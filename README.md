@@ -1,7 +1,7 @@
 WebBlueFinder
 =============
 
-Interface for BlueFinder Recommender System
+Interface for BlueFinder Recommender System (https://github.com/magictowers/bluefinder)
 
 
 Requires:
@@ -9,10 +9,9 @@ Requires:
 
 ----
 
-- Grails 2.2.4
+- Grails 2.3.8
 - JDK 1.7.0_25
 - This proyect!
-- *Occasionally* BlueFinder (https://github.com/magictowers/bluefinder)
 
 -----------
 

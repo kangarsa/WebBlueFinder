@@ -8,10 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import pia.BipartiteGraphGenerator;
-import pia.PIAConfigurationBuilder;
-import db.WikipediaConnector;
-import utils.ProjectConfiguration;
+import src.pia.BipartiteGraphGenerator;
+import src.pia.PIAConfigurationBuilder;
+import src.db.WikipediaConnector;
+import src.utils.ProjectConfiguration;
 import wbflisteners.ObservableProcess;
 
 public class PIALauncher extends ObservableProcess {
