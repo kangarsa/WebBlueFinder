@@ -31,7 +31,7 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 		runAsync {
 			//System.out.println(query);
 			//System.out.println("Async Previo DBRetriever ");
-			dbr.launch(p.hostname+"/"+p.database, query, p.dbuser, p.dbpass, scene.id+"_results");
+			dbr.launch(p.hostname+"/"+p.database, query, p.dbuser, p.dbpass, "sc"+scene.id+"_dbr");
 			//System.out.println("Async Post DBRetriever ");
 			//return "repiola"
 		}
@@ -51,12 +51,6 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 	}
 	def isDBRetrieverWrapper() {
 		return true
-	}
-	def isPIAWrapper() {
-		return false
-	}
-	def isBFWrapper() {
-		return false
 	}
 	def hasNextProcess() {
 		return true

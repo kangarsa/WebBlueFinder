@@ -24,7 +24,7 @@ class DumpLoader extends Process implements ProcessesListener {
 				Properties p = Properties.getLast()
 				def dll = new DumpLoaderLauncher()
 				dll.addObserver(this)
-				dll.launch(id, dumpPath, p.dbImportedPIA, p.dbUserImportedPIA, p.dbPassImportedPIA, true)
+				dll.launch(dumpPath, p.dbImportedPIA/*+"_"+id*/, p.dbUserImportedPIA, p.dbPassImportedPIA, true)
 			}
 		}
 	}
@@ -36,17 +36,8 @@ class DumpLoader extends Process implements ProcessesListener {
 	def getProcessStep() {
 		return 2
 	}
-	def isDBRetrieverWrapper() {
-		return false
-	}
-	def isPIAWrapper() {
-		return false
-	}
-	def isBFWrapper() {
-		return false
-	}
 	def isDumpLoader() {
-		return false
+		return true
 	}
 	def hasNextProcess() {
 		return true

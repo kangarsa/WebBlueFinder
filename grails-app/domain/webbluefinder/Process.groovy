@@ -168,9 +168,14 @@ class Process {
 	def start() {}
 	def getResults() {}
 	def getNextProcess() {}
-	def isDBRetrieverWrapper() {}
-	def isPIAWrapper() {}
-	def isBFWrapper() {}
+	def isDBRetrieverWrapper() {return false}
+	def isPIAWrapper() {return false}
+	def isBFWrapper() {return false}
+	def isBFEvaluationWrapper() {return false}
+	def isBFRecommenderWrapper() {return false}
+	def isBlueFinderImporter() {return false}
+	def isBFPathFinderWrapper() {return false}
+	def isDumpLoader() {return false}
 	def hasNextProcess() {}
 	def getProcessStep() {
 		// -1 = stoped, 0 = notStarted, 1 = isComputing, 2 = isFinalized

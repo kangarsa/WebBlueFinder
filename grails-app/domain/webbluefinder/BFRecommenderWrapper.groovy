@@ -47,12 +47,6 @@ class BFRecommenderWrapper extends Process implements ProcessesListener {
 	def getProcessStep() {
 		return 3
 	}
-	def isDBRetrieverWrapper() {
-		return false
-	}
-	def isPIAWrapper() {
-		return false
-	}
 	def isBFRecommenderWrapper() {
 		return true
 	}

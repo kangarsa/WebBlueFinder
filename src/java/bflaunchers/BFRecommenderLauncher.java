@@ -3,7 +3,6 @@ package bflaunchers;
 import java.sql.SQLException;
 import java.util.List;
 
-import knn.clean.BlueFinderEspecialRecommender;
 import knn.clean.BlueFinderRecommender;
 import knn.clean.KNN;
 import utils.ProjectConfiguration;
@@ -49,7 +48,7 @@ public class BFRecommenderLauncher extends ObservableProcess {
 			System.err.println("Number of recommendations was not provided, set to default (all).");
 		}
 		System.out.println("En BFRLauncher 4");
-		BlueFinderEspecialRecommender bfevaluation = new BlueFinderEspecialRecommender(new KNN(ProjectConfiguration.enhanceTable()), k, maxRecomm, db);
+		BlueFinderRecommender bfevaluation = new BlueFinderRecommender(new KNN(ProjectConfiguration.enhanceTable()), k, maxRecomm);
 
 		System.out.println("En BFRLauncher 5");
 		List<String> knnResults = bfevaluation.getEvaluation(object,  subject);
