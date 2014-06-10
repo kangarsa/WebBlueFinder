@@ -33,54 +33,38 @@ class BlueFinderImporter extends Process implements ProcessesListener {
 	def start() {
 		//do execute
 		Properties p = Properties.getLast()
-		System.out.println("BFI.prestart()")
 		def bfes = scene.getBFEvaluationWrappers()
 		def pfs = scene.getBFPathFinderWrappers()
 		runAsync {
+			System.out.println(dbFrom)
 			if (!dbFrom) {
 				setDefaultDbfrom()
 			}
 			if (!dbTo) {
 				setDefaultDbto()
 			}
-			System.out.println("nuevoThread?BFI")
-			def ter = new TableExporterLauncher(p.dbUserImportedPIA, p.dbPassImportedPIA, p.dbImportedPIA, dbTo, overwrite)
-			System.out.println("nuevoThread?BFI2")
+			def ter = new TableExporterLauncher(p.dbUserImportedPIA, p.dbPassImportedPIA, dbFrom, dbTo, overwrite)
 			ter.addObserver(this)
-			System.out.println("nuevoThread?BFI3")
 			//TODO No se tiene que poder ejecutar si hay otros en ejecución
 			//BFEvaluation tables:
-			System.out.println("nuevoThread?BFI3.1.1")
 			for (proc in bfes) {
-				System.out.println("nuevoThread?BFI3.1.2")
 				def table = "sc"+scene.id+"_bfe"+proc.id
-				System.out.println("nuevoThread?BFI3.1.3")
 				ter.launch(table, table)
-				System.out.println("nuevoThread?BFI3.1")
 			}
-			System.out.println("nuevoThread?BFI3.2.0")
 			ter.launch("generalStatistics", "sc"+scene.id+"_generalStatistics")
-			System.out.println("nuevoThread?BFI3.2")
 			ter.launch("particularStatistics", "sc"+scene.id+"_particularStatistics")
-			System.out.println("nuevoThread?BFI3.3")
 			//BFPathFinder:
 			for (proc in pfs) {
 				def table = "sc"+scene.id+"_bfpf"+proc.id
 				ter.launch(table, table)
-				System.out.println("nuevoThread?BFI3.4")
 			}
-			
-			System.out.println("nuevoThread?BFI4")
 			ter.launch("UxV", "sc"+scene.id+"_UxV")
-			System.out.println("nuevoThread?BFI5")
 			ter.launch("V_Normalized", "sc"+scene.id+"_V_Normalized")
-			System.out.println("nuevoThread?BFI6")
 			ter.launch("U_from", "sc"+scene.id+"_U_from")
-			System.out.println("nuevoThread?BFI7")
+			ter.launch("U_page", "sc"+scene.id+"_U_page")
 			ter.launch("NFPC", "sc"+scene.id+"_NFPC")
-			System.out.println("nuevoThread?BFI8")
 			ter.launch("U_pageEnhanced", "sc"+scene.id+"_U_pageEnhanced")
-			System.out.println("nuevoThread?BFI9")
+			finalized(ter)
 		}
 		System.out.println("BFI.poststart()")
 	}
