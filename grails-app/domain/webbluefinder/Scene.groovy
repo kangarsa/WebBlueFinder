@@ -48,6 +48,25 @@ class Scene {
 //	def processes = ["DBRetrieverWrapper","PiaWrapper","BFWrapper"]
 	def totalProcesses = 3
 	
+	def getDBRetrieverWrappers(){
+		return this.previousProcess.findAll{ p -> p.isDBRetrieverWrapper() }
+	}	
+	def getPIAWrappers(){
+		return this.previousProcess.findAll{ p -> p.isPIAWrapper() }
+	}
+	def getBFEvaluationWrappers(){
+		return this.previousProcess.findAll{ p -> p.isBFEvaluationWrapper() }
+	}
+	def getBFRecommenderWrappers(){
+		return this.previousProcess.findAll{ p -> p.isBFRecommenderWrapper() }
+	}
+	def getBFPathFinderWrappers(){
+		return this.previousProcess.findAll{ p -> p.isBFPathFinderWrapper() }
+	}
+	def getBlueFinderImporters(){
+		return this.previousProcess.findAll{ p -> p.isBlueFinderImporter() }
+	}
+	
 	def setNewProcess(Process p) {
 		if(process != null) {
 			this.addToPreviousProcess(process)

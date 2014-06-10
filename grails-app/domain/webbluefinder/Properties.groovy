@@ -8,6 +8,9 @@ class Properties {
 	String database = "results"
 	String dbuser = "results"
 	String dbpass = "results"
+	String dbImportedPIA = "piaImportAux"
+	String dbUserImportedPIA = "root"
+	String dbPassImportedPIA = "root"
 
     static constraints = {
 		title blank:false, nullable:false, display:true, default:"Web BlueFinder"

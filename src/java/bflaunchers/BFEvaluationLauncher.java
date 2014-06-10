@@ -1,6 +1,7 @@
 package bflaunchers;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 import knn.clean.BlueFinderEvaluation;
 import knn.clean.KNN;
@@ -18,20 +19,21 @@ public class BFEvaluationLauncher extends ObservableProcess {
 			System.exit(0);
 		}
 		**/
-		String scenarioName;
-		int proportion;
-		try {
-			scenarioName = scName;
-			proportion = proportionOfExperiment;
-		} catch (ArrayIndexOutOfBoundsException ex) {
-			scenarioName = "sc1Evaluation";
-			proportion = 3;
-		}
+		Date inicio = new Date();
+		System.out.println("----A1");
+		String scenarioName = scName;
+		int proportion = proportionOfExperiment;
 		KNN knn = new KNN(ProjectConfiguration.enhanceTable());
+
+		System.out.println("----A2");
 		BlueFinderEvaluation bfe = new BlueFinderEvaluation(knn);
-	    
+
+		System.out.println("----A3");
 		bfe.runCompleteEvaluation(proportion, 11, scenarioName);
-		System.out.println("FINALIZED!!!");
-		System.exit(0);
+
+		System.out.println("----A4");
+		Date fin = new Date();
+		System.out.println("BFELauncher Time: "+ (fin.getTime() - inicio.getTime()));
+		this.notifyFinished();
 	}
 }

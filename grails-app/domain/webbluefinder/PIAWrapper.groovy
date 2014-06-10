@@ -26,7 +26,7 @@ class PIAWrapper extends Process implements ProcessesListener {
 			System.out.println("nuevoThread?");
 			def pia = new PIALauncher()
 			pia.addObserver(this)
-			pia.launch(scene.piaMinLimit, scene.piaMaxLimit, scene.piaIterationsLimit, scene.id+"_results", scene.piaClean);
+			pia.launch(scene.piaMinLimit, scene.piaMaxLimit, scene.piaIterationsLimit, scene.id+"_dbr", scene.piaClean);
 		}
 		System.out.println("workerPIA.poststart()")
 	}
@@ -38,14 +38,8 @@ class PIAWrapper extends Process implements ProcessesListener {
 	def getProcessStep() {
 		return 2
 	}
-	def isDBRetrieverWrapper() {
-		return false
-	}
 	def isPIAWrapper() {
 		return true
-	}
-	def isBFWrapper() {
-		return false
 	}
 	def hasNextProcess() {
 		return true
