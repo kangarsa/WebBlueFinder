@@ -10,9 +10,21 @@ class ShowStatisticsController {
 		def cp = st.fetchConnectedPairs()
 		def ncp = st.fetchNotConnectedPairs()
 		def pqr = st.fetchPQRelevance()
-		def pqjoincp = st.pqJoinCp()
+
 		
-		render(view:"index.gsp", model:['pq':pq, 'cp':cp, 'ncp':ncp, 'pqr':pqr, 'pqcp':pqjoincp,'test':'holaTest'])
+		render(view:"index.gsp", model:['pq':pq, 'cp':cp, 'ncp':ncp, 'pqr':pqr])
 		
+	}
+	
+	def showConnectedByPQ(int id, String path) {
+		def st = new ShowStatistics()
+		def PQConnectedPairs = st.fetchConnectedPairsOfPQ(id)
+		render(view:"showConnectedByPQ.gsp", model:['pqcp':PQConnectedPairs, 'path':path])
+	}
+	
+	def showPQWhoConnects(int id, String page) {
+		def st = new ShowStatistics()
+		def PQConnectedPairs = st.fetchPQWhoConnects(id)
+		render(view:"showPQWhoConnects.gsp", model:['pqcp':PQConnectedPairs, 'page':page])	
 	}
 }
