@@ -1,102 +1,112 @@
 package webbluefinder
 
-import org.springframework.dao.DataIntegrityViolationException
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+/**
+ * StopedController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
+@Transactional(readOnly = true)
 class StopedController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Stoped.list(params), model:[stopedInstanceCount: Stoped.count()]
     }
 
-    def list(Integer max) {
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [stopedInstanceList: Stoped.list(params), stopedInstanceTotal: Stoped.count()]
+        respond Stoped.list(params), model:[stopedInstanceCount: Stoped.count()]
+    }
+
+    def show(Stoped stopedInstance) {
+        respond stopedInstance
     }
 
     def create() {
-        [stopedInstance: new Stoped(params)]
+        respond new Stoped(params)
     }
 
-    def save() {
-        def stopedInstance = new Stoped(params)
-        if (!stopedInstance.save(flush: true)) {
-            render(view: "create", model: [stopedInstance: stopedInstance])
+    @Transactional
+    def save(Stoped stopedInstance) {
+        if (stopedInstance == null) {
+            notFound()
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'stoped.label', default: 'Stoped'), stopedInstance.id])
-        redirect(action: "show", id: stopedInstance.id)
-    }
-
-    def show(Long id) {
-        def stopedInstance = Stoped.get(id)
-        if (!stopedInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'stoped.label', default: 'Stoped'), id])
-            redirect(action: "list")
+        if (stopedInstance.hasErrors()) {
+            respond stopedInstance.errors, view:'create'
             return
         }
 
-        [stopedInstance: stopedInstance]
-    }
+        stopedInstance.save flush:true
 
-    def edit(Long id) {
-        def stopedInstance = Stoped.get(id)
-        if (!stopedInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'stoped.label', default: 'Stoped'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [stopedInstance: stopedInstance]
-    }
-
-    def update(Long id, Long version) {
-        def stopedInstance = Stoped.get(id)
-        if (!stopedInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'stoped.label', default: 'Stoped'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (stopedInstance.version > version) {
-                stopedInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'stoped.label', default: 'Stoped')] as Object[],
-                          "Another user has updated this Stoped while you were editing")
-                render(view: "edit", model: [stopedInstance: stopedInstance])
-                return
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'stopedInstance.label', default: 'Stoped'), stopedInstance.id])
+                redirect stopedInstance
             }
+            '*' { respond stopedInstance, [status: CREATED] }
         }
-
-        stopedInstance.properties = params
-
-        if (!stopedInstance.save(flush: true)) {
-            render(view: "edit", model: [stopedInstance: stopedInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'stoped.label', default: 'Stoped'), stopedInstance.id])
-        redirect(action: "show", id: stopedInstance.id)
     }
 
-    def delete(Long id) {
-        def stopedInstance = Stoped.get(id)
-        if (!stopedInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'stoped.label', default: 'Stoped'), id])
-            redirect(action: "list")
+    def edit(Stoped stopedInstance) {
+        respond stopedInstance
+    }
+
+    @Transactional
+    def update(Stoped stopedInstance) {
+        if (stopedInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            stopedInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'stoped.label', default: 'Stoped'), id])
-            redirect(action: "list")
+        if (stopedInstance.hasErrors()) {
+            respond stopedInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'stoped.label', default: 'Stoped'), id])
-            redirect(action: "show", id: id)
+
+        stopedInstance.save flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'Stoped.label', default: 'Stoped'), stopedInstance.id])
+                redirect stopedInstance
+            }
+            '*'{ respond stopedInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(Stoped stopedInstance) {
+
+        if (stopedInstance == null) {
+            notFound()
+            return
+        }
+
+        stopedInstance.delete flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Stoped.label', default: 'Stoped'), stopedInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'stopedInstance.label', default: 'Stoped'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

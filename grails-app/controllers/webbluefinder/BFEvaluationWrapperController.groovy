@@ -1,16 +1,24 @@
 package webbluefinder
 
 
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+/**
+ * BFEvaluationWrapperController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
 @Transactional(readOnly = true)
 class BFEvaluationWrapperController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond BFEvaluationWrapper.list(params), model:[BFEvaluationWrapperInstanceCount: BFEvaluationWrapper.count()]
+    }
+
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond BFEvaluationWrapper.list(params), model:[BFEvaluationWrapperInstanceCount: BFEvaluationWrapper.count()]
     }
@@ -38,8 +46,8 @@ class BFEvaluationWrapperController {
         BFEvaluationWrapperInstance.save flush:true
 
         request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'BFEvaluationWrapper.label', default: 'BFEvaluationWrapper'), BFEvaluationWrapperInstance.id])
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'BFEvaluationWrapperInstance.label', default: 'BFEvaluationWrapper'), BFEvaluationWrapperInstance.id])
                 redirect BFEvaluationWrapperInstance
             }
             '*' { respond BFEvaluationWrapperInstance, [status: CREATED] }
@@ -65,7 +73,7 @@ class BFEvaluationWrapperController {
         BFEvaluationWrapperInstance.save flush:true
 
         request.withFormat {
-            form multipartForm {
+            form {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'BFEvaluationWrapper.label', default: 'BFEvaluationWrapper'), BFEvaluationWrapperInstance.id])
                 redirect BFEvaluationWrapperInstance
             }
@@ -84,7 +92,7 @@ class BFEvaluationWrapperController {
         BFEvaluationWrapperInstance.delete flush:true
 
         request.withFormat {
-            form multipartForm {
+            form {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'BFEvaluationWrapper.label', default: 'BFEvaluationWrapper'), BFEvaluationWrapperInstance.id])
                 redirect action:"index", method:"GET"
             }
@@ -94,8 +102,8 @@ class BFEvaluationWrapperController {
 
     protected void notFound() {
         request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'BFEvaluationWrapper.label', default: 'BFEvaluationWrapper'), params.id])
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'BFEvaluationWrapperInstance.label', default: 'BFEvaluationWrapper'), params.id])
                 redirect action: "index", method: "GET"
             }
             '*'{ render status: NOT_FOUND }

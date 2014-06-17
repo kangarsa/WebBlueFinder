@@ -1,102 +1,112 @@
 package webbluefinder
 
-import org.springframework.dao.DataIntegrityViolationException
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+/**
+ * FinalizedController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
+@Transactional(readOnly = true)
 class FinalizedController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Finalized.list(params), model:[finalizedInstanceCount: Finalized.count()]
     }
 
-    def list(Integer max) {
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [finalizedInstanceList: Finalized.list(params), finalizedInstanceTotal: Finalized.count()]
+        respond Finalized.list(params), model:[finalizedInstanceCount: Finalized.count()]
+    }
+
+    def show(Finalized finalizedInstance) {
+        respond finalizedInstance
     }
 
     def create() {
-        [finalizedInstance: new Finalized(params)]
+        respond new Finalized(params)
     }
 
-    def save() {
-        def finalizedInstance = new Finalized(params)
-        if (!finalizedInstance.save(flush: true)) {
-            render(view: "create", model: [finalizedInstance: finalizedInstance])
+    @Transactional
+    def save(Finalized finalizedInstance) {
+        if (finalizedInstance == null) {
+            notFound()
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'finalized.label', default: 'Finalized'), finalizedInstance.id])
-        redirect(action: "show", id: finalizedInstance.id)
-    }
-
-    def show(Long id) {
-        def finalizedInstance = Finalized.get(id)
-        if (!finalizedInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'finalized.label', default: 'Finalized'), id])
-            redirect(action: "list")
+        if (finalizedInstance.hasErrors()) {
+            respond finalizedInstance.errors, view:'create'
             return
         }
 
-        [finalizedInstance: finalizedInstance]
-    }
+        finalizedInstance.save flush:true
 
-    def edit(Long id) {
-        def finalizedInstance = Finalized.get(id)
-        if (!finalizedInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'finalized.label', default: 'Finalized'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [finalizedInstance: finalizedInstance]
-    }
-
-    def update(Long id, Long version) {
-        def finalizedInstance = Finalized.get(id)
-        if (!finalizedInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'finalized.label', default: 'Finalized'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (finalizedInstance.version > version) {
-                finalizedInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'finalized.label', default: 'Finalized')] as Object[],
-                          "Another user has updated this Finalized while you were editing")
-                render(view: "edit", model: [finalizedInstance: finalizedInstance])
-                return
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'finalizedInstance.label', default: 'Finalized'), finalizedInstance.id])
+                redirect finalizedInstance
             }
+            '*' { respond finalizedInstance, [status: CREATED] }
         }
-
-        finalizedInstance.properties = params
-
-        if (!finalizedInstance.save(flush: true)) {
-            render(view: "edit", model: [finalizedInstance: finalizedInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'finalized.label', default: 'Finalized'), finalizedInstance.id])
-        redirect(action: "show", id: finalizedInstance.id)
     }
 
-    def delete(Long id) {
-        def finalizedInstance = Finalized.get(id)
-        if (!finalizedInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'finalized.label', default: 'Finalized'), id])
-            redirect(action: "list")
+    def edit(Finalized finalizedInstance) {
+        respond finalizedInstance
+    }
+
+    @Transactional
+    def update(Finalized finalizedInstance) {
+        if (finalizedInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            finalizedInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'finalized.label', default: 'Finalized'), id])
-            redirect(action: "list")
+        if (finalizedInstance.hasErrors()) {
+            respond finalizedInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'finalized.label', default: 'Finalized'), id])
-            redirect(action: "show", id: id)
+
+        finalizedInstance.save flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'Finalized.label', default: 'Finalized'), finalizedInstance.id])
+                redirect finalizedInstance
+            }
+            '*'{ respond finalizedInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(Finalized finalizedInstance) {
+
+        if (finalizedInstance == null) {
+            notFound()
+            return
+        }
+
+        finalizedInstance.delete flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Finalized.label', default: 'Finalized'), finalizedInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'finalizedInstance.label', default: 'Finalized'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

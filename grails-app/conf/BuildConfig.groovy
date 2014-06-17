@@ -73,5 +73,7 @@ grails.project.dependency.resolution = {
 		runtime ':database-migration:1.4.0'
 		//compile ":neo4j:1.1.1" 
 		compile ":executor:0.3"
+		compile ":kickstart-with-bootstrap:1.1.0"
+		compile ':lesscss-resources:1.3.0.3'
     }
 }

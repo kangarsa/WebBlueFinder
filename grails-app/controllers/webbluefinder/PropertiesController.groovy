@@ -1,102 +1,112 @@
 package webbluefinder
 
-import org.springframework.dao.DataIntegrityViolationException
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+/**
+ * PropertiesController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
+@Transactional(readOnly = true)
 class PropertiesController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Properties.list(params), model:[propertiesInstanceCount: Properties.count()]
     }
 
-    def list(Integer max) {
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [propertiesInstanceList: Properties.list(params), propertiesInstanceTotal: Properties.count()]
+        respond Properties.list(params), model:[propertiesInstanceCount: Properties.count()]
+    }
+
+    def show(Properties propertiesInstance) {
+        respond propertiesInstance
     }
 
     def create() {
-        [propertiesInstance: new Properties(params)]
+        respond new Properties(params)
     }
 
-    def save() {
-        def propertiesInstance = new Properties(params)
-        if (!propertiesInstance.save(flush: true)) {
-            render(view: "create", model: [propertiesInstance: propertiesInstance])
+    @Transactional
+    def save(Properties propertiesInstance) {
+        if (propertiesInstance == null) {
+            notFound()
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'properties.label', default: 'Properties'), propertiesInstance.id])
-        redirect(action: "show", id: propertiesInstance.id)
-    }
-
-    def show(Long id) {
-        def propertiesInstance = Properties.get(id)
-        if (!propertiesInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'properties.label', default: 'Properties'), id])
-            redirect(action: "list")
+        if (propertiesInstance.hasErrors()) {
+            respond propertiesInstance.errors, view:'create'
             return
         }
 
-        [propertiesInstance: propertiesInstance]
-    }
+        propertiesInstance.save flush:true
 
-    def edit(Long id) {
-        def propertiesInstance = Properties.get(id)
-        if (!propertiesInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'properties.label', default: 'Properties'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [propertiesInstance: propertiesInstance]
-    }
-
-    def update(Long id, Long version) {
-        def propertiesInstance = Properties.get(id)
-        if (!propertiesInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'properties.label', default: 'Properties'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (propertiesInstance.version > version) {
-                propertiesInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'properties.label', default: 'Properties')] as Object[],
-                          "Another user has updated this Properties while you were editing")
-                render(view: "edit", model: [propertiesInstance: propertiesInstance])
-                return
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'propertiesInstance.label', default: 'Properties'), propertiesInstance.id])
+                redirect propertiesInstance
             }
+            '*' { respond propertiesInstance, [status: CREATED] }
         }
-
-        propertiesInstance.properties = params
-
-        if (!propertiesInstance.save(flush: true)) {
-            render(view: "edit", model: [propertiesInstance: propertiesInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'properties.label', default: 'Properties'), propertiesInstance.id])
-        redirect(action: "show", id: propertiesInstance.id)
     }
 
-    def delete(Long id) {
-        def propertiesInstance = Properties.get(id)
-        if (!propertiesInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'properties.label', default: 'Properties'), id])
-            redirect(action: "list")
+    def edit(Properties propertiesInstance) {
+        respond propertiesInstance
+    }
+
+    @Transactional
+    def update(Properties propertiesInstance) {
+        if (propertiesInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            propertiesInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'properties.label', default: 'Properties'), id])
-            redirect(action: "list")
+        if (propertiesInstance.hasErrors()) {
+            respond propertiesInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'properties.label', default: 'Properties'), id])
-            redirect(action: "show", id: id)
+
+        propertiesInstance.save flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'Properties.label', default: 'Properties'), propertiesInstance.id])
+                redirect propertiesInstance
+            }
+            '*'{ respond propertiesInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(Properties propertiesInstance) {
+
+        if (propertiesInstance == null) {
+            notFound()
+            return
+        }
+
+        propertiesInstance.delete flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Properties.label', default: 'Properties'), propertiesInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'propertiesInstance.label', default: 'Properties'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

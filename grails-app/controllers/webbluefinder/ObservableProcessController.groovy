@@ -1,102 +1,112 @@
 package webbluefinder
 
-import org.springframework.dao.DataIntegrityViolationException
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+/**
+ * ObservableProcessController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
+@Transactional(readOnly = true)
 class ObservableProcessController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond ObservableProcess.list(params), model:[observableProcessInstanceCount: ObservableProcess.count()]
     }
 
-    def list(Integer max) {
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [observableProcessInstanceList: ObservableProcess.list(params), observableProcessInstanceTotal: ObservableProcess.count()]
+        respond ObservableProcess.list(params), model:[observableProcessInstanceCount: ObservableProcess.count()]
+    }
+
+    def show(ObservableProcess observableProcessInstance) {
+        respond observableProcessInstance
     }
 
     def create() {
-        [observableProcessInstance: new ObservableProcess(params)]
+        respond new ObservableProcess(params)
     }
 
-    def save() {
-        def observableProcessInstance = new ObservableProcess(params)
-        if (!observableProcessInstance.save(flush: true)) {
-            render(view: "create", model: [observableProcessInstance: observableProcessInstance])
+    @Transactional
+    def save(ObservableProcess observableProcessInstance) {
+        if (observableProcessInstance == null) {
+            notFound()
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'observableProcess.label', default: 'ObservableProcess'), observableProcessInstance.id])
-        redirect(action: "show", id: observableProcessInstance.id)
-    }
-
-    def show(Long id) {
-        def observableProcessInstance = ObservableProcess.get(id)
-        if (!observableProcessInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'observableProcess.label', default: 'ObservableProcess'), id])
-            redirect(action: "list")
+        if (observableProcessInstance.hasErrors()) {
+            respond observableProcessInstance.errors, view:'create'
             return
         }
 
-        [observableProcessInstance: observableProcessInstance]
-    }
+        observableProcessInstance.save flush:true
 
-    def edit(Long id) {
-        def observableProcessInstance = ObservableProcess.get(id)
-        if (!observableProcessInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'observableProcess.label', default: 'ObservableProcess'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [observableProcessInstance: observableProcessInstance]
-    }
-
-    def update(Long id, Long version) {
-        def observableProcessInstance = ObservableProcess.get(id)
-        if (!observableProcessInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'observableProcess.label', default: 'ObservableProcess'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (observableProcessInstance.version > version) {
-                observableProcessInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'observableProcess.label', default: 'ObservableProcess')] as Object[],
-                          "Another user has updated this ObservableProcess while you were editing")
-                render(view: "edit", model: [observableProcessInstance: observableProcessInstance])
-                return
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'observableProcessInstance.label', default: 'ObservableProcess'), observableProcessInstance.id])
+                redirect observableProcessInstance
             }
+            '*' { respond observableProcessInstance, [status: CREATED] }
         }
-
-        observableProcessInstance.properties = params
-
-        if (!observableProcessInstance.save(flush: true)) {
-            render(view: "edit", model: [observableProcessInstance: observableProcessInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'observableProcess.label', default: 'ObservableProcess'), observableProcessInstance.id])
-        redirect(action: "show", id: observableProcessInstance.id)
     }
 
-    def delete(Long id) {
-        def observableProcessInstance = ObservableProcess.get(id)
-        if (!observableProcessInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'observableProcess.label', default: 'ObservableProcess'), id])
-            redirect(action: "list")
+    def edit(ObservableProcess observableProcessInstance) {
+        respond observableProcessInstance
+    }
+
+    @Transactional
+    def update(ObservableProcess observableProcessInstance) {
+        if (observableProcessInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            observableProcessInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'observableProcess.label', default: 'ObservableProcess'), id])
-            redirect(action: "list")
+        if (observableProcessInstance.hasErrors()) {
+            respond observableProcessInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'observableProcess.label', default: 'ObservableProcess'), id])
-            redirect(action: "show", id: id)
+
+        observableProcessInstance.save flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'ObservableProcess.label', default: 'ObservableProcess'), observableProcessInstance.id])
+                redirect observableProcessInstance
+            }
+            '*'{ respond observableProcessInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(ObservableProcess observableProcessInstance) {
+
+        if (observableProcessInstance == null) {
+            notFound()
+            return
+        }
+
+        observableProcessInstance.delete flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'ObservableProcess.label', default: 'ObservableProcess'), observableProcessInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'observableProcessInstance.label', default: 'ObservableProcess'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

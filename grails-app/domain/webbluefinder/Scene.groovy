@@ -28,7 +28,7 @@ class Scene {
 		fromType blank:false
 	    property blank:false
 	    toType blank:false
-		process nullable:false, editable:false, display:true
+		process nullable:true, editable:false, display:true
 		//previousProcess editable:false, display:true
 		processState nullable:true, editable:false, display:true
 		piaMinLimit min:1

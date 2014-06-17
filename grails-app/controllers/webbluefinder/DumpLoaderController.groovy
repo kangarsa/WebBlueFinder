@@ -1,16 +1,24 @@
 package webbluefinder
 
 
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+/**
+ * DumpLoaderController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
 @Transactional(readOnly = true)
 class DumpLoaderController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond DumpLoader.list(params), model:[dumpLoaderInstanceCount: DumpLoader.count()]
+    }
+
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond DumpLoader.list(params), model:[dumpLoaderInstanceCount: DumpLoader.count()]
     }
@@ -38,8 +46,8 @@ class DumpLoaderController {
         dumpLoaderInstance.save flush:true
 
         request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'dumpLoader.label', default: 'DumpLoader'), dumpLoaderInstance.id])
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'dumpLoaderInstance.label', default: 'DumpLoader'), dumpLoaderInstance.id])
                 redirect dumpLoaderInstance
             }
             '*' { respond dumpLoaderInstance, [status: CREATED] }
@@ -65,7 +73,7 @@ class DumpLoaderController {
         dumpLoaderInstance.save flush:true
 
         request.withFormat {
-            form multipartForm {
+            form {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'DumpLoader.label', default: 'DumpLoader'), dumpLoaderInstance.id])
                 redirect dumpLoaderInstance
             }
@@ -84,7 +92,7 @@ class DumpLoaderController {
         dumpLoaderInstance.delete flush:true
 
         request.withFormat {
-            form multipartForm {
+            form {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'DumpLoader.label', default: 'DumpLoader'), dumpLoaderInstance.id])
                 redirect action:"index", method:"GET"
             }
@@ -94,8 +102,8 @@ class DumpLoaderController {
 
     protected void notFound() {
         request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'dumpLoader.label', default: 'DumpLoader'), params.id])
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'dumpLoaderInstance.label', default: 'DumpLoader'), params.id])
                 redirect action: "index", method: "GET"
             }
             '*'{ render status: NOT_FOUND }

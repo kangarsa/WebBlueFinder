@@ -1,102 +1,112 @@
 package webbluefinder
 
-import org.springframework.dao.DataIntegrityViolationException
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+/**
+ * ComputingController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
+@Transactional(readOnly = true)
 class ComputingController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Computing.list(params), model:[computingInstanceCount: Computing.count()]
     }
 
-    def list(Integer max) {
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [computingInstanceList: Computing.list(params), computingInstanceTotal: Computing.count()]
+        respond Computing.list(params), model:[computingInstanceCount: Computing.count()]
+    }
+
+    def show(Computing computingInstance) {
+        respond computingInstance
     }
 
     def create() {
-        [computingInstance: new Computing(params)]
+        respond new Computing(params)
     }
 
-    def save() {
-        def computingInstance = new Computing(params)
-        if (!computingInstance.save(flush: true)) {
-            render(view: "create", model: [computingInstance: computingInstance])
+    @Transactional
+    def save(Computing computingInstance) {
+        if (computingInstance == null) {
+            notFound()
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'computing.label', default: 'Computing'), computingInstance.id])
-        redirect(action: "show", id: computingInstance.id)
-    }
-
-    def show(Long id) {
-        def computingInstance = Computing.get(id)
-        if (!computingInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'computing.label', default: 'Computing'), id])
-            redirect(action: "list")
+        if (computingInstance.hasErrors()) {
+            respond computingInstance.errors, view:'create'
             return
         }
 
-        [computingInstance: computingInstance]
-    }
+        computingInstance.save flush:true
 
-    def edit(Long id) {
-        def computingInstance = Computing.get(id)
-        if (!computingInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'computing.label', default: 'Computing'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [computingInstance: computingInstance]
-    }
-
-    def update(Long id, Long version) {
-        def computingInstance = Computing.get(id)
-        if (!computingInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'computing.label', default: 'Computing'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (computingInstance.version > version) {
-                computingInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'computing.label', default: 'Computing')] as Object[],
-                          "Another user has updated this Computing while you were editing")
-                render(view: "edit", model: [computingInstance: computingInstance])
-                return
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'computingInstance.label', default: 'Computing'), computingInstance.id])
+                redirect computingInstance
             }
+            '*' { respond computingInstance, [status: CREATED] }
         }
-
-        computingInstance.properties = params
-
-        if (!computingInstance.save(flush: true)) {
-            render(view: "edit", model: [computingInstance: computingInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'computing.label', default: 'Computing'), computingInstance.id])
-        redirect(action: "show", id: computingInstance.id)
     }
 
-    def delete(Long id) {
-        def computingInstance = Computing.get(id)
-        if (!computingInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'computing.label', default: 'Computing'), id])
-            redirect(action: "list")
+    def edit(Computing computingInstance) {
+        respond computingInstance
+    }
+
+    @Transactional
+    def update(Computing computingInstance) {
+        if (computingInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            computingInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'computing.label', default: 'Computing'), id])
-            redirect(action: "list")
+        if (computingInstance.hasErrors()) {
+            respond computingInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'computing.label', default: 'Computing'), id])
-            redirect(action: "show", id: id)
+
+        computingInstance.save flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'Computing.label', default: 'Computing'), computingInstance.id])
+                redirect computingInstance
+            }
+            '*'{ respond computingInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(Computing computingInstance) {
+
+        if (computingInstance == null) {
+            notFound()
+            return
+        }
+
+        computingInstance.delete flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Computing.label', default: 'Computing'), computingInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'computingInstance.label', default: 'Computing'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

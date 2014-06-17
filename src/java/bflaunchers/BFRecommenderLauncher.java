@@ -1,11 +1,13 @@
 package bflaunchers;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import db.utils.ResultsDbInterface;
 import knn.clean.BlueFinderRecommender;
 import knn.clean.KNN;
-import utils.ProjectConfiguration;
+import utils.ProjectSetup;
 import wbflisteners.ObservableProcess;
 
 public class BFRecommenderLauncher extends ObservableProcess {
@@ -15,19 +17,11 @@ public class BFRecommenderLauncher extends ObservableProcess {
 		if (args.length < 3) {
 			System.out.println("Expected arguments: <from> <to> <neighbour> [<max recommendations>]");
 			System.exit(255);
-		}**/
-		System.out.println("from: "+from);
-		System.out.println("to: "+to);
-		System.out.println("nei: "+neighbour);
-		System.out.println("max: "+maxRecommendations);
-		System.out.println("db: "+db);
-		
-		System.out.println("En BFRLauncher 1");
+		}**/				
 		String subject = from;
 		String object = to;
 		int k = 5;
 
-		System.out.println("En BFRLauncher 2");
 		try {
 			k = neighbour;
 			if (k > 11) {
@@ -38,7 +32,6 @@ public class BFRecommenderLauncher extends ObservableProcess {
 			k = 5;
 		}
 
-		System.out.println("En BFRLauncher 3");
 		int maxRecomm = 100000;
 		try {
 			maxRecomm = maxRecommendations;
@@ -47,8 +40,10 @@ public class BFRecommenderLauncher extends ObservableProcess {
 		} catch (ArrayIndexOutOfBoundsException ex) {
 			System.err.println("Number of recommendations was not provided, set to default (all).");
 		}
-		System.out.println("En BFRLauncher 4");
-		BlueFinderRecommender bfevaluation = new BlueFinderRecommender(new KNN(ProjectConfiguration.enhanceTable()), k, maxRecomm);
+		Connection conn = DatabaseConnector.getConnection("root","root");
+		ResultsDbInterface rdi = new ResultsDbInterface(conn);
+		
+		BlueFinderRecommender bfevaluation = new BlueFinderRecommender(new KNN(new ProjectSetup()), k, maxRecomm,rdi);
 
 		System.out.println("En BFRLauncher 5");
 		List<String> knnResults = bfevaluation.getEvaluation(object,  subject);

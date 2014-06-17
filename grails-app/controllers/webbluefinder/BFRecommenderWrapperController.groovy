@@ -1,102 +1,112 @@
 package webbluefinder
 
-import org.springframework.dao.DataIntegrityViolationException
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+/**
+ * BFRecommenderWrapperController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
+@Transactional(readOnly = true)
 class BFRecommenderWrapperController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond BFRecommenderWrapper.list(params), model:[BFRecommenderWrapperInstanceCount: BFRecommenderWrapper.count()]
     }
 
-    def list(Integer max) {
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [BFRecommenderWrapperInstanceList: BFRecommenderWrapper.list(params), BFRecommenderWrapperInstanceTotal: BFRecommenderWrapper.count()]
+        respond BFRecommenderWrapper.list(params), model:[BFRecommenderWrapperInstanceCount: BFRecommenderWrapper.count()]
+    }
+
+    def show(BFRecommenderWrapper BFRecommenderWrapperInstance) {
+        respond BFRecommenderWrapperInstance
     }
 
     def create() {
-        [BFRecommenderWrapperInstance: new BFRecommenderWrapper(params)]
+        respond new BFRecommenderWrapper(params)
     }
 
-    def save() {
-        def BFRecommenderWrapperInstance = new BFRecommenderWrapper(params)
-        if (!BFRecommenderWrapperInstance.save(flush: true)) {
-            render(view: "create", model: [BFRecommenderWrapperInstance: BFRecommenderWrapperInstance])
+    @Transactional
+    def save(BFRecommenderWrapper BFRecommenderWrapperInstance) {
+        if (BFRecommenderWrapperInstance == null) {
+            notFound()
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper'), BFRecommenderWrapperInstance.id])
-        redirect(action: "show", id: BFRecommenderWrapperInstance.id)
-    }
-
-    def show(Long id) {
-        def BFRecommenderWrapperInstance = BFRecommenderWrapper.get(id)
-        if (!BFRecommenderWrapperInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper'), id])
-            redirect(action: "list")
+        if (BFRecommenderWrapperInstance.hasErrors()) {
+            respond BFRecommenderWrapperInstance.errors, view:'create'
             return
         }
 
-        [BFRecommenderWrapperInstance: BFRecommenderWrapperInstance]
-    }
+        BFRecommenderWrapperInstance.save flush:true
 
-    def edit(Long id) {
-        def BFRecommenderWrapperInstance = BFRecommenderWrapper.get(id)
-        if (!BFRecommenderWrapperInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [BFRecommenderWrapperInstance: BFRecommenderWrapperInstance]
-    }
-
-    def update(Long id, Long version) {
-        def BFRecommenderWrapperInstance = BFRecommenderWrapper.get(id)
-        if (!BFRecommenderWrapperInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (BFRecommenderWrapperInstance.version > version) {
-                BFRecommenderWrapperInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper')] as Object[],
-                          "Another user has updated this BFRecommenderWrapper while you were editing")
-                render(view: "edit", model: [BFRecommenderWrapperInstance: BFRecommenderWrapperInstance])
-                return
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'BFRecommenderWrapperInstance.label', default: 'BFRecommenderWrapper'), BFRecommenderWrapperInstance.id])
+                redirect BFRecommenderWrapperInstance
             }
+            '*' { respond BFRecommenderWrapperInstance, [status: CREATED] }
         }
-
-        BFRecommenderWrapperInstance.properties = params
-
-        if (!BFRecommenderWrapperInstance.save(flush: true)) {
-            render(view: "edit", model: [BFRecommenderWrapperInstance: BFRecommenderWrapperInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper'), BFRecommenderWrapperInstance.id])
-        redirect(action: "show", id: BFRecommenderWrapperInstance.id)
     }
 
-    def delete(Long id) {
-        def BFRecommenderWrapperInstance = BFRecommenderWrapper.get(id)
-        if (!BFRecommenderWrapperInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper'), id])
-            redirect(action: "list")
+    def edit(BFRecommenderWrapper BFRecommenderWrapperInstance) {
+        respond BFRecommenderWrapperInstance
+    }
+
+    @Transactional
+    def update(BFRecommenderWrapper BFRecommenderWrapperInstance) {
+        if (BFRecommenderWrapperInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            BFRecommenderWrapperInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper'), id])
-            redirect(action: "list")
+        if (BFRecommenderWrapperInstance.hasErrors()) {
+            respond BFRecommenderWrapperInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper'), id])
-            redirect(action: "show", id: id)
+
+        BFRecommenderWrapperInstance.save flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper'), BFRecommenderWrapperInstance.id])
+                redirect BFRecommenderWrapperInstance
+            }
+            '*'{ respond BFRecommenderWrapperInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(BFRecommenderWrapper BFRecommenderWrapperInstance) {
+
+        if (BFRecommenderWrapperInstance == null) {
+            notFound()
+            return
+        }
+
+        BFRecommenderWrapperInstance.delete flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'BFRecommenderWrapper.label', default: 'BFRecommenderWrapper'), BFRecommenderWrapperInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'BFRecommenderWrapperInstance.label', default: 'BFRecommenderWrapper'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

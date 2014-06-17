@@ -11,7 +11,7 @@ import java.sql.Statement;
 import pia.BipartiteGraphGenerator;
 import pia.PIAConfigurationBuilder;
 import db.WikipediaConnector;
-import utils.ProjectConfiguration;
+import utils.ProjectConfigurationReader;
 import wbflisteners.ObservableProcess;
 
 public class PIALauncher extends ObservableProcess {
@@ -42,7 +42,7 @@ public class PIALauncher extends ObservableProcess {
         params += iterations + " ";
         String from_to_table = fromToTable;
         
-		String dbpediaPrefix = ProjectConfiguration.dbpediaPrefix();
+		String dbpediaPrefix = ProjectConfigurationReader.dbpediaPrefix();
         
 
 		String clean = "tidy";

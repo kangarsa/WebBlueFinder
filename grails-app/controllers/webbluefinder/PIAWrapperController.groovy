@@ -1,102 +1,112 @@
 package webbluefinder
 
-import org.springframework.dao.DataIntegrityViolationException
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+/**
+ * PIAWrapperController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
+@Transactional(readOnly = true)
 class PIAWrapperController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond PIAWrapper.list(params), model:[PIAWrapperInstanceCount: PIAWrapper.count()]
     }
 
-    def list(Integer max) {
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [PIAWrapperInstanceList: PIAWrapper.list(params), PIAWrapperInstanceTotal: PIAWrapper.count()]
+        respond PIAWrapper.list(params), model:[PIAWrapperInstanceCount: PIAWrapper.count()]
+    }
+
+    def show(PIAWrapper PIAWrapperInstance) {
+        respond PIAWrapperInstance
     }
 
     def create() {
-        [PIAWrapperInstance: new PIAWrapper(params)]
+        respond new PIAWrapper(params)
     }
 
-    def save() {
-        def PIAWrapperInstance = new PIAWrapper(params)
-        if (!PIAWrapperInstance.save(flush: true)) {
-            render(view: "create", model: [PIAWrapperInstance: PIAWrapperInstance])
+    @Transactional
+    def save(PIAWrapper PIAWrapperInstance) {
+        if (PIAWrapperInstance == null) {
+            notFound()
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'PIAWrapper.label', default: 'PIAWrapper'), PIAWrapperInstance.id])
-        redirect(action: "show", id: PIAWrapperInstance.id)
-    }
-
-    def show(Long id) {
-        def PIAWrapperInstance = PIAWrapper.get(id)
-        if (!PIAWrapperInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'PIAWrapper.label', default: 'PIAWrapper'), id])
-            redirect(action: "list")
+        if (PIAWrapperInstance.hasErrors()) {
+            respond PIAWrapperInstance.errors, view:'create'
             return
         }
 
-        [PIAWrapperInstance: PIAWrapperInstance]
-    }
+        PIAWrapperInstance.save flush:true
 
-    def edit(Long id) {
-        def PIAWrapperInstance = PIAWrapper.get(id)
-        if (!PIAWrapperInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'PIAWrapper.label', default: 'PIAWrapper'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [PIAWrapperInstance: PIAWrapperInstance]
-    }
-
-    def update(Long id, Long version) {
-        def PIAWrapperInstance = PIAWrapper.get(id)
-        if (!PIAWrapperInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'PIAWrapper.label', default: 'PIAWrapper'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (PIAWrapperInstance.version > version) {
-                PIAWrapperInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'PIAWrapper.label', default: 'PIAWrapper')] as Object[],
-                          "Another user has updated this PIAWrapper while you were editing")
-                render(view: "edit", model: [PIAWrapperInstance: PIAWrapperInstance])
-                return
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'PIAWrapperInstance.label', default: 'PIAWrapper'), PIAWrapperInstance.id])
+                redirect PIAWrapperInstance
             }
+            '*' { respond PIAWrapperInstance, [status: CREATED] }
         }
-
-        PIAWrapperInstance.properties = params
-
-        if (!PIAWrapperInstance.save(flush: true)) {
-            render(view: "edit", model: [PIAWrapperInstance: PIAWrapperInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'PIAWrapper.label', default: 'PIAWrapper'), PIAWrapperInstance.id])
-        redirect(action: "show", id: PIAWrapperInstance.id)
     }
 
-    def delete(Long id) {
-        def PIAWrapperInstance = PIAWrapper.get(id)
-        if (!PIAWrapperInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'PIAWrapper.label', default: 'PIAWrapper'), id])
-            redirect(action: "list")
+    def edit(PIAWrapper PIAWrapperInstance) {
+        respond PIAWrapperInstance
+    }
+
+    @Transactional
+    def update(PIAWrapper PIAWrapperInstance) {
+        if (PIAWrapperInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            PIAWrapperInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'PIAWrapper.label', default: 'PIAWrapper'), id])
-            redirect(action: "list")
+        if (PIAWrapperInstance.hasErrors()) {
+            respond PIAWrapperInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'PIAWrapper.label', default: 'PIAWrapper'), id])
-            redirect(action: "show", id: id)
+
+        PIAWrapperInstance.save flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'PIAWrapper.label', default: 'PIAWrapper'), PIAWrapperInstance.id])
+                redirect PIAWrapperInstance
+            }
+            '*'{ respond PIAWrapperInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(PIAWrapper PIAWrapperInstance) {
+
+        if (PIAWrapperInstance == null) {
+            notFound()
+            return
+        }
+
+        PIAWrapperInstance.delete flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'PIAWrapper.label', default: 'PIAWrapper'), PIAWrapperInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'PIAWrapperInstance.label', default: 'PIAWrapper'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

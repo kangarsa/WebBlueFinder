@@ -1,102 +1,112 @@
 package webbluefinder
 
-import org.springframework.dao.DataIntegrityViolationException
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+/**
+ * ProcessController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
+@Transactional(readOnly = true)
 class ProcessController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Process.list(params), model:[processInstanceCount: Process.count()]
     }
 
-    def list(Integer max) {
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [processInstanceList: Process.list(params), processInstanceTotal: Process.count()]
+        respond Process.list(params), model:[processInstanceCount: Process.count()]
+    }
+
+    def show(Process processInstance) {
+        respond processInstance
     }
 
     def create() {
-        [processInstance: new Process(params)]
+        respond new Process(params)
     }
 
-    def save() {
-        def processInstance = new Process(params)
-        if (!processInstance.save(flush: true)) {
-            render(view: "create", model: [processInstance: processInstance])
+    @Transactional
+    def save(Process processInstance) {
+        if (processInstance == null) {
+            notFound()
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'process.label', default: 'Process'), processInstance.id])
-        redirect(action: "show", id: processInstance.id)
-    }
-
-    def show(Long id) {
-        def processInstance = Process.get(id)
-        if (!processInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'process.label', default: 'Process'), id])
-            redirect(action: "list")
+        if (processInstance.hasErrors()) {
+            respond processInstance.errors, view:'create'
             return
         }
 
-        [processInstance: processInstance]
-    }
+        processInstance.save flush:true
 
-    def edit(Long id) {
-        def processInstance = Process.get(id)
-        if (!processInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'process.label', default: 'Process'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [processInstance: processInstance]
-    }
-
-    def update(Long id, Long version) {
-        def processInstance = Process.get(id)
-        if (!processInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'process.label', default: 'Process'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (processInstance.version > version) {
-                processInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'process.label', default: 'Process')] as Object[],
-                          "Another user has updated this Process while you were editing")
-                render(view: "edit", model: [processInstance: processInstance])
-                return
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'processInstance.label', default: 'Process'), processInstance.id])
+                redirect processInstance
             }
+            '*' { respond processInstance, [status: CREATED] }
         }
-
-        processInstance.properties = params
-
-        if (!processInstance.save(flush: true)) {
-            render(view: "edit", model: [processInstance: processInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'process.label', default: 'Process'), processInstance.id])
-        redirect(action: "show", id: processInstance.id)
     }
 
-    def delete(Long id) {
-        def processInstance = Process.get(id)
-        if (!processInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'process.label', default: 'Process'), id])
-            redirect(action: "list")
+    def edit(Process processInstance) {
+        respond processInstance
+    }
+
+    @Transactional
+    def update(Process processInstance) {
+        if (processInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            processInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'process.label', default: 'Process'), id])
-            redirect(action: "list")
+        if (processInstance.hasErrors()) {
+            respond processInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'process.label', default: 'Process'), id])
-            redirect(action: "show", id: id)
+
+        processInstance.save flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'Process.label', default: 'Process'), processInstance.id])
+                redirect processInstance
+            }
+            '*'{ respond processInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(Process processInstance) {
+
+        if (processInstance == null) {
+            notFound()
+            return
+        }
+
+        processInstance.delete flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Process.label', default: 'Process'), processInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'processInstance.label', default: 'Process'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 	

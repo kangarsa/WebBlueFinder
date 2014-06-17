@@ -1,137 +1,112 @@
 package webbluefinder
 
-import org.springframework.dao.DataIntegrityViolationException
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+/**
+ * SceneController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
+@Transactional(readOnly = true)
 class SceneController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() {
-        redirect(action: "list", params: params)
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Scene.list(params), model:[sceneInstanceCount: Scene.count()]
     }
 
-    def list(Integer max) {
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [sceneInstanceList: Scene.list(params), sceneInstanceTotal: Scene.count()]
+        respond Scene.list(params), model:[sceneInstanceCount: Scene.count()]
+    }
+
+    def show(Scene sceneInstance) {
+        respond sceneInstance
     }
 
     def create() {
-        [sceneInstance: new Scene(params)]
+        respond new Scene(params)
     }
 
-    def save() {
-        def sceneInstance = new Scene(params)
-		sceneInstance.process = new DBRetrieverWrapper()
-		sceneInstance.process.scene = sceneInstance
-        if (!sceneInstance.save(flush: true)) {
-            render(view: "create", model: [sceneInstance: sceneInstance])
+    @Transactional
+    def save(Scene sceneInstance) {
+        if (sceneInstance == null) {
+            notFound()
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.id])
-        redirect(action: "show", id: sceneInstance.id)
-    }
-	
-	def show(Long id) {
-		def sceneInstance = Scene.get(id)
-		if (!sceneInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'scene.label', default: 'Scene'), id])
-			redirect(action: "list")
-			return
-		}
-
-		[sceneInstance: sceneInstance]
-	}
-	
-    def start(Long id) {
-        def sceneInstance = Scene.get(id)
-        if (!sceneInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'scene.label', default: 'Scene'), id])
-            redirect(action: "list")
-            return
-        }
-		
-		if (sceneInstance.start()) {
-			flash.message = message(code: 'scene.started.successful', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.name])
-		} else {
-			flash.message = message(code: 'scene.started.failed', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.name])
-		}
-		redirect(action: "show", id: sceneInstance.id)
-    }
-	
-	def next(Long id) {
-		def sceneInstance = Scene.get(id)
-		if (!sceneInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'scene.label', default: 'Scene'), id])
-			redirect(action: "list")
-			return
-		}
-		
-		if (sceneInstance.nextProcess()) {
-			flash.message = message(code: 'scene.started.successful', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.name])
-			sceneInstance.save();
-		} else {
-			flash.message = message(code: 'scene.started.failed', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.name])
-		}
-		redirect(action: "show", id: sceneInstance.id)
-	}
-
-    def edit(Long id) {
-        def sceneInstance = Scene.get(id)
-        if (!sceneInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'scene.label', default: 'Scene'), id])
-            redirect(action: "list")
+        if (sceneInstance.hasErrors()) {
+            respond sceneInstance.errors, view:'create'
             return
         }
 
-        [sceneInstance: sceneInstance]
-    }
+        sceneInstance.save flush:true
 
-    def update(Long id, Long version) {
-        def sceneInstance = Scene.get(id)
-        if (!sceneInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'scene.label', default: 'Scene'), id])
-            redirect(action: "list")
-            return
-        }
-
-        if (version != null) {
-            if (sceneInstance.version > version) {
-                sceneInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'scene.label', default: 'Scene')] as Object[],
-                          "Another user has updated this Scene while you were editing")
-                render(view: "edit", model: [sceneInstance: sceneInstance])
-                return
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'sceneInstance.label', default: 'Scene'), sceneInstance.id])
+                redirect sceneInstance
             }
+            '*' { respond sceneInstance, [status: CREATED] }
         }
-
-        sceneInstance.properties = params
-
-        if (!sceneInstance.save(flush: true)) {
-            render(view: "edit", model: [sceneInstance: sceneInstance])
-            return
-        }
-
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'scene.label', default: 'Scene'), sceneInstance.id])
-        redirect(action: "show", id: sceneInstance.id)
     }
 
-    def delete(Long id) {
-        def sceneInstance = Scene.get(id)
-        if (!sceneInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'scene.label', default: 'Scene'), id])
-            redirect(action: "list")
+    def edit(Scene sceneInstance) {
+        respond sceneInstance
+    }
+
+    @Transactional
+    def update(Scene sceneInstance) {
+        if (sceneInstance == null) {
+            notFound()
             return
         }
 
-        try {
-            sceneInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'scene.label', default: 'Scene'), id])
-            redirect(action: "list")
+        if (sceneInstance.hasErrors()) {
+            respond sceneInstance.errors, view:'edit'
+            return
         }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'scene.label', default: 'Scene'), id])
-            redirect(action: "show", id: id)
+
+        sceneInstance.save flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'Scene.label', default: 'Scene'), sceneInstance.id])
+                redirect sceneInstance
+            }
+            '*'{ respond sceneInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(Scene sceneInstance) {
+
+        if (sceneInstance == null) {
+            notFound()
+            return
+        }
+
+        sceneInstance.delete flush:true
+
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Scene.label', default: 'Scene'), sceneInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'sceneInstance.label', default: 'Scene'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
         }
     }
 }

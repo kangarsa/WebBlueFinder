@@ -1,16 +1,24 @@
 package webbluefinder
 
 
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+/**
+ * BlueFinderImporterController
+ * A controller class handles incoming web requests and performs actions such as redirects, rendering views and so on.
+ */
 @Transactional(readOnly = true)
 class BlueFinderImporterController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
+	def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond BlueFinderImporter.list(params), model:[blueFinderImporterInstanceCount: BlueFinderImporter.count()]
+    }
+
+	def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond BlueFinderImporter.list(params), model:[blueFinderImporterInstanceCount: BlueFinderImporter.count()]
     }
@@ -38,8 +46,8 @@ class BlueFinderImporterController {
         blueFinderImporterInstance.save flush:true
 
         request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'blueFinderImporter.label', default: 'BlueFinderImporter'), blueFinderImporterInstance.id])
+            form {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'blueFinderImporterInstance.label', default: 'BlueFinderImporter'), blueFinderImporterInstance.id])
                 redirect blueFinderImporterInstance
             }
             '*' { respond blueFinderImporterInstance, [status: CREATED] }
@@ -65,7 +73,7 @@ class BlueFinderImporterController {
         blueFinderImporterInstance.save flush:true
 
         request.withFormat {
-            form multipartForm {
+            form {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'BlueFinderImporter.label', default: 'BlueFinderImporter'), blueFinderImporterInstance.id])
                 redirect blueFinderImporterInstance
             }
@@ -84,7 +92,7 @@ class BlueFinderImporterController {
         blueFinderImporterInstance.delete flush:true
 
         request.withFormat {
-            form multipartForm {
+            form {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'BlueFinderImporter.label', default: 'BlueFinderImporter'), blueFinderImporterInstance.id])
                 redirect action:"index", method:"GET"
             }
@@ -94,8 +102,8 @@ class BlueFinderImporterController {
 
     protected void notFound() {
         request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'blueFinderImporter.label', default: 'BlueFinderImporter'), params.id])
+            form {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'blueFinderImporterInstance.label', default: 'BlueFinderImporter'), params.id])
                 redirect action: "index", method: "GET"
             }
             '*'{ render status: NOT_FOUND }

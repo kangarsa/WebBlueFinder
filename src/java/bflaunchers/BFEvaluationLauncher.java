@@ -1,11 +1,13 @@
 package bflaunchers;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 
+import db.utils.ResultsDbInterface;
 import knn.clean.BlueFinderEvaluation;
 import knn.clean.KNN;
-import utils.ProjectConfiguration;
+import utils.ProjectSetup;
 import wbflisteners.ObservableProcess;
 
 public class BFEvaluationLauncher extends ObservableProcess {
@@ -20,13 +22,18 @@ public class BFEvaluationLauncher extends ObservableProcess {
 		}
 		**/
 		Date inicio = new Date();
+
+		Connection conn = DatabaseConnector.getConnection("root","root");
+		ResultsDbInterface rdi = new ResultsDbInterface(conn);
+		ProjectSetup ps = new ProjectSetup();
+		
 		System.out.println("----A1");
 		String scenarioName = scName;
 		int proportion = proportionOfExperiment;
-		KNN knn = new KNN(ProjectConfiguration.enhanceTable());
-
+		KNN knn = new KNN(ps,rdi);
+		
 		System.out.println("----A2");
-		BlueFinderEvaluation bfe = new BlueFinderEvaluation(knn);
+		BlueFinderEvaluation bfe = new BlueFinderEvaluation(knn,rdi);
 
 		System.out.println("----A3");
 		bfe.runCompleteEvaluation(proportion, 11, scenarioName);

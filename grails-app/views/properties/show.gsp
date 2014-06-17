@@ -2,80 +2,80 @@
 <%@ page import="webbluefinder.Properties" %>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'properties.label', default: 'Properties')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
-	</head>
-	<body>
-		<a href="#show-properties" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
-		<div id="show-properties" class="content scaffold-show" role="main">
-			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<ol class="property-list properties">
-			
-				<g:if test="${propertiesInstance?.title}">
-				<li class="fieldcontain">
-					<span id="title-label" class="property-label"><g:message code="properties.title.label" default="Title" /></span>
-					
-						<span class="property-value" aria-labelledby="title-label"><g:fieldValue bean="${propertiesInstance}" field="title"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${propertiesInstance?.hostname}">
-				<li class="fieldcontain">
-					<span id="hostname-label" class="property-label"><g:message code="properties.hostname.label" default="Hostname" /></span>
-					
-						<span class="property-value" aria-labelledby="hostname-label"><g:fieldValue bean="${propertiesInstance}" field="hostname"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${propertiesInstance?.database}">
-				<li class="fieldcontain">
-					<span id="database-label" class="property-label"><g:message code="properties.database.label" default="Database" /></span>
-					
-						<span class="property-value" aria-labelledby="database-label"><g:fieldValue bean="${propertiesInstance}" field="database"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${propertiesInstance?.dbuser}">
-				<li class="fieldcontain">
-					<span id="dbuser-label" class="property-label"><g:message code="properties.dbuser.label" default="Dbuser" /></span>
-					
-						<span class="property-value" aria-labelledby="dbuser-label"><g:fieldValue bean="${propertiesInstance}" field="dbuser"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${propertiesInstance?.dbpass}">
-				<li class="fieldcontain">
-					<span id="dbpass-label" class="property-label"><g:message code="properties.dbpass.label" default="Dbpass" /></span>
-					
-						<span class="property-value" aria-labelledby="dbpass-label"><g:fieldValue bean="${propertiesInstance}" field="dbpass"/></span>
-					
-				</li>
-				</g:if>
-			
-			</ol>
-			<g:form>
-				<fieldset class="buttons">
-					<g:hiddenField name="id" value="${propertiesInstance?.id}" />
-					<g:link class="edit" action="edit" id="${propertiesInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-				</fieldset>
-			</g:form>
-		</div>
-	</body>
+
+<head>
+	<meta name="layout" content="kickstart" />
+	<g:set var="entityName" value="${message(code: 'properties.label', default: 'Properties')}" />
+	<title><g:message code="default.show.label" args="[entityName]" /></title>
+</head>
+
+<body>
+
+<section id="show-properties" class="first">
+
+	<table class="table">
+		<tbody>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="properties.title.label" default="Title" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: propertiesInstance, field: "title")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="properties.hostname.label" default="Hostname" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: propertiesInstance, field: "hostname")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="properties.database.label" default="Database" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: propertiesInstance, field: "database")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="properties.dbuser.label" default="Dbuser" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: propertiesInstance, field: "dbuser")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="properties.dbpass.label" default="Dbpass" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: propertiesInstance, field: "dbpass")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="properties.dbImportedPIA.label" default="Db Imported PIA" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: propertiesInstance, field: "dbImportedPIA")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="properties.dbPassImportedPIA.label" default="Db Pass Imported PIA" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: propertiesInstance, field: "dbPassImportedPIA")}</td>
+				
+			</tr>
+		
+			<tr class="prop">
+				<td valign="top" class="name"><g:message code="properties.dbUserImportedPIA.label" default="Db User Imported PIA" /></td>
+				
+				<td valign="top" class="value">${fieldValue(bean: propertiesInstance, field: "dbUserImportedPIA")}</td>
+				
+			</tr>
+		
+		</tbody>
+	</table>
+</section>
+
+</body>
+
 </html>
