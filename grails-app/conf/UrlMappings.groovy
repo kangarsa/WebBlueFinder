@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 class UrlMappings {
 
 	static mappings = {
@@ -14,7 +13,17 @@ class UrlMappings {
 		"/terms"		(view:"/siteinfo/terms")
 		"/imprint"		(view:"/siteinfo/imprint")
 		"/nextSteps"	(view:"/home/nextSteps")
-
+		"/$controller/$action?/$id?"{
+			constraints {
+				// apply constraints here
+			}
+		}
+		/**
+		"/showStatistics/pathQuery/$id?" (resources: "pathQuery", includes: ['index', 'show'] )
+		"/showStatistics/connectedPair/$id?" (resources: "connectedPair", includes: ['index', 'show'] )
+		"/"(view:"/index")
+		"500"(view:'/error')
+		**/
 		/*
 		 * Pages with controller
 		 * WARN: No domain/controller should be named "api" or "mobile" or "web"!
@@ -39,25 +48,3 @@ class UrlMappings {
 		"503"	(view:'/_errors/503')
 	}
 }
-=======
-class UrlMappings {
-
-	static mappings = {
-		"/$controller/$action?/$id?"{
-			constraints {
-				// apply constraints here
-			}
-		}
-		"/showStatistics/pathQuery/$id?" (resources: "pathQuery", includes: ['index', 'show'] )
-		"/showStatistics/connectedPair/$id?" (resources: "connectedPair", includes: ['index', 'show'] )
-		"/"(view:"/index")
-		"500"(view:'/error')
-	}
-	
-	
-	/** static mappings = {
-	 "/showStatistics/pathQuery/$id?" (resources: "pathQuery", includes: ['index', 'show'] )
-	  
-	}**/
-}
->>>>>>> 66df2cacfb274f4503b8c913956b00b00d8d7795
