@@ -1,6 +1,5 @@
 
- <%@ page import="webbluefinder.PathQuery" %>
-
+<%@ page import="webbluefinder.PathQuery" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -17,11 +16,13 @@
 			</ul>
 		</div>
 		
-		<h3> Pairs connected by <span style="color:blue">${path }</span></h3> 
+		<h3> Pairs connected by <span style="color:blue">${path }</span></h3>
+		<div style="left:250px;overflow:auto;height:500px">	  
 			<ul class="connectedPairsList" >
 				<g:each var="item" in="${pqcp}">
-      				<li class="connectedPairItem"><g:link >${item.Page } </g:link></li>  
+      				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" params="[id: item.id, connected: item.Page]"> ${item.id } - ${item.Page } </g:link></li>  
 				</g:each>
 			</ul>		
+		</div>	
 	</body>
 </html>
