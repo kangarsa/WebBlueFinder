@@ -50,14 +50,7 @@
 				<td valign="top" class="value"><g:link controller="process" action="show" id="${sceneInstance?.process?.id}">${sceneInstance?.process?.encodeAsHTML()}</g:link></td>
 				
 			</tr>
-		
-			<tr class="prop">
-				<td valign="top" class="name"><g:message code="scene.processState.label" default="Process State" /></td>
 				
-				<td valign="top" class="value">${fieldValue(bean: sceneInstance, field: "processState")}</td>
-				
-			</tr>
-		
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="scene.piaMinLimit.label" default="Pia Min Limit" /></td>
 				
@@ -85,7 +78,7 @@
 				<td valign="top" class="value"><g:formatBoolean boolean="${sceneInstance?.piaClean}" /></td>
 				
 			</tr>
-		
+		<%--
 			<tr class="prop">
 				<td valign="top" class="name"><g:message code="scene.previousProcess.label" default="Previous Process" /></td>
 				
@@ -98,7 +91,7 @@
 				</td>
 				
 			</tr>
-		
+		 --%>
 		</tbody>
 	</table>
 	

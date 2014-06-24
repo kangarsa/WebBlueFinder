@@ -14,6 +14,11 @@ class DumpLoader extends Process implements ProcessesListener {
 		super(s)
 	}
 	
+	DumpLoader(Scene s, String dumpPath){
+		super(s)
+		this.dumpPath = dumpPath
+	}
+	
 	def getName() {
 		return 'DumpLoader'
 	}

@@ -30,15 +30,6 @@ class DBRetrieverWrapperController {
     def create() {
         respond new DBRetrieverWrapper(params)
     }
-	
-	@Transactional	
-	def createFor() {
-		def sc = Scene.get(params.id)
-		sc.previousProcess.add(new DBRetrieverWrapper(sc))
-		if(sc) {
-			redirect controller:"scene", action:"show", id:params.id, method:"GET"
-		}
-	}
 
     @Transactional
     def save(DBRetrieverWrapper DBRetrieverWrapperInstance) {
@@ -118,4 +109,12 @@ class DBRetrieverWrapperController {
             '*'{ render status: NOT_FOUND }
         }
     }
+	
+	@Transactional	
+	def createFor() {
+		def sc = Scene.get(params.id)
+		if(sc.addNewDBRetriever()) {
+			redirect controller:"scene", action:"show", id:params.id, method:"GET"
+		}
+	}
 }

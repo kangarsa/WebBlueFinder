@@ -18,6 +18,13 @@ public class ObservableProcess {
 		  observers.remove(o);
 	  }
 	 
+	  public void notifyComputing() {
+	      for (ProcessesListener o:observers) {
+	    	  o.computing(this);
+	      }
+	      System.out.println("notifico");
+	  }
+	 
 	  public void notifyFinished() {
 	      for (ProcessesListener o:observers) {
 	    	  o.finalized(this);

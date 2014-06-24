@@ -18,7 +18,7 @@
 		</p>
 		<!--<g:link class="btn btn-large btn-primary" controller="nextSteps">Next Steps</g:link>-->
 	</section>
-
+<%--
 	<section id="info">
 		<div class="row">
 	    	<div class="col-md-4">
@@ -77,7 +77,7 @@
 			</div>
 	    </div>
 	</section>
-
+ --%>
 </body>
 
 </html>

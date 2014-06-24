@@ -109,4 +109,12 @@ class BlueFinderImporterController {
             '*'{ render status: NOT_FOUND }
         }
     }
+	
+	@Transactional	
+	def createFor() {
+		def sc = Scene.get(params.id)
+		if(sc.addNewBlueFinderImporter()) {
+			redirect controller:"scene", action:"show", id:params.id, method:"GET"
+		}
+	}
 }

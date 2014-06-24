@@ -110,6 +110,7 @@ class ProcessController {
         }
     }
 	
+	@Transactional
 	def execute(Long id) {
 		def processInstance = Process.get(id)
 		if (!processInstance) {

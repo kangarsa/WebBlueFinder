@@ -83,15 +83,53 @@
   color: white;
 }
 </style>
+
+<script>
+function showForm(elem)
+{
+	document.getElementById("PIAImport").style.display = "block";
+}
+</script>
+
 <div class='row-fluid show-grid container'>
 	<div class='actionContainer'>
 		<h3>Generate New Process</h3>
 		<div class='buttonContainer'>
-			<g:link controller="DBRetrieverWrapper" action="createFor" id="${sceneInstance.id}"><div class='actionButton red center'>DBRetriever</div></g:link>
-			<div class='actionButton dark center'>PIA</div>
-			<div class='actionButton light center'>BlueFinder Evaluation</div>
-			<div class='actionButton green center'>BlueFinder PathFinder</div>
-			<!-- <div class='actionButton blue center'>Blue Dark</div> -->
+			<g:link controller="DBRetrieverWrapper" action="createFor" id="${sceneInstance.id}">
+				<div class='actionButton red center'>DBRetriever</div>
+			</g:link>
+			<g:link controller="PIAWrapper" action="createFor" id="${sceneInstance.id}">
+				<div class='actionButton dark center'>PIA</div>
+			</g:link>
+			<g:link controller="BFEvaluationWrapper" action="createFor" id="${sceneInstance.id}">
+				<div class='actionButton light center'>BlueFinder Evaluation</div>
+			</g:link>
+			<g:link controller="BFPathFinderWrapper" action="createFor" id="${sceneInstance.id}">
+				<div class='actionButton green center'>BlueFinder PathFinder</div>
+			</g:link>
+			<g:link controller="DumpLoader" action="createFor" params="[sceneId:sceneInstance.id,'scene.id':sceneInstance.id, scene:[id:sceneInstance.id]]">
+				<div class='actionButton green center'>DL</div>
+			</g:link>
+			<div class='actionButton blue center' onclick="showForm('PIAImport');">Blue Dark</div>
+		</div>
+		<div id="PIAImport" style="display:none;">
+			<section id="create-dumpLoader" class="first">
+				<g:hasErrors bean="${dumpLoaderInstance}">
+				<div class="alert alert-danger">
+					<g:renderErrors bean="${dumpLoaderInstance}" as="list" />
+				</div>
+				</g:hasErrors>
+		
+				<g:form controller="dumpLoader" action="createFor" class="form-horizontal" role="form" >
+					<g:render contextPath="../dumpLoader/" template="shortForm"/>
+					<g:hiddenField name="sceneId" value="${sceneInstance.id}" />
+					<div class="form-actions margin-top-medium">
+						<g:submitButton name="create" class="btn btn-primary" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+			            <button class="btn" type="reset"><g:message code="default.button.reset.label" default="Reset" /></button>
+					</div>
+				</g:form>
+		
+			</section>
 		</div>
 	</div>
 </div>
@@ -110,6 +148,7 @@
   <div class="tab-pane" id="BlueFinder PathFinder">...</div>
 </div>
  --%>
+<%--
 <g:form>
 	<fieldset class="buttons">
 		<g:hiddenField name="id" value="${sceneInstance?.id}" />
@@ -118,6 +157,7 @@
 	</fieldset>
 </g:form>
 
+ --%>
 <table class="table table-bordered margin-top-medium">
 
 	<thead>
@@ -129,7 +169,6 @@
 			<th><g:message code="process.stop.label" default="Stop" /></th>
 		</tr>
 	</thead>
-	${sceneInstance.previousProcess}
 	<tbody>
 		<g:each in="${sceneInstance.previousProcess}" status="i" var="process">
 			<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">

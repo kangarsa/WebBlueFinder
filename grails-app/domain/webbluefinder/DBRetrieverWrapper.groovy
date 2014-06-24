@@ -58,8 +58,8 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 
 	@Override
 	public void computing(ObservableProcess dbr) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("set computing");
+		this.setComputing()
 	}
 
 	@Override
@@ -76,7 +76,7 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 
 	@Override
 	public void finalized(ObservableProcess dbr) {
-		System.out.println("en finalized");
+		System.out.println("set finalized");
 		this.setFinalized()
 	}
 }

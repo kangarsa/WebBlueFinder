@@ -109,4 +109,12 @@ class PIAWrapperController {
             '*'{ render status: NOT_FOUND }
         }
     }
+	
+	@Transactional	
+	def createFor() {
+		def sc = Scene.get(params.id)
+		if(sc.addNewPIA()) {
+			redirect controller:"scene", action:"show", id:params.id, method:"GET"
+		}
+	}
 }

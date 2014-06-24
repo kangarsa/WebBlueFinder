@@ -9,7 +9,6 @@ class Scene {
 	String fromType
     String toType
     String property
-	String processState
 	Process process
 	int piaMinLimit = 1
 	int piaMaxLimit = 600
@@ -30,7 +29,6 @@ class Scene {
 	    toType blank:false
 		process nullable:true, editable:false, display:true
 		//previousProcess editable:false, display:true
-		processState nullable:true, editable:false, display:true
 		piaMinLimit min:1
 		piaMaxLimit min:1
 		piaIterationsLimit min:1
@@ -65,6 +63,25 @@ class Scene {
 	}
 	def getBlueFinderImporters(){
 		return this.previousProcess.findAll{ p -> p.isBlueFinderImporter() }
+	}
+	
+	def addNewPIA(){
+		return previousProcess.add(new PIAWrapper(this))
+	}
+	def addNewDBRetriever(){
+		return previousProcess.add(new DBRetrieverWrapper(this))
+	}
+	def addNewBFPathFinder(){
+		//return previousProcess.add(new BFPathFinderWrapper(this))
+	}
+	def addNewBFEvaluation(){
+		return previousProcess.add(new BFEvaluationWrapper(this))
+	}
+	def addNewBFRecommender(){
+		return previousProcess.add(new BFRecommenderWrapper(this))
+	}
+	def addNewDumpLoader(String dumpPath){
+		return previousProcess.add(new DumpLoader(this, dumpPath))
 	}
 	
 	def setNewProcess(Process p) {

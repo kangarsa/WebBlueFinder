@@ -8,10 +8,16 @@
 		<title><g:message code="default.list.label" args="[entityName]" /></title>
 	</head>
 	<body>
+		<a href="#show-showStatistics" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+		<div class="nav" role="navigation">
+			<ul>
+				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
+			</ul>
+		</div>	
 		<r:external type="js" uri="https://www.google.com/jsapi"/>
 		<g:javascript>
 			      // Load the Visualization API and the piechart package.
-	      google.load('visualization', '1.0', {'packages':['table','corechart']});
+	      google.load('visualization', '1.0', {'packages':['corechart']});
 	
 	      // Set a callback to run when the Google Visualization API is loaded.
 	      google.setOnLoadCallback(drawChart);
@@ -22,39 +28,8 @@
 	      function drawChart() {
 
 	        // Create the data table.
-	        var dataPQS = new google.visualization.DataTable();
-	        var dataCP = new google.visualization.DataTable();
-	        var dataNCP = new google.visualization.DataTable();
-	        var dataPQR = new google.visualization.DataTable();
-	        //var dataConnects = new google.visualization.DataTable();
-	        //var dataConnectedBy = new google.visualization.DataTable();
 
-			dataPQS.addColumn('number', 'ID');
-	        dataPQS.addColumn('string', 'Path');
-	        <g:each var="item" in="${pq}">
-	       		 dataPQS.addRow([${item.id}, "${item.path }"]);  
-			</g:each>
-			
-			//dataConnects.addColumn('number', 'ID');
-	        //dataConnects.addColumn('string', 'Page');
-	        
-	        dataCP.addColumn('number', 'ID');
-	        dataCP.addColumn('string', 'Page');
-	        <g:each var="item" in="${cp}">
-	       		 dataCP.addRow([${item.id}, '${item.page}']);  
-			</g:each>
-			
-			//dataConnectedBy.addColumn('number', 'ID');
-	        //dataConnectedBy.addColumn('string', 'Path');
-			
-			dataNCP.addColumn('number', 'ID');
-			dataNCP.addColumn('string', 'v_from');
-			dataNCP.addColumn('string', 'u_to');      
-	        <g:each var="item" in="${ncp}">
-	       		 dataNCP.addRow([${item.id}, "${item.v_from }", "${item.u_to }"]);  
-			</g:each>			
-			
-			//dataPQR.addColumn('number', 'Cantidad2');
+	        var dataPQR = new google.visualization.DataTable();
 			
 	        dataPQR.addColumn('string', 'Path');
 	        dataPQR.addColumn('number', 'Cantidad');
@@ -64,58 +39,50 @@
 
 
 	        // Set chart options
-	        var optionsPQS = {'title':'Path Queries',
-	                       'width':'45%',
-	                       'height':300};
-	        var optionsCP = {'title':'Connected pairs',
-	                       'width':'45%',
-	                       'height':300};
-	        var optionsNCP = {'title':'Not connected pairs',
-	        			   'width':'50%',
-	                       'height':300,
-	                       'allowHtml':true};
-	        var optionsPQR = {'title':'Path queries relevance',
+
+	        var optionsPQR = {'title':'Path query relevance',
 	                       'width':'90%',
-	                       'height':1111};   
-            //var optionsConnects = {'title':'Connects...',
-	          //             'width':'45%',
-	            //           'height':300};           
-	          
+	                       'height':2000};   	          
 	                     
 	        // Instantiate and draw our chart, passing in some options.
-	        var tablePQS = new google.visualization.Table(document.getElementById('pqs'));
-	        var tableCP = new google.visualization.Table(document.getElementById('cp'));
-	        var tableNCP = new google.visualization.Table(document.getElementById('ncp'));     
+	             
 	        var chartPQR = new google.visualization.BarChart(document.getElementById('pqr'));   
-	        //var tableConnects = new google.visualization.BarChart(document.getElementById('pqc'));
-	        //var tableConnectedBy = new google.visualization.BarChart(document.getElementById('cpc'));
-	        //var formatter = new google.visualization.BarFormat({width: 40});
-  			//formatter.format(dataNCP, 0); // Apply formatter to second column
-	        //dataNCP.setColumnProperty(0, 'style', 'width:150px');
-	        tablePQS.draw(dataPQS, optionsPQS);
-	        tableCP.draw(dataCP, optionsCP);
-	        tableNCP.draw(dataNCP, optionsNCP);
+	        
 	        chartPQR.draw(dataPQR, optionsPQR);
-	        //dataNCP.setColumnProperty(1, 'style', 'width:20px');
-			//google.visualization.events.addListener(tablePQS, 'select', selectHandler);
-	        //google.visualization.events.addListener(tableCP, 'select', selectCPHandler);
-
-					 	
-    		 
-    		 
 
 			 }
 	        
 		</g:javascript>
-				<g:field type="text" name="bbdd" required="true" value=""/>
+				<g:field type="text" name="bbdd" required="true" value="" hidden="true"/>
 				<g:link controller="ShowStatistics" action="index" hidden="true"> Compute </g:link>
 				<br/>
-				<div style="width:450px;float:left"> Path queries</div> <div style="width:450px;margin-left:455px"> Connects...</div>
-				<div id="pqs" ></div> <div id="pqc"></div>
-				<div style="width:450px;float:left"> Connected pairs</div> <div style="width:450px;margin-left:455px"> Connected by...</div>
-				<div id="cp" ></div>
-				<div style="width:50%"> Not connected pairs</div>
-				<div id="ncp" ></div>
+				<!-- El estilo de los divs siguientes tiene que volar cuando se aplique un CSS como la gente -->
+				<h3> Path queries</h3>
+				<div style="left:250px;overflow:auto;height:500px">			 
+					<ul class="pathQueriesList" >
+					<g:each var="item" in="${pq}">
+	       				<li class="pathQueryItem"><g:link resource="pathQuery" action="show" params="[id: item.id, path: item.path]">${item.id } - ${item.path } </g:link></li>  
+					</g:each>
+					</ul>
+				</div>
+				<br/>
+				<h3> Connected pairs</h3>
+				<div style="left:250px;overflow:auto;height:500px">	 
+					<ul class="connectedPairsList" >
+					<g:each var="item" in="${cp}">
+	       				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" params="[id: item.id, connected: item.Page]">${item.id } - ${item.Page } </g:link></li>  
+					</g:each>
+					</ul>
+				</div>
+				<br/>
+				<h3> Not connected pairs</h3>
+				<div style="left:250px;overflow:auto;height:500px">	 
+					<ul class="notConnectedPairsList" >
+					<g:each var="item" in="${ncp}">
+	       				<li class="notConnectedPairItem">${item.id } - ${item.v_from } , ${item.u_to }</li>  
+					</g:each>
+					</ul>
+				</div>				
 				<div id="pqr" ></div>
 				
 	</body>

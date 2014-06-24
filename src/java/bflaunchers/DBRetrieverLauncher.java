@@ -21,7 +21,8 @@ public class DBRetrieverLauncher extends ObservableProcess {
 
 	public void launch(String base, String query, String user, String pass, String table) throws MalformedQueryException, RepositoryException, QueryEvaluationException, ClassNotFoundException, SQLException {
         
-      System.out.println("Arrancando LaunchDBRetriever");
+       System.out.println("Arrancando LaunchDBRetriever");
+//       this.notifyComputing();
        if(base.equalsIgnoreCase("localhost/dtorres")){
     	   throw new RepositoryException();
        }

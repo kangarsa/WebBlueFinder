@@ -21,7 +21,8 @@ class AllTests {
 		def s = new Scene(fromType: from)
 		assertEquals from, s.getFromType()
 	}
-	
+
+	@Test
 	void testCreateNew() {
 		def from = 'Place'
 		def to = 'Person'
@@ -39,6 +40,7 @@ class AllTests {
 		assertEquals 'DBRetrieverWrapper', s.getProcessName()
 	}
 	
+	@Test
 	void testStart() {
 		def from = 'Place'
 		def to = 'Person'
@@ -61,6 +63,7 @@ class AllTests {
 		assertEquals 12, s.getPercent(), 0
 	}
 	
+	@Test
 	void testNext() {
 		def from = 'Place'
 		def to = 'Person'
@@ -97,24 +100,24 @@ class AllTests {
 		assertEquals 87, s.getPercent(), 0
 	}
 	
+	@Test
 	void testGetProcessName() {
 		def from = 'Place'
 		def to = 'Person'
 		def property = 'birthPlace'
 		def DBRetrieverWrapper dbr = new DBRetrieverWrapper()
-		def s = new Scene(from,to,property,dbr)
-		s.start()
-		assertEquals 'DBRetrieverWrapper', s.getProcessName()
-		s.nextProcessState()
-		s.nextProcessState()
-		s.nextProcess()
-		assertEquals 'PIAWrapper', s.getProcessName()
-		s.nextProcessState()
-		s.nextProcessState()
-		s.nextProcess()
-		assertEquals 'BFWrapper', s.getProcessName()
+		assertEquals 'DBRetrieverWrapper', dbr.getName()
+		def PIAWrapper pia = new DBRetrieverWrapper()
+		assertEquals 'PIAWrapper', pia.getName()
+		def BFRecommenderWrapper bfr = new BFRecommenderWrapper()
+		assertEquals 'BFRecommenderWrapper', bfr.getName()
+		def BFEvaluationWrapper bfe = new BFEvaluationWrapper()
+		assertEquals 'BFRecommenderWrapper', bfr.getName()
+		def BFPathFinderWrapperbfpf = new BFPathFinderWrapper()
+		assertEquals 'BFRecommenderWrapper', bfr.getName()
 	}
 	
+	@Test
 	void testGetNames() {
 		def from = 'Place'
 		def to = 'Person'
@@ -139,6 +142,7 @@ class AllTests {
 		assertEquals  'Finalized', s.getProcessStateName()
 	}
 	
+	@Test
 	void testIsComplete() {
 		def from = 'Place'
 		def to = 'Person'
@@ -153,6 +157,7 @@ class AllTests {
 		assertFalse s.isComplete()
 	}
 	
+	@Test
 	void testIsCanceled() {
 		def from = 'Place'
 		def to = 'Person'
@@ -165,6 +170,7 @@ class AllTests {
 		assertTrue s.isCanceled()
 	}
 	
+	@Test
 	void testIsProcessing() {
 		def from = 'Place'
 		def to = 'Person'
@@ -187,6 +193,7 @@ class AllTests {
 		assertTrue s.isComplete()
 	}
 	
+	@Test
 	void testGetPercent() {
 		def from = 'Place'
 		def to = 'Person'
@@ -204,6 +211,7 @@ class AllTests {
 		assertEquals 87, s.getPercent(), 0
 	}
 	
+	@Test
 	void testGetErrors() {
 		def from = 'Place'
 		def to = 'Person'
@@ -217,6 +225,7 @@ class AllTests {
 		assertEquals '', s.getSceneErrors()
 	}
 	
+	@Test
 	void testPreviousProcess(){
 		def from = 'Place'
 		def to = 'Person'
@@ -233,6 +242,7 @@ class AllTests {
 		assertFalse p == s.getProcess()
 	}
 	
+	@Test
 	void testExecuteQuery() {
 		def from = 'Place'
 		def to = 'Person'

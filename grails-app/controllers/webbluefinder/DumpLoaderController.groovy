@@ -109,4 +109,19 @@ class DumpLoaderController {
             '*'{ render status: NOT_FOUND }
         }
     }
+	
+	@Transactional	
+	def createFor(DumpLoader dumpLoaderInstance) {
+        if (dumpLoaderInstance.hasErrors()) {
+            respond dumpLoaderInstance.errors, view:'edit'
+			flash.message = message(code: 'default.created.message', args: [message(code: dumpLoaderInstance.errors, default: dumpLoaderInstance.errors), dumpLoaderInstance.id])
+			redirect controller:"scene", action:"show", id:params.sceneId, method:"GET"
+            return
+        }
+		def sc = Scene.get(params.sceneId)
+		if(sc.addNewDumpLoader(params.dumpPath)) {
+			flash.message = message(code: 'default.created.message', args: [message(code: 'dumpLoaderInstance.label', default: 'DumpLoader'), dumpLoaderInstance.id])
+		}
+		redirect controller:"scene", action:"show", id:params.sceneId, method:"GET"
+	}
 }

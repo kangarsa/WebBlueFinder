@@ -33,7 +33,7 @@
 					<span class="help-inline">${hasErrors(bean: sceneInstance, field: 'toType', 'error')}</span>
 				</div>
 			</div>
-
+<%--
 			<div class="${hasErrors(bean: sceneInstance, field: 'process', 'error')} ">
 				<label for="process" class="control-label"><g:message code="scene.process.label" default="Process" /></label>
 				<div>
@@ -41,15 +41,7 @@
 					<span class="help-inline">${hasErrors(bean: sceneInstance, field: 'process', 'error')}</span>
 				</div>
 			</div>
-
-			<div class="${hasErrors(bean: sceneInstance, field: 'processState', 'error')} ">
-				<label for="processState" class="control-label"><g:message code="scene.processState.label" default="Process State" /></label>
-				<div>
-					<g:textField class="form-control" name="processState" readonly="readonly" value="${sceneInstance?.processState}"/>
-					<span class="help-inline">${hasErrors(bean: sceneInstance, field: 'processState', 'error')}</span>
-				</div>
-			</div>
-
+ --%>
 			<div class="${hasErrors(bean: sceneInstance, field: 'piaMinLimit', 'error')} required">
 				<label for="piaMinLimit" class="control-label"><g:message code="scene.piaMinLimit.label" default="Pia Min Limit" /><span class="required-indicator">*</span></label>
 				<div>
@@ -81,7 +73,7 @@
 					<span class="help-inline">${hasErrors(bean: sceneInstance, field: 'piaClean', 'error')}</span>
 				</div>
 			</div>
-
+<%--
 			<div class="${hasErrors(bean: sceneInstance, field: 'previousProcess', 'error')} ">
 				<label for="previousProcess" class="control-label"><g:message code="scene.previousProcess.label" default="Previous Process" /></label>
 				<div>
@@ -92,10 +84,10 @@
 </g:each>
 <li class="add">
 <g:link controller="process" action="create" params="['scene.id': sceneInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'process.label', default: 'Process')])}</g:link>
-</li>
+</li> 
 </ul>
 
 					<span class="help-inline">${hasErrors(bean: sceneInstance, field: 'previousProcess', 'error')}</span>
 				</div>
 			</div>
-
+--%>
