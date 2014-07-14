@@ -20,6 +20,8 @@ class ShowStatisticsController {
 		def cp = st.fetchConnectedPairs()
 		def ncp = st.fetchNotConnectedPairs()
 		def pqr = st.fetchPQRelevance()
+		def foo = st.fetchPathQuery(4)
+		println foo.path
 
 		
 		render(view:"index.gsp", model:['pq':pq, 'cp':cp, 'ncp':ncp, 'pqr':pqr])

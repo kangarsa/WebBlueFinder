@@ -15,7 +15,6 @@ package webbluefinder
  */
 
 import java.sql.Connection;
-import db.WikipediaConnector;
 import groovy.sql.Sql
 
 class ShowStatistics {
@@ -127,5 +126,12 @@ class ShowStatistics {
 		def result = sql.rows "select distinct vn.id, vn.path from U_page up inner join UxV on up.id=UxV.u_from inner join V_Normalized vn on vn.id=UxV.v_to where up.id="+id;
 		return result
 		
+	}
+	
+	def PathQuery fetchPathQuery(int id) {
+		connect()
+		def result = sql.rows "select * from V_Normalized where id="+id
+		PathQuery pq = new PathQuery(identifier: result[0].id, path: result[0].path)
+		return pq
 	}
 }

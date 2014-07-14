@@ -67,7 +67,7 @@
 				var path = dataPQR.getValue(selection[0].row, 0);
 				var uri = path;
 				var res = encodeURIComponent(uri);
-				window.location = "http://localhost:8080/WebBlueFinder/pathQuery/show/"+ id +"?path="+res;
+				window.location = "../pathQuery/show/"+ id +"?path="+res;
 
 
 

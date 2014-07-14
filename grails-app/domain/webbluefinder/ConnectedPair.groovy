@@ -2,8 +2,8 @@ package webbluefinder
 
 class ConnectedPair {
 	
-	//def identifier
-	//def path
+	int identifier
+	String path
 
     static constraints = {
     }
