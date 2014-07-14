@@ -17,6 +17,22 @@ class PathQueryController {
 	def show(int id, String path) { 
 		def st = new ShowStatistics()
 		def PQConnectedPairs = st.fetchConnectedPairsOfPQ(id)
-		render(view:"show.gsp", model:['pqcp':PQConnectedPairs, 'path':path])
+		def PQRelevance = st.fetchPQRelevance(id)
+		//def pp = path.replaceAll('#from', 'Argentina').replaceAll('#to', 'Messi')
+		//def paths = path.split()
+		def coll = new ArrayList<String>()
+		//ArrayList <?> lolo = (ArrayList) PQConnectedPairs
+		//println lolo.class
+		for (item in PQConnectedPairs) {
+			//println item.Page.split().getAt(0)
+			def split = item.Page.split()
+			def from = split.getAt(0)
+			def to = split.getAt(2)
+			coll.add( path.replaceAll('#from', from).replaceAll('#to', to).replace("Cat", "Categoría"))
+		}
+		//println coll
+		//println pp
+		def first5PQs = st.fetchPQRelevance("limit 5");
+		render(view:"show.gsp", model:['pqcp':PQConnectedPairs, 'path':path, 'pqr': first5PQs, 'PQrel': PQRelevance, 'instanciated': coll])
 	}
 }

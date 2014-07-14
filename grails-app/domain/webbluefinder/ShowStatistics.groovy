@@ -78,13 +78,23 @@ class ShowStatistics {
 		return result
 	}
 	
-	def ArrayList<?> fetchPQRelevance() {
+	def ArrayList<?> fetchPQRelevance(String limit = "limit 50") {
 		/**
 		 * Método que devuelve la cantidad de pares que conecta cada path query
 		 */
 		connect()
 		//Limitado a 50 porque si no se va al carajo
-		def result = sql.rows "select count(v_to) as cant,vn.path from UxV inner join V_Normalized as vn on UxV.v_to=vn.id group by v_to order by cant desc limit 50"
+		def result = sql.rows "select vn.id, count(v_to) as cant,vn.path from UxV inner join V_Normalized as vn on UxV.v_to=vn.id group by v_to order by cant desc "+limit
+		return result
+		
+	}
+	
+	def ArrayList<?> fetchPQRelevance(int id) {
+		/**
+		 * Método que devuelve la cantidad de pares que conecta un path query pasado por parámetro
+		 */
+		connect()
+		def result = sql.rows "select vn.id, count(v_to) as cant,vn.path from UxV inner join V_Normalized as vn on UxV.v_to=vn.id where vn.id="+id+" group by v_to order by cant desc";
 		return result
 		
 	}
@@ -104,7 +114,7 @@ class ShowStatistics {
 		 * Método que devuelve los pares que conecta un path query
 		 */
 		connect()
-		def result = sql.rows "select up.id, CONVERT(up.page using utf8) as Page from U_page up inner join UxV on up.id=UxV.u_from inner join V_Normalized vn on vn.id=UxV.v_to where vn.id="+id;
+		def result = sql.rows "select distinct up.id, CONVERT(up.page using utf8) as Page from U_page up inner join UxV on up.id=UxV.u_from inner join V_Normalized vn on vn.id=UxV.v_to where vn.id="+id;
 		return result
 		
 	}
@@ -114,7 +124,7 @@ class ShowStatistics {
 		 * Método que devuelve los path queries que conectan a un par
 		 */
 		connect()
-		def result = sql.rows "select vn.id, vn.path from U_page up inner join UxV on up.id=UxV.u_from inner join V_Normalized vn on vn.id=UxV.v_to where up.id="+id;
+		def result = sql.rows "select distinct vn.id, vn.path from U_page up inner join UxV on up.id=UxV.u_from inner join V_Normalized vn on vn.id=UxV.v_to where up.id="+id;
 		return result
 		
 	}

@@ -33,11 +33,17 @@
 			
 	        dataPQR.addColumn('string', 'Path');
 	        dataPQR.addColumn('number', 'Cantidad');
+	        dataPQR.addColumn('number', 'id');
 	        <g:each var="item" in="${pqr}">
-	       		 dataPQR.addRow(["${item.path }", ${item.cant}]);  
+	       		 dataPQR.addRow(["${item.path }", ${item.cant}, ${item.id }]);  
 			</g:each>		
-
-
+			var viewPQR = new google.visualization.DataView(dataPQR);
+     		 viewPQR.setColumns([0, 1,
+                     			  { calc: "stringify",
+                     			    sourceColumn: 1,
+                      			    type: "string",
+                      			    role: "annotation" }]);
+			//viewPQR.hideColumns([2]);
 	        // Set chart options
 
 	        var optionsPQR = {'title':'Path query relevance',
@@ -47,8 +53,26 @@
 	        // Instantiate and draw our chart, passing in some options.
 	             
 	        var chartPQR = new google.visualization.BarChart(document.getElementById('pqr'));   
+	        //var viewPQR = new google.visualization.DataView(dataPQR);
 	        
-	        chartPQR.draw(dataPQR, optionsPQR);
+	        
+	        chartPQR.draw(viewPQR, optionsPQR);
+	        
+			google.visualization.events.addListener(chartPQR, 'select', selectHandler);
+
+			function selectHandler() {	
+			
+				var selection = chartPQR.getSelection();
+				var id = dataPQR.getValue(selection[0].row, 2);
+				var path = dataPQR.getValue(selection[0].row, 0);
+				var uri = path;
+				var res = encodeURIComponent(uri);
+				window.location = "http://localhost:8080/WebBlueFinder/pathQuery/show/"+ id +"?path="+res;
+
+
+
+
+				}
 
 			 }
 	        
@@ -61,7 +85,7 @@
 				<div style="left:250px;overflow:auto;height:500px">			 
 					<ul class="pathQueriesList" >
 					<g:each var="item" in="${pq}">
-	       				<li class="pathQueryItem"><g:link resource="pathQuery" action="show" params="[id: item.id, path: item.path]">${item.id } - ${item.path } </g:link></li>  
+	       				<li class="pathQueryItem"><g:link resource="pathQuery" action="show" params="[id: item.id, path: item.path]">${item.path } </g:link></li>  
 					</g:each>
 					</ul>
 				</div>
@@ -70,7 +94,7 @@
 				<div style="left:250px;overflow:auto;height:500px">	 
 					<ul class="connectedPairsList" >
 					<g:each var="item" in="${cp}">
-	       				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" params="[id: item.id, connected: item.Page]">${item.id } - ${item.Page } </g:link></li>  
+	       				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" params="[id: item.id, connected: item.Page]">${item.Page } </g:link></li>  
 					</g:each>
 					</ul>
 				</div>
@@ -79,7 +103,7 @@
 				<div style="left:250px;overflow:auto;height:500px">	 
 					<ul class="notConnectedPairsList" >
 					<g:each var="item" in="${ncp}">
-	       				<li class="notConnectedPairItem">${item.id } - ${item.v_from } , ${item.u_to }</li>  
+	       				<li class="notConnectedPairItem">${item.v_from } , ${item.u_to }</li>  
 					</g:each>
 					</ul>
 				</div>				
