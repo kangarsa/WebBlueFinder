@@ -134,4 +134,11 @@ class ShowStatistics {
 		PathQuery pq = new PathQuery(identifier: result[0].id, path: result[0].path)
 		return pq
 	}
+	
+	def ConnectedPair fetchConnectedPair(int id) {
+		connect()
+		def result = sql.rows "select * from U_page where id="+id
+		ConnectedPair cp = new ConnectedPair(identifier: result[0].id, page: result[0].page)
+		return cp
+	}
 }

@@ -3,7 +3,7 @@ package webbluefinder
 class ConnectedPair {
 	
 	int identifier
-	String path
+	String page
 
     static constraints = {
     }
