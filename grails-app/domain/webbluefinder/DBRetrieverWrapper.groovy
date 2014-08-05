@@ -1,9 +1,8 @@
 package webbluefinder
 
-import bflaunchers.DBRetrieverLauncher;
+import bflaunchers.DBRetrieverLauncher
 import wbflisteners.ObservableProcess
 import wbflisteners.ProcessesListener
-//import static grails.async.Promises.*
 
 
 class DBRetrieverWrapper extends Process implements ProcessesListener {
@@ -18,7 +17,7 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 	def getName() {
 		return 'DBRetrieverWrapper'
 	}
-	
+		
 	def start() {
 //do execute
 		Properties p = Properties.getLast()

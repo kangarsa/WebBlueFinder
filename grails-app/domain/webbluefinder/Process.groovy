@@ -12,7 +12,7 @@ class Process {
     static constraints = {
 		state nullable:true, editable:false, display:false
 		scene nullable:true
-		processErrors nullable:true, editable:false, display:true
+		processErrors nullable:true, editable:false, display:false
     }
 	
 	Process() {
