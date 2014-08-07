@@ -22,9 +22,7 @@ class ShowStatisticsController {
 		def pqr = st.fetchPQRelevance()
 		//def foo = st.fetchPathQuery(4)
 		//println foo.path
-		def someoneElsesPage = new URL( "http://en.wikipedia.org/wiki/Popular_Action_(Peru)" ).getText()
-		println someoneElsesPage
-		
+
 		render(view:"index.gsp", model:['pq':pq, 'cp':cp, 'ncp':ncp, 'pqr':pqr])
 		
 	}

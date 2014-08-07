@@ -77,12 +77,14 @@
 			 }
 	        
 		</g:javascript>
+				<!-- Este field no, el link siguiente tampoco -->
 				<g:field type="text" name="bbdd" required="true" value="" hidden="true"/>
 				<g:link controller="ShowStatistics" action="index" hidden="true"> Compute </g:link>
 				<br/>
 				<!-- El estilo de los divs siguientes tiene que volar cuando se aplique un CSS como la gente -->
+				<h5 style="font-size:280%;text-align:center">Scenary</h5>
 				<h3> Path queries</h3>
-				<div style="left:250px;overflow:auto;height:500px">			 
+				<div style="left:250px;overflow:auto;max-height:400px">			 
 					<ul class="pathQueriesList" >
 					<g:each var="item" in="${pq}">
 	       				<li class="pathQueryItem"><g:link resource="pathQuery" action="show" params="[id: item.id, path: item.path]">${item.path } </g:link></li>  
@@ -91,7 +93,7 @@
 				</div>
 				<br/>
 				<h3> Connected pairs</h3>
-				<div style="left:250px;overflow:auto;height:500px">	 
+				<div style="left:250px;overflow:auto;max-height:400px">	 
 					<ul class="connectedPairsList" >
 					<g:each var="item" in="${cp}">
 	       				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" params="[id: item.id, connected: item.Page]">${item.Page } </g:link></li>  
@@ -100,7 +102,7 @@
 				</div>
 				<br/>
 				<h3> Not connected pairs</h3>
-				<div style="left:250px;overflow:auto;height:500px">	 
+				<div style="left:250px;overflow:auto;max-height:400px">	 
 					<ul class="notConnectedPairsList" >
 					<g:each var="item" in="${ncp}">
 	       				<li class="notConnectedPairItem">${item.v_from } , ${item.u_to }</li>  
