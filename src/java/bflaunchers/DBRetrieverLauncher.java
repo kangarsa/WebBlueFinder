@@ -15,7 +15,7 @@ import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryException;
 
 import wbflisteners.ObservableProcess;
-import edu.unlp.info.lifia.DBRetriever.QueryRetriever;
+import dbpedia.utils.sesame.QueryRetriever;
 
 public class DBRetrieverLauncher extends ObservableProcess {
 

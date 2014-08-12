@@ -68,7 +68,8 @@ grails.project.dependency.resolution = {
         //compile ':cache:1.0.1'
 		compile ":webxml:1.4.1"
 		build ':tomcat:7.0.52.1'
-		runtime ':resources:1.2.7'
+		//runtime ':resources:1.2.7'
+		runtime ':resources:1.2.8'
 		compile ':scaffolding:2.0.3'
 		runtime ':database-migration:1.4.0'
 		//compile ":neo4j:1.1.1" 
