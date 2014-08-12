@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 
+import db.WikipediaConnector;
 import db.utils.ResultsDbInterface;
 import knn.clean.BlueFinderEvaluation;
 import knn.clean.KNN;
@@ -23,14 +24,18 @@ public class BFEvaluationLauncher extends ObservableProcess {
 		**/
 		Date inicio = new Date();
 
-		Connection conn = DatabaseConnector.getConnection("root","root");
+		Connection conn =  WikipediaConnector.getResultsConnection();
+		//Connection conn = DatabaseConnector.getConnection("root","root");
+		
 		ResultsDbInterface rdi = new ResultsDbInterface(conn);
-		ProjectSetup ps = new ProjectSetup();
+		ProjectSetup setup = new ProjectSetup();
+		setup.setCreateEnhancedTable(true);
 		
 		System.out.println("----A1");
 		String scenarioName = scName;
 		int proportion = proportionOfExperiment;
-		KNN knn = new KNN(ps,rdi);
+		KNN knn = new KNN(setup,rdi);
+		
 		
 		System.out.println("----A2");
 		BlueFinderEvaluation bfe = new BlueFinderEvaluation(knn,rdi);

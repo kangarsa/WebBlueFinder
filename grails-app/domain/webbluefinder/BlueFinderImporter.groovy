@@ -20,6 +20,13 @@ class BlueFinderImporter extends Process implements ProcessesListener {
 		return 'BlueFinderImporter'
 	}
 	
+	def getDbTo() {
+		if (dbTo) {
+			return dbTo
+		}
+		return Properties.getLast().database
+	}
+	
 	def setDefaultDbfrom(){
 		Properties p = Properties.getLast()
 		dbFrom = p.dbImportedPIA
