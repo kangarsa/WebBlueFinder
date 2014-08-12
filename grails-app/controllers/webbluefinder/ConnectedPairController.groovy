@@ -40,7 +40,7 @@ class ConnectedPairController {
 			}
 		}
 		def test = colPages.getAt(0)
-		println colPages.size
+		//println colPages.size
 		//println test
 		
 		render(view:"show.gsp", model:['pqc':PQWhichConnect, 'connected':connected, 'instanciated':coll, 'test':colPages])
