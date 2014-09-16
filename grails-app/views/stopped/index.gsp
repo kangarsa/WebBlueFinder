@@ -1,17 +1,17 @@
 
-<%@ page import="webbluefinder.Stoped" %>
+<%@ page import="webbluefinder.Stopped" %>
 <!DOCTYPE html>
 <html>
 
 <head>
 	<meta name="layout" content="kickstart" />
-	<g:set var="entityName" value="${message(code: 'stoped.label', default: 'Stoped')}" />
+	<g:set var="entityName" value="${message(code: 'stopped.label', default: 'Stopped')}" />
 	<title><g:message code="default.index.label" args="[entityName]" /></title>
 </head>
 
 <body>
 
-<section id="index-stoped" class="first">
+<section id="index-stopped" class="first">
 
 	<table class="table table-bordered margin-top-medium">
 		<thead>
@@ -20,7 +20,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		<g:each in="${stopedInstanceList}" status="i" var="stopedInstance">
+		<g:each in="${stoppedInstanceList}" status="i" var="stoppedInstance">
 			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 			
 			</tr>
@@ -28,7 +28,7 @@
 		</tbody>
 	</table>
 	<div>
-		<bs:paginate total="${stopedInstanceCount}" />
+		<bs:paginate total="${stoppedInstanceCount}" />
 	</div>
 </section>
 

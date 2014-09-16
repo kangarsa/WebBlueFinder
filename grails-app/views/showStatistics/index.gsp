@@ -3,14 +3,27 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<meta name="layout" content="kickstartNoNav">
 		<g:set var="entityName" value="${message(code: 'showStatistics.label', default: 'ShowStatistics')}" />
 		<title><g:message code="default.list.label" args="[entityName]" /></title>
+		<style>
+			.listados {
+			left:250px;
+			overflow:auto;
+			max-height:400px;
+			width:80%;
+			margin:auto;
+			}
+		</style>		
 	</head>
 	<body>
-		<a href="#show-showStatistics" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+		<header id="Header" class="jumbotron masthead">
+			<div class="container">
+				<h1 class="title">Statistics of aScenary</h1>
+			</div>
+		</header>	
 		<div class="nav" role="navigation">
-			<ul>
+			<ul class="nav nav-tabs">
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
 			</ul>
 		</div>	
@@ -48,7 +61,8 @@
 
 	        var optionsPQR = {'title':'Path query relevance',
 	                       'width':'90%',
-	                       'height':2000};   	          
+	                       'height':1500
+	                       };   	          
 	                     
 	        // Instantiate and draw our chart, passing in some options.
 	             
@@ -77,32 +91,32 @@
 			 }
 	        
 		</g:javascript>
-				<!-- Este field no, el link siguiente tampoco -->
+				<!-- Este field no va, el link siguiente tampoco -->
 				<g:field type="text" name="bbdd" required="true" value="" hidden="true"/>
 				<g:link controller="ShowStatistics" action="index" hidden="true"> Compute </g:link>
 				<br/>
 				<!-- El estilo de los divs siguientes tiene que volar cuando se aplique un CSS como la gente -->
-				<h5 style="font-size:280%;text-align:center">Scenary</h5>
+				
 				<h3> Path queries</h3>
-				<div style="left:250px;overflow:auto;max-height:400px">			 
+				<div class="listados">			 
 					<ul class="pathQueriesList" >
 					<g:each var="item" in="${pq}">
-	       				<li class="pathQueryItem"><g:link resource="pathQuery" action="show" params="[id: item.id, path: item.path]">${item.path } </g:link></li>  
+	       				<li class="pathQueryItem"><g:link resource="pathQuery" action="show" id="${item.id}">${item.path } </g:link></li>  
 					</g:each>
 					</ul>
 				</div>
 				<br/>
 				<h3> Connected pairs</h3>
-				<div style="left:250px;overflow:auto;max-height:400px">	 
+				<div class="listados">	 
 					<ul class="connectedPairsList" >
 					<g:each var="item" in="${cp}">
-	       				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" params="[id: item.id, connected: item.Page]">${item.Page } </g:link></li>  
+	       				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" id="${item.id}">${item.Page } </g:link></li>  
 					</g:each>
 					</ul>
 				</div>
 				<br/>
 				<h3> Not connected pairs</h3>
-				<div style="left:250px;overflow:auto;max-height:400px">	 
+				<div class="listados">	 
 					<ul class="notConnectedPairsList" >
 					<g:each var="item" in="${ncp}">
 	       				<li class="notConnectedPairItem">${item.v_from } , ${item.u_to }</li>  

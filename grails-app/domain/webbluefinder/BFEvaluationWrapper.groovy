@@ -29,7 +29,7 @@ class BFEvaluationWrapper extends Process implements ProcessesListener {
 			bfe.addObserver(this)
 			
 			System.out.println("?BFE-3")
-			bfe.launch("sc"+scene.id+"_bfe"+id, 100)
+			bfe.launch(p.getDatabase(),p.getDbuser(), p.getDbpass(),"sc"+scene.id+"_bfe"+id, 100)
 		}
 		System.out.println("workerBFE.poststart()")
 	}

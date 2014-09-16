@@ -214,7 +214,7 @@ class Scene {
 	def updateComputing() {
 	}
 	
-	def updateStoped() {
+	def updateStopped() {
 	}
 	
 	def updateProcessState() {

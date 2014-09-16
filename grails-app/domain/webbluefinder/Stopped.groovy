@@ -1,12 +1,12 @@
 package webbluefinder
 
-class Stoped extends ProcessState {
+class Stopped extends ProcessState {
 
     static constraints = {
     }
 	
 	def getName() {
-		return 'Stoped'
+		return 'Stopped'
 	}
 	def getStep() {
 		return -1

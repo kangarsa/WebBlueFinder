@@ -19,8 +19,8 @@ class UrlMappings {
 			}
 		}
 		
-		"/showStatistics/pathQuery/$id?" (resources: "pathQuery", includes: ['index', 'show'] )
-		"/showStatistics/connectedPair/$id?" (resources: "connectedPair", includes: ['index', 'show'] )
+		"/showStatistics/pathQuery" (resources: "pathQuery", includes: ['index', 'show'] )
+		"/showStatistics/connectedPair" (resources: "connectedPair", includes: ['index', 'show'] )
 		/**
 		"/"(view:"/index")
 		"500"(view:'/error')

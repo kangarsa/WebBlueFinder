@@ -51,8 +51,8 @@ class ObservableProcess {
 		observer.updateComputing()
 	}
 	
-	def notifyStopedToObservers() {
-		observer.updateStoped()
+	def notifyStoppedToObservers() {
+		observer.updateStopped()
 	}
 	
 	def notifyStateChangeToObservers() {

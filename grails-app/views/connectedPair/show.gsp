@@ -2,40 +2,46 @@
 <%@ page import="webbluefinder.ConnectedPair" %>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'connectedPair.label', default: 'ConnectedPair')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
-		<style>
-			.infobox_v2 {
-			border: 1px solid #B4BBC8;
-			background-color: #f9f9f9;
-			color: #000;
-			padding: .4em;
-			clear: right;
-			font-size: 90%;
-			line-height: 1.5em;
-			width: 22.5em;
-			}
-		</style>
-	</head>
-	<body>
-		<a href="#show-connectedPair" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+
+<head>
+	<meta name="layout" content="kickstartNoNav" />
+	<g:set var="entityName" value="${message(code: 'connectedPair.label', default: 'ConnectedPair')}" />
+	<title><g:message code="default.show.label" args="[entityName]" /></title>
+	<style>
+		.infobox_v2 {
+		border: 1px solid #B4BBC8;
+		background-color: #f9f9f9;
+		color: #000;
+		padding: .4em;
+		clear: right;
+		font-size: 90%;
+		line-height: 1.5em;
+		width: 22.5em;
+		}
+	</style>
+</head>
+
+<body>
+		<header id="Header" class="jumbotron masthead">
+			<div class="container">
+				<h2 class="title">Connected pair</h2>
+			</div>
+		</header>
 		<div class="nav" role="navigation">
-			<ul>
+			<ul class="nav nav-tabs">
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
 				<li><g:link controller="showStatistics" action="index">Volver a las estadísticas</g:link></li>
 			</ul>
 		</div>
-
+		
 		<g:set var="size" value="${instanciated.size()-1}" />
 		<g:set var="counter" value="${0}" />
 		
-		<h1 style="text-align:center">${connected }</h1>
+		<h2 style="text-align:center">${connected }</h2>
 		
 		<div>
-			<div style="float:left; margin-left:1.5cm"> ${test.getAt(0) }</div>
-			<div style="margin-left:15cm"> ${test.getAt(1) }</div>
+			<div style="float:left; margin-left:6.5cm"> ${test.getAt(0) }</div>
+			<div style="margin-left:20cm"> ${test.getAt(1) }</div>
 		</div>
 		
 		<br/>
@@ -47,7 +53,7 @@
 					<g:each var="item" in="${pqc}">
 	       				<li class="pathQueryItem"><g:link resource="pathQuery" action="show" params="[id: item.id, path: item.path]"> ${item.path } </g:link></li>
 	       				
-		      				<g:set var="norm" value="${instanciated.getAt(counter).replaceAll("/", "").replace("*", "")}" />
+		      				<g:set var="norm" value="${instanciated.getAt(counter).replaceAll(" /", "").replace("*", "")}" />
 		      				<g:set var="split" value="${norm.split()}" />
 		      				<g:set var="tam" value="${split.size()}" />	
 		      				<g:set var="index" value="${0}" />
@@ -91,7 +97,8 @@
 		</div>--%>
 		<%--<g:each var="item" in="${test}">	
 			<span style="float:left"> ${item }   </span>
-		</g:each>--%>
+		</g:each>--%>		
 
-	</body>
+</body>
+
 </html>

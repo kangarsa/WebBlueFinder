@@ -5,9 +5,9 @@ package webbluefinder
 import org.junit.*
 import grails.test.mixin.*
 
-@TestFor(StopedController)
-@Mock(Stoped)
-class StopedControllerTests {
+@TestFor(StoppedController)
+@Mock(Stopped)
+class StoppedControllerTests {
 
     def populateValidParams(params) {
         assert params != null
@@ -17,139 +17,139 @@ class StopedControllerTests {
 
     void testIndex() {
         controller.index()
-        assert "/stoped/list" == response.redirectedUrl
+        assert "/stopped/list" == response.redirectedUrl
     }
 
     void testList() {
 
         def model = controller.list()
 
-        assert model.stopedInstanceList.size() == 0
-        assert model.stopedInstanceTotal == 0
+        assert model.stoppedInstanceList.size() == 0
+        assert model.stoppedInstanceTotal == 0
     }
 
     void testCreate() {
         def model = controller.create()
 
-        assert model.stopedInstance != null
+        assert model.stoppedInstance != null
     }
 
     void testSave() {
         controller.save()
 
-        assert model.stopedInstance != null
-        assert view == '/stoped/create'
+        assert model.stoppedInstance != null
+        assert view == '/stopped/create'
 
         response.reset()
 
         populateValidParams(params)
         controller.save()
 
-        assert response.redirectedUrl == '/stoped/show/1'
+        assert response.redirectedUrl == '/stopped/show/1'
         assert controller.flash.message != null
-        assert Stoped.count() == 1
+        assert Stopped.count() == 1
     }
 
     void testShow() {
         controller.show()
 
         assert flash.message != null
-        assert response.redirectedUrl == '/stoped/list'
+        assert response.redirectedUrl == '/stopped/list'
 
         populateValidParams(params)
-        def stoped = new Stoped(params)
+        def stopped = new Stopped(params)
 
-        assert stoped.save() != null
+        assert stopped.save() != null
 
-        params.id = stoped.id
+        params.id = stopped.id
 
         def model = controller.show()
 
-        assert model.stopedInstance == stoped
+        assert model.stoppedInstance == stopped
     }
 
     void testEdit() {
         controller.edit()
 
         assert flash.message != null
-        assert response.redirectedUrl == '/stoped/list'
+        assert response.redirectedUrl == '/stopped/list'
 
         populateValidParams(params)
-        def stoped = new Stoped(params)
+        def stopped = new Stopped(params)
 
-        assert stoped.save() != null
+        assert stopped.save() != null
 
-        params.id = stoped.id
+        params.id = stopped.id
 
         def model = controller.edit()
 
-        assert model.stopedInstance == stoped
+        assert model.stoppedInstance == stopped
     }
 
     void testUpdate() {
         controller.update()
 
         assert flash.message != null
-        assert response.redirectedUrl == '/stoped/list'
+        assert response.redirectedUrl == '/stopped/list'
 
         response.reset()
 
         populateValidParams(params)
-        def stoped = new Stoped(params)
+        def stopped = new Stopped(params)
 
-        assert stoped.save() != null
+        assert stopped.save() != null
 
         // test invalid parameters in update
-        params.id = stoped.id
+        params.id = stopped.id
         //TODO: add invalid values to params object
 
         controller.update()
 
-        assert view == "/stoped/edit"
-        assert model.stopedInstance != null
+        assert view == "/stopped/edit"
+        assert model.stoppedInstance != null
 
-        stoped.clearErrors()
+        stopped.clearErrors()
 
         populateValidParams(params)
         controller.update()
 
-        assert response.redirectedUrl == "/stoped/show/$stoped.id"
+        assert response.redirectedUrl == "/stopped/show/$stopped.id"
         assert flash.message != null
 
         //test outdated version number
         response.reset()
-        stoped.clearErrors()
+        stopped.clearErrors()
 
         populateValidParams(params)
-        params.id = stoped.id
+        params.id = stopped.id
         params.version = -1
         controller.update()
 
-        assert view == "/stoped/edit"
-        assert model.stopedInstance != null
-        assert model.stopedInstance.errors.getFieldError('version')
+        assert view == "/stopped/edit"
+        assert model.stoppedInstance != null
+        assert model.stoppedInstance.errors.getFieldError('version')
         assert flash.message != null
     }
 
     void testDelete() {
         controller.delete()
         assert flash.message != null
-        assert response.redirectedUrl == '/stoped/list'
+        assert response.redirectedUrl == '/stopped/list'
 
         response.reset()
 
         populateValidParams(params)
-        def stoped = new Stoped(params)
+        def stopped = new Stopped(params)
 
-        assert stoped.save() != null
-        assert Stoped.count() == 1
+        assert stopped.save() != null
+        assert Stopped.count() == 1
 
-        params.id = stoped.id
+        params.id = stopped.id
 
         controller.delete()
 
-        assert Stoped.count() == 0
-        assert Stoped.get(stoped.id) == null
-        assert response.redirectedUrl == '/stoped/list'
+        assert Stopped.count() == 0
+        assert Stopped.get(stopped.id) == null
+        assert response.redirectedUrl == '/stopped/list'
     }
 }

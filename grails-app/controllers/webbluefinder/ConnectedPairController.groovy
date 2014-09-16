@@ -3,16 +3,16 @@ package webbluefinder
 class ConnectedPairController {
 
     def index() { }
-	def show(int id, String connected) {
+	def show(int id) {
 		def st = new ShowStatistics()
-		def PQWhichConnect = st.fetchPQWhoConnects(id)
+		ConnectedPair cp = st.fetchConnectedPair(id)
+		//def PQWhichConnect = st.fetchPQWhoConnects(id)
 		
 		def coll = new ArrayList<String>()
 		def colPages = new ArrayList<?>()
-		
-		for (item in PQWhichConnect) {
+		for (item in cp.getPathQueries()) {
 			//println item.Page.split().getAt(0)
-			def split = connected.split()
+			def split = cp.getPage().split()
 			def from = split.getAt(0)
 			def to = split.getAt(2)
 			coll.add( item.path.replaceAll('#from', from).replaceAll('#to', to).replace("Cat", "Categoría"))
@@ -42,7 +42,10 @@ class ConnectedPairController {
 		def test = colPages.getAt(0)
 		//println colPages.size
 		//println test
-		
-		render(view:"show.gsp", model:['pqc':PQWhichConnect, 'connected':connected, 'instanciated':coll, 'test':colPages])
+				
+		render(view:"show.gsp", model:['pqc':cp.getPathQueries(), //ArrayList
+									   'connected':cp.getPage(), //String
+									   'instanciated':coll, //ArrayList
+									   'test':colPages]) //ArrayList
 	}
 }

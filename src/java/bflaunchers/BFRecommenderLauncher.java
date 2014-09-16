@@ -1,9 +1,10 @@
 package bflaunchers;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import db.DBConnector;
+import db.PropertiesFileIsNotFoundException;
 import db.utils.ResultsDbInterface;
 import knn.clean.BlueFinderRecommender;
 import knn.clean.KNN;
@@ -12,7 +13,7 @@ import wbflisteners.ObservableProcess;
 
 public class BFRecommenderLauncher extends ObservableProcess {
 	
-	public void launch(String from, String to, int neighbour, int maxRecommendations, String db) throws ClassNotFoundException, SQLException {
+	public void launch(String from, String to, int neighbour, int maxRecommendations, String db, String dbuser, String dbpass) throws ClassNotFoundException, SQLException, PropertiesFileIsNotFoundException {
 		/**
 		if (args.length < 3) {
 			System.out.println("Expected arguments: <from> <to> <neighbour> [<max recommendations>]");
@@ -40,10 +41,10 @@ public class BFRecommenderLauncher extends ObservableProcess {
 		} catch (ArrayIndexOutOfBoundsException ex) {
 			System.err.println("Number of recommendations was not provided, set to default (all).");
 		}
-		Connection conn = DatabaseConnector.getConnection("root","root");
-		ResultsDbInterface rdi = new ResultsDbInterface(conn);
+		DBConnector dbc = new DBConnector(db, dbuser, dbpass, db, dbuser, dbpass);
+		ResultsDbInterface rdi = new ResultsDbInterface(dbc);
 		
-		BlueFinderRecommender bfevaluation = new BlueFinderRecommender(new KNN(new ProjectSetup()), k, maxRecomm,rdi);
+		BlueFinderRecommender bfevaluation = new BlueFinderRecommender(dbc, new KNN(dbc, new ProjectSetup()), k, maxRecomm,rdi);
 
 		System.out.println("En BFRLauncher 5");
 		List<String> knnResults = bfevaluation.getEvaluation(object,  subject);

@@ -57,9 +57,10 @@ class Process {
 		return isNotStarted()
 	}
 	
-	def setStoped() {
-		this.setState(new Stoped())
-		notifyStopedToObservers()
+	def setStopped() {
+		state = new Stopped()
+		this.save()
+		System.out.println(state)
 	}
 	def setComputing() {
 		this.setState(new Computing())
@@ -68,7 +69,6 @@ class Process {
 	def setFinalized() {
 		//this.setState(new Finalized())
 		//this.merge()
-		System.out.println("acá esta")
 		state = new Finalized()
 		this.save()
 		System.out.println(state)

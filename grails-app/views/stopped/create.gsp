@@ -1,20 +1,20 @@
-<%@ page import="webbluefinder.Stoped" %>
+<%@ page import="webbluefinder.Stopped" %>
 <!DOCTYPE html>
 <html>
 
 <head>
 	<meta name="layout" content="kickstart" />
-	<g:set var="entityName" value="${message(code: 'stoped.label', default: 'Stoped')}" />
+	<g:set var="entityName" value="${message(code: 'stopped.label', default: 'Stopped')}" />
 	<title><g:message code="default.create.label" args="[entityName]" /></title>
 </head>
 
 <body>
 
-	<section id="create-stoped" class="first">
+	<section id="create-stopped" class="first">
 
-		<g:hasErrors bean="${stopedInstance}">
+		<g:hasErrors bean="${stoppedInstance}">
 		<div class="alert alert-danger">
-			<g:renderErrors bean="${stopedInstance}" as="list" />
+			<g:renderErrors bean="${stoppedInstance}" as="list" />
 		</div>
 		</g:hasErrors>
 

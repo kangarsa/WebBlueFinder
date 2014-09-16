@@ -53,7 +53,7 @@ class ShowStatistics {
 	
 	def ArrayList<?> fetchPathQueries() {
 		/**
-		 * Método que devuelve los path queries
+		 * Método que devuelve todos los path queries
 		 */
 		connect()
 		def result = sql.rows "select * from V_Normalized"
@@ -61,7 +61,7 @@ class ShowStatistics {
 	}
 	def ArrayList<?> fetchConnectedPairs() {
 		/**
-		 * Método que devuelve los pares conectados
+		 * Método que devuelve todos los pares conectados
 		 */
 		connect()
 		def result = sql.rows "select id, CONVERT(page using utf8) as Page from U_page"
@@ -70,7 +70,7 @@ class ShowStatistics {
 	
 	def ArrayList<?> fetchNotConnectedPairs() {
 		/**
-		 * Método que devuelve los pares no conectados
+		 * Método que devuelve todos los pares no conectados
 		 */
 		connect()
 		def result = sql.rows "select * from NFPC"
@@ -82,7 +82,7 @@ class ShowStatistics {
 		 * Método que devuelve la cantidad de pares que conecta cada path query
 		 */
 		connect()
-		//Limitado a 50 porque si no se va al carajo
+		//Limitado a 50 porque si no se va a la fruta
 		def result = sql.rows "select vn.id, count(v_to) as cant,vn.path from UxV inner join V_Normalized as vn on UxV.v_to=vn.id group by v_to order by cant desc "+limit
 		return result
 		
@@ -129,16 +129,30 @@ class ShowStatistics {
 	}
 	
 	def PathQuery fetchPathQuery(int id) {
+		/**
+		 * Método que devuelve del DTO de un path query, instanciando su clase
+		 * de dominio 
+		 */
 		connect()
 		def result = sql.rows "select * from V_Normalized where id="+id
+		def connectedPairs = this.fetchConnectedPairsOfPQ(id)
+		def relevance = this.fetchPQRelevance(id)
 		PathQuery pq = new PathQuery(identifier: result[0].id, path: result[0].path)
+		pq.setConnectedPairs(connectedPairs)
+		pq.setRelevance(relevance)
 		return pq
 	}
 	
 	def ConnectedPair fetchConnectedPair(int id) {
+		/**
+		 * Método que devuelve del DTO de un connected pair, instanciando su clase
+		 * de dominio
+		 */
 		connect()
-		def result = sql.rows "select * from U_page where id="+id
-		ConnectedPair cp = new ConnectedPair(identifier: result[0].id, page: result[0].page)
+		def result = sql.rows "select id, CONVERT(page using utf8) as Page from U_page where id="+id
+		def pathQueries = this.fetchPQWhoConnects(id)
+		ConnectedPair cp = new ConnectedPair(identifier: result[0].id, page: result[0].Page)
+		cp.setPathQueries(pathQueries)
 		return cp
 	}
 }

@@ -1,26 +1,26 @@
-<%@ page import="webbluefinder.Stoped" %>
+<%@ page import="webbluefinder.Stopped" %>
 <!DOCTYPE html>
 <html>
 
 <head>
 	<meta name="layout" content="kickstart" />
-	<g:set var="entityName" value="${message(code: 'stoped.label', default: 'Stoped')}" />
+	<g:set var="entityName" value="${message(code: 'stopped.label', default: 'Stopped')}" />
 	<title><g:message code="default.edit.label" args="[entityName]" /></title>
 </head>
 
 <body>
 
-	<section id="edit-stoped" class="first">
+	<section id="edit-stopped" class="first">
 
-		<g:hasErrors bean="${stopedInstance}">
+		<g:hasErrors bean="${stoppedInstance}">
 		<div class="alert alert-danger">
-			<g:renderErrors bean="${stopedInstance}" as="list" />
+			<g:renderErrors bean="${stoppedInstance}" as="list" />
 		</div>
 		</g:hasErrors>
 
 		<g:form method="post" class="form-horizontal" role="form" >
-			<g:hiddenField name="id" value="${stopedInstance?.id}" />
-			<g:hiddenField name="version" value="${stopedInstance?.version}" />
+			<g:hiddenField name="id" value="${stoppedInstance?.id}" />
+			<g:hiddenField name="version" value="${stoppedInstance?.version}" />
 			<g:hiddenField name="_method" value="PUT" />
 			
 			<g:render template="form"/>

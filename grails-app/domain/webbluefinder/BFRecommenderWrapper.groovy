@@ -34,7 +34,7 @@ class BFRecommenderWrapper extends Process implements ProcessesListener {
 			bfr.addObserver(this)
 			System.out.println("nuevoThread?BFR3")
 			//bfr.launch("asd","dsa",5,10000,"results")
-			bfr.launch(this.bfrFrom, this.bfrTo, this.neighbour, this.maxRecommendations, this.db)
+			bfr.launch(this.bfrFrom, this.bfrTo, this.neighbour, this.maxRecommendations, this.db,p.getDbuser(), p.getDbpass())
 			System.out.println("nuevoThread?BFR4")
 		}
 		System.out.println("workerBFR.poststart()")

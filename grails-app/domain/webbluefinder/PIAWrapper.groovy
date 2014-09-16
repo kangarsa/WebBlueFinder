@@ -23,10 +23,13 @@ class PIAWrapper extends Process implements ProcessesListener {
 		Properties p = Properties.getLast()
 		System.out.println("workerPIA.prestart()")
 		runAsync {
-			System.out.println("nuevoThread?");
+			System.out.println("PIA-nuevoThread?-1");
 			def pia = new PIALauncher()
+			System.out.println("PIA-nuevoThread?-2");
 			pia.addObserver(this)
-			pia.launch(scene.piaMinLimit, scene.piaMaxLimit, scene.piaIterationsLimit, scene.id+"_dbr", scene.piaClean);
+			System.out.println("PIA-nuevoThread?-3");
+			pia.launch("localhost/"+p.getDatabase(), p.getDbuser(), p.getDbpass(), scene.piaMinLimit, scene.piaMaxLimit, scene.piaIterationsLimit, scene.id+"_dbr", scene.piaClean);
+			System.out.println("PIA-nuevoThread?-4");
 		}
 		System.out.println("workerPIA.poststart()")
 	}
@@ -53,8 +56,8 @@ class PIAWrapper extends Process implements ProcessesListener {
 
 	@Override
 	public void stopped(ObservableProcess pia) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("en stopped!");
+		this.setStopped()
 	}
 
 	@Override

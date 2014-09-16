@@ -2,41 +2,44 @@
 <%@ page import="webbluefinder.ConnectedPair" %>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'connectedPair.label', default: 'ConnectedPair')}" />
-		<title><g:message code="default.list.label" args="[entityName]" /></title>
-	</head>
-	<body>
-		<a href="#list-connectedPair" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
-		<div id="list-connectedPair" class="content scaffold-list" role="main">
-			<h1><g:message code="default.list.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-				<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<table>
-			<thead>
-					<tr>
-					
-					</tr>
-				</thead>
-				<tbody>
-				<g:each in="${connectedPairInstanceList}" status="i" var="connectedPairInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-					</tr>
-				</g:each>
-				</tbody>
-			</table>
-			<div class="pagination">
-				<g:paginate total="${connectedPairInstanceCount ?: 0}" />
-			</div>
-		</div>
-	</body>
+
+<head>
+	<meta name="layout" content="kickstart" />
+	<g:set var="entityName" value="${message(code: 'connectedPair.label', default: 'ConnectedPair')}" />
+	<title><g:message code="default.index.label" args="[entityName]" /></title>
+</head>
+
+<body>
+
+<section id="index-connectedPair" class="first">
+
+	<table class="table table-bordered margin-top-medium">
+		<thead>
+			<tr>
+			
+				<g:sortableColumn property="identifier" title="${message(code: 'connectedPair.identifier.label', default: 'Identifier')}" />
+			
+				<g:sortableColumn property="page" title="${message(code: 'connectedPair.page.label', default: 'Page')}" />
+			
+			</tr>
+		</thead>
+		<tbody>
+		<g:each in="${connectedPairInstanceList}" status="i" var="connectedPairInstance">
+			<tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+			
+				<td><g:link action="show" id="${connectedPairInstance.id}">${fieldValue(bean: connectedPairInstance, field: "identifier")}</g:link></td>
+			
+				<td>${fieldValue(bean: connectedPairInstance, field: "page")}</td>
+			
+			</tr>
+		</g:each>
+		</tbody>
+	</table>
+	<div>
+		<bs:paginate total="${connectedPairInstanceCount}" />
+	</div>
+</section>
+
+</body>
+
 </html>
