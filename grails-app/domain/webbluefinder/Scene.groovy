@@ -14,6 +14,7 @@ class Scene {
 	int piaMaxLimit = 600
 	int piaIterationsLimit = 2
 	boolean piaClean = true
+	Blacklist blacklist
 	
 	static hasMany = [previousProcess: Process]
 	
@@ -32,6 +33,7 @@ class Scene {
 		piaMinLimit min:1
 		piaMaxLimit min:1
 		piaIterationsLimit min:1
+		blacklist nullable:true
     }
 	
 	Scene(String from,String to,String prop,Process dbr){
@@ -82,6 +84,13 @@ class Scene {
 	}
 	def addNewDumpLoader(String dumpPath){
 		return previousProcess.add(new DumpLoader(this, dumpPath))
+	}
+	
+	def getBlacklist(){
+		if (blacklist){
+			return blacklist.words
+		}
+		return []
 	}
 	
 	def setNewProcess(Process p) {

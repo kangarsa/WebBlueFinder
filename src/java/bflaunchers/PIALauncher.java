@@ -1,28 +1,41 @@
 package bflaunchers;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import normalization.BasicNormalization;
+import normalization.TranslatorBasicNormalization;
 import pia.BipartiteGraphGenerator;
 import pia.PIAConfigurationBuilder;
+import pia.PIAConfigurationContainer;
+import pia.PathFinder;
 import db.DBConnector;
 import db.PropertiesFileIsNotFoundException;
+import utils.BlacklistCategory;
 import utils.ProjectConfigurationReader;
+import utils.ProjectSetup;
 import wbflisteners.ObservableProcess;
 
 public class PIALauncher extends ObservableProcess {
 
-	public void launch(String db, String dbuser, String dbpass, int infLimit, int maxLimit, int iterationsLimit, String fromToTable/*, String prefix*/, boolean cl) {
+	public void launch(List<String> blacklist, String dbwiki, String dbwikiuser, String dbwikipass, String dbresults, String dbresultsuser, String dbresultspass, int infLimit, int maxLimit, int iterationsLimit, String fromToTable/*, String prefix*/, boolean cl) {
 
 		try {
 			System.out.println("ALGO0.0");
-			DBConnector dbc = new DBConnector(dbuser, dbpass, db, dbuser, dbpass, db);
+			DBConnector dbc = new DBConnector(dbwikiuser, dbwikipass, dbwiki, dbresultsuser, dbresultspass, dbresults);
 
 			System.out.println("ALGO0.1");
 			Connection conReserarch;
@@ -66,11 +79,21 @@ public class PIALauncher extends ObservableProcess {
 			System.out.println("Params: " + params + "\n");
 
 			long start = System.nanoTime();
+			ProjectSetup ps = new ProjectSetup("dbtypes", false, "unstarred", 
+					"Category:", "en", "http://dbpedia.org/resource/", 
+					"http://dbpedia.org/resource/", this.readBlacklistCategoryFile("blacklist_category_default.txt"),
+					false, true, null);
 
+	        
 			BipartiteGraphGenerator bgg;
 		//	bgg = PIAConfigurationBuilder.getBipartiteGraphGenerator(iterations);
 			//IMPORTATE VERIFICAR SI UTILIZA OTRO TIPO DE NORMALIZACION!!! Y SI TIENE QUE TRADUCIR.
-			bgg = new BipartiteGraphGenerator(dbc,new BasicNormalization(),iterationsLimit);
+		//	bgg = new BipartiteGraphGenerator(dbc,new BasicNormalization(),iterationsLimit);
+		//	BlacklistCategory blacklistCategory = new BlacklistCategory("blacklist_category_default.txt");
+//			List<String> bl = readBlacklistCategoryFile("blacklist_category_default.txt");
+			System.out.println(blacklist);
+/** TODO ver que onda con la exportacion de la carpeta config o si se debe copiar todos los archivos necesarios al proyecto grails **/			
+			bgg = ps.getBipartiteGraphGenerator(dbc, iterations);
 			if (cl) {
 				dbc.restoreResultIndex();
 			}
@@ -104,22 +127,45 @@ public class PIALauncher extends ObservableProcess {
 			this.notifyFinished();
 
 		} catch (ClassNotFoundException e) {
-			System.out.println("ERROR DBRetriever LAUNCHER EXCEPTION ClassNotFound");
+			System.out.println("ERROR PIA LAUNCHER EXCEPTION ClassNotFound");
 			this.notifyStopped();
 		} catch (SQLException e) {
-			System.out.println("ERROR DBRetriever LAUNCHER EXCEPTION SQL");
+			System.out.println(e.getStackTrace());
+			System.out.println("ERROR PIA LAUNCHER EXCEPTION SQL");
 			this.notifyStopped();
 		} catch (PropertiesFileIsNotFoundException e) {
-			System.out.println("ERROR DBRetriever LAUNCHER EXCEPTION PropertiesFileIsNotFound");
+			System.out.println("ERROR PIA LAUNCHER EXCEPTION PropertiesFileIsNotFound");
 			this.notifyStopped();
 		} catch (FileNotFoundException e) {
-			System.out.println("ERROR DBRetriever LAUNCHER EXCEPTION FileNotFound");
+			System.out.println("ERROR PIA LAUNCHER EXCEPTION FileNotFound");
 			this.notifyStopped();
 		} catch (IOException e) {
-			System.out.println("ERROR DBRetriever LAUNCHER EXCEPTION IO");
+			System.out.println("ERROR PIA LAUNCHER EXCEPTION IO");
+			this.notifyStopped();
+		} catch (Exception e) {
+			System.out.println("ERROR PIA LAUNCHER EXCEPTION Generic");
 			this.notifyStopped();
 		}
 
 	}
+	
+	private List<String> readBlacklistCategoryFile(String fileName){
 
+        List<String> list = new ArrayList<String>();
+
+        try {
+	        InputStream blackListIS = PIALauncher.class.getClassLoader().getResourceAsStream(fileName);
+	        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(blackListIS));
+	        String line;
+				while ((line = bufferedReader.readLine()) != null) {
+					list.add(line);
+				}
+	        bufferedReader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("TODO MAL, no hay archivo");
+			e.printStackTrace();
+		}
+        return Collections.unmodifiableList(list);
+	}
 }

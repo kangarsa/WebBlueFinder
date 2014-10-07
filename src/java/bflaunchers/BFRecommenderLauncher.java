@@ -1,8 +1,15 @@
 package bflaunchers;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import pia.PIAConfigurationContainer;
 import db.DBConnector;
 import db.PropertiesFileIsNotFoundException;
 import db.utils.ResultsDbInterface;
@@ -42,9 +49,16 @@ public class BFRecommenderLauncher extends ObservableProcess {
 			System.err.println("Number of recommendations was not provided, set to default (all).");
 		}
 		DBConnector dbc = new DBConnector(db, dbuser, dbpass, db, dbuser, dbpass);
-		ResultsDbInterface rdi = new ResultsDbInterface(dbc);
 		
-		BlueFinderRecommender bfevaluation = new BlueFinderRecommender(dbc, new KNN(dbc, new ProjectSetup()), k, maxRecomm,rdi);
+
+		ProjectSetup ps = new ProjectSetup("dbtypes", false, "unstarred", 
+				"Category:", "en", "http://dbpedia.org/resource/", 
+				"http://dbpedia.org/resource/", this.readBlacklistCategoryFile("blacklist_category_default.txt"),
+				false, true, null);
+		
+		ResultsDbInterface rdi = new ResultsDbInterface(ps,dbc);
+		
+		BlueFinderRecommender bfevaluation = new BlueFinderRecommender(dbc, new KNN(ps, dbc), k, maxRecomm,rdi);
 
 		System.out.println("En BFRLauncher 5");
 		List<String> knnResults = bfevaluation.getEvaluation(object,  subject);
@@ -68,4 +82,25 @@ public class BFRecommenderLauncher extends ObservableProcess {
 		System.out.println("En BFRLauncher 6");
         this.notifyFinished();
 	}
+	
+	private List<String> readBlacklistCategoryFile(String fileName){
+
+        List<String> list = new ArrayList<String>();
+
+        try {
+	        InputStream blackListIS = PIALauncher.class.getClassLoader().getResourceAsStream(fileName);
+	        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(blackListIS));
+	        String line;
+				while ((line = bufferedReader.readLine()) != null) {
+					list.add(line);
+				}
+	        bufferedReader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("TODO MAL, no hay archivo");
+			e.printStackTrace();
+		}
+        return Collections.unmodifiableList(list);
+	}
+
 }

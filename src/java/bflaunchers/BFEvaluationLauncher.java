@@ -1,8 +1,16 @@
 package bflaunchers;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
+import pia.PIAConfigurationContainer;
 import db.DBConnector;
 import db.PropertiesFileIsNotFoundException;
 import db.utils.ResultsDbInterface;
@@ -26,26 +34,51 @@ public class BFEvaluationLauncher extends ObservableProcess {
 
 		DBConnector dbc = new DBConnector(db, dbuser, dbpass, db, dbuser, dbpass);
 		//Connection conn = DatabaseConnector.getConnection("root","root");
+
+
+		ProjectSetup ps = new ProjectSetup("dbtypes", false, "unstarred", 
+				"Category:", "en", "http://dbpedia.org/resource/", 
+				"http://dbpedia.org/resource/", this.readBlacklistCategoryFile("blacklist_category_default.txt"),
+				false, true, null);
 		
-		ResultsDbInterface rdi = new ResultsDbInterface(dbc);
-		ProjectSetup setup = new ProjectSetup();
-		setup.setCreateEnhancedTable(true);
+		ResultsDbInterface rdi = new ResultsDbInterface(ps,dbc);
+		ps.setCreateEnhancedTable(true);
 		
 		System.out.println("----A1");
 		String scenarioName = scName;
 		int proportion = proportionOfExperiment;
-		KNN knn = new KNN(dbc,setup,rdi);
+		KNN knn = new KNN(ps,dbc,rdi);
 		
 		
 		System.out.println("----A2");
-		BlueFinderEvaluation bfe = new BlueFinderEvaluation(knn,rdi);
+		BlueFinderEvaluation bfe = new BlueFinderEvaluation(ps, dbc, knn, rdi);
 
 		System.out.println("----A3");
-		bfe.runCompleteEvaluation(proportion, 11, scenarioName);
+		bfe.runCompleteEvaluation(ps, proportion, 11, scenarioName);
 
 		System.out.println("----A4");
 		Date fin = new Date();
 		System.out.println("BFELauncher Time: "+ (fin.getTime() - inicio.getTime()));
 		this.notifyFinished();
+	}
+
+	private List<String> readBlacklistCategoryFile(String fileName){
+
+        List<String> list = new ArrayList<String>();
+
+        try {
+	        InputStream blackListIS = PIALauncher.class.getClassLoader().getResourceAsStream(fileName);
+	        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(blackListIS));
+	        String line;
+				while ((line = bufferedReader.readLine()) != null) {
+					list.add(line);
+				}
+	        bufferedReader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("TODO MAL, no hay archivo");
+			e.printStackTrace();
+		}
+        return Collections.unmodifiableList(list);
 	}
 }
