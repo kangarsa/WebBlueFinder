@@ -29,7 +29,7 @@
 		</div>	
 		<r:external type="js" uri="https://www.google.com/jsapi"/>
 		<g:javascript>
-			      // Load the Visualization API and the piechart package.
+		  // Load the Visualization API and the piechart package.
 	      google.load('visualization', '1.0', {'packages':['corechart']});
 	
 	      // Set a callback to run when the Google Visualization API is loaded.
@@ -59,7 +59,7 @@
 			//viewPQR.hideColumns([2]);
 	        // Set chart options
 
-	        var optionsPQR = {'title':'Path query relevance',
+	        var optionsPQR = {'title':'Path query coverage',
 	                       'width':'90%',
 	                       'height':1500
 	                       };   	          
@@ -74,27 +74,17 @@
 	        
 			google.visualization.events.addListener(chartPQR, 'select', selectHandler);
 
-			function selectHandler() {	
-			
+			function selectHandler() {		
 				var selection = chartPQR.getSelection();
 				var id = dataPQR.getValue(selection[0].row, 2);
 				var path = dataPQR.getValue(selection[0].row, 0);
 				var uri = path;
 				var res = encodeURIComponent(uri);
-				window.location = "../pathQuery/show/"+ id +"?path="+res;
-
-
-
-
+				window.location = "./pathQuery/"+ id;
 				}
-
 			 }
 	        
 		</g:javascript>
-				<!-- Este field no va, el link siguiente tampoco -->
-				<g:field type="text" name="bbdd" required="true" value="" hidden="true"/>
-				<g:link controller="ShowStatistics" action="index" hidden="true"> Compute </g:link>
-				<br/>
 				<!-- El estilo de los divs siguientes tiene que volar cuando se aplique un CSS como la gente -->
 				
 				<h3> Path queries</h3>
@@ -110,7 +100,7 @@
 				<div class="listados">	 
 					<ul class="connectedPairsList" >
 					<g:each var="item" in="${cp}">
-	       				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" id="${item.id}">${item.Page } </g:link></li>  
+	       				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" id="${item.id}">${item.Page.replace(",","-").replaceAll("_", " ") } </g:link></li>  
 					</g:each>
 					</ul>
 				</div>
@@ -119,11 +109,10 @@
 				<div class="listados">	 
 					<ul class="notConnectedPairsList" >
 					<g:each var="item" in="${ncp}">
-	       				<li class="notConnectedPairItem">${item.v_from } , ${item.u_to }</li>  
+	       				<li class="notConnectedPairItem">${item.v_from.replaceAll("_", " ") } - ${item.u_to.replaceAll("_", " ") }</li>  
 					</g:each>
 					</ul>
 				</div>				
-				<div id="pqr" ></div>
-				
+				<div id="pqr" ></div> <!-- El div donde se carga el gráfico de barras -->		
 	</body>
 </html>
