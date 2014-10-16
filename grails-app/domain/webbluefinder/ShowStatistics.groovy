@@ -38,7 +38,7 @@ class ShowStatistics {
 	def user = "giuliano"
 	def password = "123456"
 	def host = "192.168.10.84"
-	def bd = "piaImportAux_2"
+	def bd = "p02_deathPlace_es_loaded"
 	String connectTo = "jdbc:mysql://"+host+"/"+bd
 	
     static constraints = {
