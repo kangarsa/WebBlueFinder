@@ -15,6 +15,9 @@ package webbluefinder
  */
 
 import java.sql.Connection;
+
+import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor;
+
 import groovy.sql.Sql
 
 class ShowStatistics {
@@ -24,29 +27,50 @@ class ShowStatistics {
 	método defineProperties, corresponden a testeos y deberían eliminarse
 	eventualmente
 	**/
+	//p02_deathPlace_es_loaded
+	//piaImportAux_2
 	
-	def connectTo = "jdbc:mysql://192.168.10.84/piaImportAux_2"
 
-	/**Si acá pongo 'Sql' en lugar de 'def', Hibernate trata de mapearlo y tira error.
+	/**Si acá pongo 'Sql' en lugar de 'def' (para un chequeo estático), Hibernate trata de mapearlo y tira error.
 	 * Creo que hay una annotation para decirle que no
 	 */
 	def sql
+	def user = "giuliano"
+	def password = "123456"
+	def host = "192.168.10.84"
+	def bd = "piaImportAux_2"
+	String connectTo = "jdbc:mysql://"+host+"/"+bd
 	
     static constraints = {
     }
 	
-	def defineProperties() {	
+	/**def defineProperties() {	
 		java.util.Properties properties = new java.util.Properties()
 		properties.put("user", "giuliano")
 		properties.put("password", "123456")
 		
+	}**/
+	
+	ShowStatistics(String host, String bd, String user, String pass) {
+		//Constructor que recibe el nombre de una bbdd auxiliar para hacer tests
+		//def driver = Class.forName("com.mysql.jdbc.Driver").newInstance()
+		//java.util.Properties properties = new java.util.Properties()
+		this.user = user
+		this.password = pass
+		this.host = host
+		this.bd = bd
+		//properties.put("user", user)
+		//properties.put("password", pass)
+		//connectTo = "jdbc:mysql://localhost/"+bd
+		//Connection con = driver.connect(connectTo, properties)
+		//sql = new Sql(con)		
 	}
 	
 	def connect(){
 		def driver = Class.forName("com.mysql.jdbc.Driver").newInstance()
 		java.util.Properties properties = new java.util.Properties()
-		properties.put("user", "giuliano")
-		properties.put("password", "123456")
+		properties.put("user", this.user)
+		properties.put("password", this.password)
 		Connection con = driver.connect(connectTo, properties)
 		sql = new Sql(con)
 	}
@@ -83,7 +107,7 @@ class ShowStatistics {
 		 */
 		connect()
 		//Limitado a 50 porque si no se va a la fruta
-		def result = sql.rows "select vn.id, count(v_to) as cant,vn.path from UxV inner join V_Normalized as vn on UxV.v_to=vn.id group by v_to order by cant desc "+limit
+		def result = sql.rows "select vn.id, count(distinct u_from) as cant,vn.path from UxV inner join V_Normalized as vn on UxV.v_to=vn.id group by v_to order by cant desc "+limit
 		return result
 		
 	}
@@ -91,9 +115,9 @@ class ShowStatistics {
 	def ArrayList<?> fetchPQRelevance(int id) {
 		/**
 		 * Método que devuelve la cantidad de pares que conecta un path query pasado por parámetro
-		 */
+		 **/
 		connect()
-		def result = sql.rows "select vn.id, count(v_to) as cant,vn.path from UxV inner join V_Normalized as vn on UxV.v_to=vn.id where vn.id="+id+" group by v_to order by cant desc";
+		def result = sql.rows "select vn.id, count(distinct u_from) as cant,vn.path from UxV inner join V_Normalized as vn on UxV.v_to=vn.id where vn.id="+id+" group by v_to order by cant desc";
 		return result
 		
 	}

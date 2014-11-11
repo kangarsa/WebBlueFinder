@@ -7,15 +7,6 @@
 		<meta name="layout" content="kickstartNoNav">
 		<g:set var="entityName" value="${message(code: 'pathQuery.label', default: 'PathQuery')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
-		<!--   <script language="javascript" type="text/javascript" src="jit-yc.js"></script>
-		<script language="javascript" type="text/javascript" src="example1.js"></script> -->
-		<!--<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-		<script type="text/javascript" src="jit-yc.js"></script>-->
-
-		<!--  <r:external type="js" uri="http://mbostock.github.io/d3/talk/20111018/d3/d3.js"/> -->
-		<!--<script src="http://d3js.org/d3.v3.min.js"></script>-->
-		<!--<script type="text/javascript" src="d3.js"></script>
-    	<script type="text/javascript" src="d3.layout.js"></script>-->
     	<g:javascript src="d3.js" />
     	<g:javascript src="d3.layout.js" />
     	
@@ -37,10 +28,8 @@
 			  stroke-width: 1.5px;
 			}
 		</style>		
-
-
 	</head>
-	<body> <!--  onload="init();" -->
+	<body>
 		<header id="Header" class="jumbotron masthead">
 			<div class="container">
 				<h1 class="title">Path query</h1>
@@ -57,8 +46,6 @@
 		Librerías de Google Charts para mostrar el gráfico de la relevancia de cada
 		path query
 		 -->
-		 
-		
 		<r:external type="js" uri="https://www.google.com/jsapi"/>
 		<g:javascript>
 	      google.load('visualization', '1.0', {'packages':['corechart']});
@@ -74,17 +61,24 @@
 	        dataPQR.addColumn('number', 'id');
 	        dataPQR.addColumn('number', 'Cant');
 	        
-	        <g:each var="item" in="${pqr}">
-	       		 dataPQR.addRow(["${item.path }", ${item.cant}, ${item.id }, 0]);  
-			</g:each>		
+	        <g:set var="never" value="${true}" />
+			<g:each var="item" in="${pqr}">  		 
+	       		 <g:if test="${PQrel[0].id == item.id}">
+    				 dataPQR.addRow(["${item.path }", 0, ${item.id }, ${item.cant}]);
+    				 <g:set var="never" value="${false}" />
+				 </g:if>
+				 <g:else>
+    				 dataPQR.addRow(["${item.path }", ${item.cant}, ${item.id }, 0]);  
+			     </g:else>
+			</g:each>
 			
-	        <g:each var="item" in="${PQrel}">
-	       		 dataPQR.addRow(["${item.path }", 0, ${item.id }, ${item.cant}]);  
-			</g:each>		
-			
+			<g:if test ="${never}">
+				dataPQR.addRow(["${PQrel[0].path }", 0, ${PQrel[0].id }, ${PQrel[0].cant}]);
+			</g:if>
+						
 		    var viewPQR = new google.visualization.DataView(dataPQR);
 
-	        var optionsPQR = {'title':'Path query relevance',
+	        var optionsPQR = {'title':'Path query coverage',
 	                       'width':'90%',
 	                       'height':500,
 	                       series: [{color: '#0000ff', visibleInLegend: true}, {color: '#ff0000', visibleInLegend: false}]
@@ -103,30 +97,27 @@
 				var path = dataPQR.getValue(selection[0].row, 0);
 				var uri = path;
 				var res = encodeURIComponent(uri);
-				window.location = "../show/"+ id;
+				window.location = "./"+ id;
 				}
 			 }
-			         	function AnEventHasOccurred() {
-				var d = document.getElementById("forms");
-			} 	
 
 		</g:javascript>
 		
-		<g:set var="size" value="${instanciated.size()-1}" />
+		<g:set var="size" value="${instantiated.size()-1}" />
 		<g:set var="counter" value="${0}" />
 		
 		<h3> Pairs connected by <span style="color:blue">${path }</span></h3>
 		
-		<div style="left:250px;overflow:auto;height:400px;width:80%">	  
-			<ul class="connectedPairsList" >
+		<div style="left:250px;overflow:auto;max-height:400px;width:90%;border: 3px solid #90bade;border-radius: 5px">	  
+			<ul class="connectedPairsList"  >
 				<g:each var="item" in="${pqcp}">
-      				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" params="[id: item.id, connected: item.Page]"> ${item.Page } </g:link> </li>
-      				<%--<p style="margin-left:0.5cm"> ${instanciated.getAt(counter)} </p>--%>
-      				<g:set var="norm" value="${instanciated.getAt(counter).replaceAll(" /", "").replace("*", "")}" />
+      				<li class="connectedPairItem"><g:link controller="connectedPair" action="show" id="${item.id}"> ${item.Page.replaceAll(",","-").replaceAll("_"," ") } </g:link> 
+      				-->
+      				<g:set var="norm" value="${instantiated.getAt(counter).replaceAll(" /", "").replace("*", "")}" />
       				<g:set var="split" value="${norm.split()}" />
       				<g:set var="tam" value="${split.size()}" />
       				<g:set var="index" value="${0}" />
-      				<span style="margin-left:0.5cm">
+      				<!--  <span style="margin-left:0.5cm;">-->
 	      				<g:each var="word" in="${split}">
 	      					<%-- El idioma de la Wiki está hardcodeado!!
 	      						 Cuando se defina bien el escenario del cual se muestran las estadísticas, el idioma
@@ -149,202 +140,172 @@
 	
 	      					<g:set var="index" value="${index + 1}" /> 
 	      				</g:each>
-      				</span>
+	      				</li>
+      				<!--</span>-->
       				<g:set var="counter" value="${counter + 1}" />  
 				</g:each>
 			</ul>	
 		</div>	
 		<p> Total: ${pqcp.size() }</p>
-		
-		<div id="chart"></div>
-			
+		  <div id="chart"></div>
 		<div id="pqr" ></div>
-		
-		
-		
-		<!--  <select id="formstt" style="width:30%" onChange="AnEventHasOccurred()">
-			<g:each var="item" in="{pathsMap.keySet()}">
-			<option id="{item }" value="{item }">{item }</option>
-			</g:each>
-		</select> -->
-		
-		
-      <!--  <g:javascript type="text/javascript">
-        	
-        	function AnEventHasOccurred() {
-				var d = document.getElementById("forms");
-				var j =
-				alert(j);
-				
-				childs = j[0]
-			    root = {
-			   			 "name": "#from",
-			   			 "children": []
-			  			 }
-				update(root);
-			} 
-			
-
-        </g:javascript> -->
-        tengo que hace que se inicialice sin todos los hijos
 		<script type="text/javascript">
-
-
-
-	var w = 1000,
-	    h = 20000,
-	    i = 0,
-	    duration = 500,
-	    root = {
-			    "name": "#from",
-			    "children": [${pathsMap}]
-			   }
-	    ;
-
-	var tree = d3.layout.tree()
-	    .size([h, w - 160]);
-
-	var diagonal = d3.svg.diagonal()
-	    .projection(function(d) { return [d.y, d.x]; });
-
-	var vis = d3.select("#chart").append("svg:svg")
-	    .attr("width", w)
-	    .attr("height", h)
-	  .append("svg:g")
-	    .attr("transform", "translate(40,0)");
-
-	update(root);
-
-	
-	function update(source) {
-
-	  // Compute the new tree layout.
-	  var nodes = tree.nodes(root).reverse();
-	 console.log(nodes)
-	  // Update the nodes…
-	  	var node = vis.selectAll("g.node")
-	      .data(nodes, function(d) { return d.id || (d.id = ++i); });
-
-		var nodeEnter = node.enter().append("svg:g")
-	    	.attr("class", "node")
-	    	.attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; });
-	    	//.style("opacity", 1e-6);
-	 
-	  // Enter any new nodes at the parent's previous position.
-	 
-	  	nodeEnter.append("svg:circle")
-	      //.attr("class", "node")
-	      //.attr("cx", function(d) { return source.x0; })
-	      //.attr("cy", function(d) { return source.y0; })
-	      .attr("r", 4.5)
-	      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
-	      .on("click", click);
-	
-		nodeEnter.append("svg:text")
-	      	.attr("x", function(d) { return d._children ? -8 : 8; })
-			.attr("y", 3)
-	      	//.attr("fill","#ccc")
-	      	//.attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
-	      	.text(function(d) { return d.name; });
-
-	  // Transition nodes to their new position.
-		nodeEnter.transition()
-			.duration(duration)
-			.attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
-	      	.style("opacity", 1)
-	      .select("circle")
-	    	//.attr("cx", function(d) { return d.x; })
-			//.attr("cy", function(d) { return d.y; })
-		.style("fill", "lightsteelblue");
-	      
-	    node.transition()
-	      .duration(duration)
-	      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
-	      .style("opacity", 1);
-	    
-
-		node.exit().transition()
-	      .duration(duration)
-	      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
-	      .style("opacity", 1e-6)
-	      .remove();
-	/*
-		var nodeTransition = node.transition()
-			.duration(duration);
-	  
-	  nodeTransition.select("circle")
-	      .attr("cx", function(d) { return d.y; })
-	      .attr("cy", function(d) { return d.x; })
-	      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
-	  
-	  nodeTransition.select("text")
-	      .attr("dx", function(d) { return d._children ? -8 : 8; })
-		  .attr("dy", 3)
-	      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#5babfc"; });
-
-	  // Transition exiting nodes to the parent's new position.
-	  var nodeExit = node.exit();
-	  
-	  nodeExit.select("circle").transition()
-	      .duration(duration)
-	      .attr("cx", function(d) { return source.y; })
-	      .attr("cy", function(d) { return source.x; })
-	      .remove();
-	  
-	  nodeExit.select("text").transition()
-	      .duration(duration)
-	      .remove();
-	*/
-	  // Update the links…
-	  var link = vis.selectAll("path.link")
-	      .data(tree.links(nodes), function(d) { return d.target.id; });
-
-	  // Enter any new links at the parent's previous position.
-	  link.enter().insert("svg:path", "g")
-	      .attr("class", "link")
-	      .attr("d", function(d) {
-		var o = {x: source.x0, y: source.y0};
-		return diagonal({source: o, target: o});
-	      })
-	    .transition()
-	      .duration(duration)
-	      .attr("d", diagonal);
-
-	  // Transition links to their new position.
-	  link.transition()
-	      .duration(duration)
-	      .attr("d", diagonal);
-
-	  // Transition exiting nodes to the parent's new position.
-	  link.exit().transition()
-	      .duration(duration)
-	      .attr("d", function(d) {
-		var o = {x: source.x, y: source.y};
-		return diagonal({source: o, target: o});
-	      })
-	      .remove();
-
-	  // Stash the old positions for transition.
-	  nodes.forEach(function(d) {
-	    d.x0 = d.x;
-	    d.y0 = d.y;
-	  });
-	}
-
-	// Toggle children on click.
-	function click(d) {
-	  if (d.children) {
-	    d._children = d.children;
-	    d.children = null;
-	  } else {
-	    d.children = d._children;
-	    d._children = null;
-	  }
-	  update(d);
-	}
-
-	d3.select(self.frameElement).style("height", "2000px");
+				
+			var w = 1200,
+			    h = ${treeSize},
+			    i = 0,
+			    duration = 500,
+			    root = {
+					    "name": "#paths",
+					    "children": [${pathsMap}]
+					   };
+		
+			var tree = d3.layout.tree()
+			    .size([h, w - 160]);
+		
+			var diagonal = d3.svg.diagonal()
+			    .projection(function(d) { return [d.y, d.x]; });
+		
+			var vis = d3.select("#chart").append("svg:svg")
+			    .attr("width", w)
+			    .attr("height", h)
+			  .append("svg:g")
+			    .attr("transform", "translate(40,0)");
+			   
+			//root.children.forEach(click);       		    	   
+  			update(root);
+			
+			
+			function update(source) {
+		
+			  // Compute the new tree layout.
+			  var nodes = tree.nodes(root).reverse();
+			 console.log(nodes)
+			  // Update the nodes…
+			  	var node = vis.selectAll("g.node")
+			      .data(nodes, function(d) { return d.id || (d.id = ++i); });
+		
+				var nodeEnter = node.enter().append("svg:g")
+			    	.attr("class", "node")
+			    	.attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; });
+			    	//.style("opacity", 1e-6);
+			 
+			  // Enter any new nodes at the parent's previous position.
+			 
+			  	nodeEnter.append("svg:circle")
+			      //.attr("class", "node")
+			      //.attr("cx", function(d) { return source.x0; })
+			      //.attr("cy", function(d) { return source.y0; })
+			      .attr("r", 4.5)
+			      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
+			      .on("click", click);
+			
+				nodeEnter.append("svg:text")
+			      	.attr("x", function(d) { return d._children ? -8 : 8; })
+					.attr("y", 3)
+			      	//.attr("fill","#ccc")
+			      	//.attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+			      	.text(function(d) { return d.name; });
+		
+			  // Transition nodes to their new position.
+				nodeEnter.transition()
+					.duration(duration)
+					.attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+			      	.style("opacity", 1)
+			      .select("circle")
+			    	//.attr("cx", function(d) { return d.x; })
+					//.attr("cy", function(d) { return d.y; })
+				.style("fill", "lightsteelblue");
+			      
+			    node.transition()
+			      .duration(duration)
+			      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+			      .style("opacity", 1);
+			    
+		
+				node.exit().transition()
+			      .duration(duration)
+			      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+			      .style("opacity", 1e-6)
+			      .remove();
+			/*
+				var nodeTransition = node.transition()
+					.duration(duration);
+			  
+			  nodeTransition.select("circle")
+			      .attr("cx", function(d) { return d.y; })
+			      .attr("cy", function(d) { return d.x; })
+			      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+			  
+			  nodeTransition.select("text")
+			      .attr("dx", function(d) { return d._children ? -8 : 8; })
+				  .attr("dy", 3)
+			      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#5babfc"; });
+		
+			  // Transition exiting nodes to the parent's new position.
+			  var nodeExit = node.exit();
+			  
+			  nodeExit.select("circle").transition()
+			      .duration(duration)
+			      .attr("cx", function(d) { return source.y; })
+			      .attr("cy", function(d) { return source.x; })
+			      .remove();
+			  
+			  nodeExit.select("text").transition()
+			      .duration(duration)
+			      .remove();
+			*/
+			  // Update the links…
+			  var link = vis.selectAll("path.link")
+			      .data(tree.links(nodes), function(d) { return d.target.id; });
+		
+			  // Enter any new links at the parent's previous position.
+			  link.enter().insert("svg:path", "g")
+			      .attr("class", "link")
+			      .attr("d", function(d) {
+				var o = {x: source.x0, y: source.y0};
+				return diagonal({source: o, target: o});
+			      })
+			    .transition()
+			      .duration(duration)
+			      .attr("d", diagonal);
+		
+			  // Transition links to their new position.
+			  link.transition()
+			      .duration(duration)
+			      .attr("d", diagonal);
+		
+			  // Transition exiting nodes to the parent's new position.
+			  link.exit().transition()
+			      .duration(duration)
+			      .attr("d", function(d) {
+				var o = {x: source.x, y: source.y};
+				return diagonal({source: o, target: o});
+			      })
+			      .remove();
+		
+			  // Stash the old positions for transition.
+			  nodes.forEach(function(d) {
+			    d.x0 = d.x;
+			    d.y0 = d.y;
+			  });
+			}
+		
+			// Toggle children on click.
+			function click(d) {
+			  if (d.children) {
+			    d._children = d.children;
+			    d.children = null;
+			  } else {
+			    d.children = d._children;
+			    d._children = null;
+			  }
+			  update(d);
+			}
+		
+			d3.select(self.frameElement).style("height", "2000px");
 
     </script>
+
 	</body>
 </html>
