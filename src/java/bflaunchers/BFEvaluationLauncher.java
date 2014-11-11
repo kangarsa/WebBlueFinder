@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import pia.PIAConfigurationContainer;
 import db.DBConnector;
 import db.PropertiesFileIsNotFoundException;
 import db.utils.ResultsDbInterface;
@@ -36,7 +35,7 @@ public class BFEvaluationLauncher extends ObservableProcess {
 		//Connection conn = DatabaseConnector.getConnection("root","root");
 
 
-		ProjectSetup ps = new ProjectSetup("dbtypes", false, "unstarred", 
+		ProjectSetup ps = new ProjectSetup("dbtypes", "unstarred", 
 				"Category:", "en", "http://dbpedia.org/resource/", 
 				"http://dbpedia.org/resource/", this.readBlacklistCategoryFile("blacklist_category_default.txt"),
 				false, true, null);

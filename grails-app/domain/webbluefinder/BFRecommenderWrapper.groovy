@@ -19,6 +19,10 @@ class BFRecommenderWrapper extends Process implements ProcessesListener {
 		super(s)
 	}
 	
+	def getTableNamePiece() {
+		return 'bfr'+this.id;
+	}
+	
 	def getName() {
 		return 'BFRecommenderWrapper'
 	}

@@ -14,8 +14,19 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 		super(s)
 	}
 	
+	def getTableNamePiece() {
+		return 'dbr'+this.id;
+	}
+	
 	def getName() {
 		return 'DBRetrieverWrapper'
+	}
+	
+	def getQuery() {
+		return "SELECT ?from, ?to"+
+				" WHERE { ?from a <"+scene.fromType+">."+
+						" ?to a <"+scene.toType+">."+
+						" ?to <"+scene.property+"> ?from. }";
 	}
 		
 	def start() {
@@ -24,13 +35,12 @@ class DBRetrieverWrapper extends Process implements ProcessesListener {
 		System.out.println("worker.prestart()")
 		
 		def dbr = new DBRetrieverLauncher()
-		def query = "SELECT ?from, ?to WHERE { ?from a <"+scene.fromType+">. ?to a <"+scene.toType+">. ?to <"+scene.property+"> ?from. }";
 		dbr.addObserver(this)
 		
 		runAsync {
 			//System.out.println(query);
 			//System.out.println("Async Previo DBRetriever ");
-			dbr.launch(p.hostname+"/"+p.database, query, p.dbuser, p.dbpass, "sc"+scene.id+"_dbr");
+			dbr.launch(p.hostname+"/"+p.database, this.getQuery(), p.dbuser, p.dbpass, scene.getTableNameFor(this));
 			//System.out.println("Async Post DBRetriever ");
 			//return "repiola"
 		}

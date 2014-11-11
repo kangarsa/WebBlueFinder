@@ -1,9 +1,7 @@
 package bflaunchers;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,18 +14,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import normalization.BasicNormalization;
-import normalization.TranslatorBasicNormalization;
 import pia.BipartiteGraphGenerator;
-import pia.PIAConfigurationBuilder;
-import pia.PIAConfigurationContainer;
-import pia.PathFinder;
-import db.DBConnector;
-import db.PropertiesFileIsNotFoundException;
-import utils.BlacklistCategory;
-import utils.ProjectConfigurationReader;
 import utils.ProjectSetup;
 import wbflisteners.ObservableProcess;
+import db.DBConnector;
+import db.PropertiesFileIsNotFoundException;
 
 public class PIALauncher extends ObservableProcess {
 
@@ -79,7 +70,7 @@ public class PIALauncher extends ObservableProcess {
 			System.out.println("Params: " + params + "\n");
 
 			long start = System.nanoTime();
-			ProjectSetup ps = new ProjectSetup("dbtypes", false, "unstarred", 
+			ProjectSetup ps = new ProjectSetup("dbtypes", "unstarred", 
 					"Category:", "en", "http://dbpedia.org/resource/", 
 					"http://dbpedia.org/resource/", this.readBlacklistCategoryFile("blacklist_category_default.txt"),
 					false, true, null);

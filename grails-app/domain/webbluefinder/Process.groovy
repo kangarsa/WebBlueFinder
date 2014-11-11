@@ -177,6 +177,7 @@ class Process {
 	def isBFPathFinderWrapper() {return false}
 	def isDumpLoader() {return false}
 	def hasNextProcess() {}
+	def getTableNamePiece() {}
 	def getProcessStep() {
 		// -1 = stoped, 0 = notStarted, 1 = isComputing, 2 = isFinalized
 	}

@@ -1,41 +1,49 @@
 package webbluefinder
 
+import bflaunchers.BFPathFinderLauncher
 import wbflisteners.ObservableProcess;
 import wbflisteners.ProcessesListener;
-import bflaunchers.BFEvaluationLauncher
 
-
-class BFEvaluationWrapper extends Process implements ProcessesListener {
+/**
+ * BFPathFinderWrapper
+ * A domain class describes the data object and it's mapping to the database
+ */
+class BFPathFinderWrapper extends Process implements ProcessesListener {
 
     static constraints = {
     }
 	
-	BFEvaluationWrapper(Scene s){
+	BFPathFinderWrapper(Scene s){
 		super(s)
 	}
 	
 	def getTableNamePiece() {
-		return 'bfe'+this.id;
+		return 'bfpf'+this.id;
 	}
 	
 	def getName() {
-		return 'BFEvaluationWrapper'
+		return 'BFPathFinderWrapper'
 	}
 	
 	def start() {
 		//do execute
 		Properties p = Properties.getLast()
-		System.out.println("workerBFE.prestart()")
+		System.out.println("workerBFPF.prestart()")
 		runAsync {
-			System.out.println("?BFE-1")
-			def bfe = new BFEvaluationLauncher()
-			System.out.println("?BFE-2")
-			bfe.addObserver(this)
+			System.out.println("?BFPF-1")
+			def bfpf = new BFPathFinderLauncher()
+			System.out.println("?BFPF-2")
+			bfpf.addObserver(this)
 			
-			System.out.println("?BFE-3")
-			bfe.launch(p.getDatabase(),p.getDbuser(), p.getDbpass(),"sc"+scene.id+"_bfe"+id, 100)
+			System.out.println("?BFPF-3")
+			bfpf.launch("localhost/"+"wikipediadumps",
+			"root", "root",
+			"localhost/"+p.getDatabase(),
+			p.getDbuser(), p.getDbpass(),
+			true,scene.name,3,0)
+			System.out.println("?BFPF-4")
 		}
-		System.out.println("workerBFE.poststart()")
+		System.out.println("workerBFPF.poststart()")
 	}
 	
 	def getNextProcess() {
@@ -60,7 +68,8 @@ class BFEvaluationWrapper extends Process implements ProcessesListener {
 
 	@Override
 	public void stopped(ObservableProcess p) {
-		// TODO Auto-generated method stub
+		System.out.println("en stopped!");
+		this.setStopped()
 		
 	}
 

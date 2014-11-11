@@ -5,10 +5,10 @@ import java.util.Arrays
 //import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor;
 
 class Scene {
-	String name
-	String fromType
-    String toType
-    String property
+	String name="prueba"
+	String fromType="http://dbpedia.org/ontology/Building"
+    String toType="http://dbpedia.org/ontology/Artist"
+    String property="http://dbpedia.org/ontology/birthPlace"
 	Process process
 	int piaMinLimit = 1
 	int piaMaxLimit = 600
@@ -74,7 +74,7 @@ class Scene {
 		return previousProcess.add(new DBRetrieverWrapper(this))
 	}
 	def addNewBFPathFinder(){
-		//return previousProcess.add(new BFPathFinderWrapper(this))
+		return previousProcess.add(new BFPathFinderWrapper(this))
 	}
 	def addNewBFEvaluation(){
 		return previousProcess.add(new BFEvaluationWrapper(this))
@@ -228,6 +228,10 @@ class Scene {
 	
 	def updateProcessState() {
 		//processState = process.getProcessState()
+	}
+	
+	def getTableNameFor(Process process){
+		return "sc"+this.id+"_"+process.getTableNamePiece();
 	}
 
 }
