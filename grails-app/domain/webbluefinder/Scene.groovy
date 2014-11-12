@@ -233,5 +233,9 @@ class Scene {
 	def getTableNameFor(Process process){
 		return "sc"+this.id+"_"+process.getTableNamePiece();
 	}
+	
+	def getLastDBRetriever(){
+		return this.previousProcess.findAll{ p -> p.isDBRetrieverWrapper() }.last()
+	}	
 
 }

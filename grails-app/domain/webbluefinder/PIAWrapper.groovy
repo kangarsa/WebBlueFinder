@@ -24,6 +24,8 @@ class PIAWrapper extends Process implements ProcessesListener {
 		System.out.println("workerPIA.prestart()A")
 		def bl = scene.getBlacklist()
 		System.out.println("workerPIA.prestart("+bl+")B")
+		String tableName=scene.getTableNameFor(scene.getLastDBRetriever());
+		System.out.println("workerPIA.prestart("+tableName+")TableName")
 		runAsync {
 			System.out.println("PIA-nuevoThread?-1");
 			def pia = new PIALauncher()
@@ -38,7 +40,7 @@ class PIAWrapper extends Process implements ProcessesListener {
 				p.getDbuser(), p.getDbpass(), 
 				scene.piaMinLimit, scene.piaMaxLimit, 
 				scene.piaIterationsLimit, 
-				"sc"+scene.id+"_dbr", 
+				tableName, 
 				scene.piaClean
 				);
 			System.out.println("PIA-nuevoThread?-4");
