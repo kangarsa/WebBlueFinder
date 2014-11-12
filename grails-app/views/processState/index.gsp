@@ -1,5 +1,5 @@
 
-<%@ page import="webbluefinder.ProcessState" %>
+<%@ page import="webbluefinder.state.ProcessState" %>
 <!DOCTYPE html>
 <html>
 

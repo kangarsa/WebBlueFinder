@@ -3,6 +3,8 @@ package webbluefinder
 
 
 import org.junit.*
+
+import webbluefinder.state.Computing;
 import grails.test.mixin.*
 
 @TestFor(ComputingController)

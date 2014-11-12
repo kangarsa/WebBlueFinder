@@ -1,4 +1,11 @@
-package webbluefinder
+package webbluefinder.process
+
+import webbluefinder.Scene;
+import webbluefinder.state.Computing;
+import webbluefinder.state.Finalized;
+import webbluefinder.state.NotStarted;
+import webbluefinder.state.ProcessState;
+import webbluefinder.state.Stopped;
 
 class Process {
 	String processErrors

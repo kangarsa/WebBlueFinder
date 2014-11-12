@@ -1,4 +1,4 @@
-<%@ page import="webbluefinder.ProcessState" %>
+<%@ page import="webbluefinder.state.ProcessState" %>
 
 
 

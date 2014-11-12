@@ -3,6 +3,8 @@ package webbluefinder
 
 
 import org.junit.*
+
+import webbluefinder.process.BFRecommenderWrapper;
 import grails.test.mixin.*
 
 @TestFor(BFRecommenderWrapperController)

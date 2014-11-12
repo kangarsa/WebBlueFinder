@@ -1,4 +1,4 @@
-<%@ page import="webbluefinder.BFEvaluationWrapper" %>
+<%@ page import="webbluefinder.process.BFEvaluationWrapper" %>
 <!DOCTYPE html>
 <html>
 

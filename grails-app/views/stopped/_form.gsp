@@ -1,4 +1,4 @@
-<%@ page import="webbluefinder.Stopped" %>
+<%@ page import="webbluefinder.state.Stopped" %>
 
 
 

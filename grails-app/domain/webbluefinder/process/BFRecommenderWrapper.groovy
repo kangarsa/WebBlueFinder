@@ -1,8 +1,10 @@
-package webbluefinder
+package webbluefinder.process
 
 import bflaunchers.BFRecommenderLauncher
 import wbflisteners.ObservableProcess
 import wbflisteners.ProcessesListener
+import webbluefinder.Properties;
+import webbluefinder.Scene;
 
 class BFRecommenderWrapper extends Process implements ProcessesListener {
 	// Sin estos strings vacios no es capaz de guardar el Process en db

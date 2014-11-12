@@ -1,4 +1,4 @@
-<%@ page import="webbluefinder.ObservableProcess" %>
+<%@ page import="webbluefinder.process.ObservableProcess" %>
 <!DOCTYPE html>
 <html>
 

@@ -1,5 +1,5 @@
 
-<%@ page import="webbluefinder.NotStarted" %>
+<%@ page import="webbluefinder.state.NotStarted" %>
 <!DOCTYPE html>
 <html>
 

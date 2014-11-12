@@ -2,6 +2,7 @@ package webbluefinder
 
 
 import static org.springframework.http.HttpStatus.*
+import webbluefinder.process.BFPathFinderWrapper;
 import grails.transaction.Transactional
 
 /**

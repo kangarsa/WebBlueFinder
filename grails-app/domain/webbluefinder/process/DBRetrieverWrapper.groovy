@@ -1,8 +1,10 @@
-package webbluefinder
+package webbluefinder.process
 
 import bflaunchers.DBRetrieverLauncher
 import wbflisteners.ObservableProcess
 import wbflisteners.ProcessesListener
+import webbluefinder.Properties;
+import webbluefinder.Scene;
 
 
 class DBRetrieverWrapper extends Process implements ProcessesListener {

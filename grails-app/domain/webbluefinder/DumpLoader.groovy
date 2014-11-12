@@ -3,6 +3,8 @@ package webbluefinder
 import bflaunchers.DumpLoaderLauncher
 import wbflisteners.ObservableProcess;
 import wbflisteners.ProcessesListener
+import webbluefinder.process.BFRecommenderWrapper;
+import webbluefinder.process.Process;
 
 class DumpLoader extends Process implements ProcessesListener {
 	String dumpPath

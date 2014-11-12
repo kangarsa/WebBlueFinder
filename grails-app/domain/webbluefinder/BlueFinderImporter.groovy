@@ -3,6 +3,7 @@ package webbluefinder
 import bflaunchers.TableExporterLauncher
 import wbflisteners.ObservableProcess;
 import wbflisteners.ProcessesListener;
+import webbluefinder.process.Process;
 	
 class BlueFinderImporter extends Process implements ProcessesListener {
 	String dbFrom

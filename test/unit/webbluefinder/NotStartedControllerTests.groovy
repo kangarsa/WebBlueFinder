@@ -3,6 +3,8 @@ package webbluefinder
 
 
 import org.junit.*
+
+import webbluefinder.state.NotStarted;
 import grails.test.mixin.*
 
 @TestFor(NotStartedController)

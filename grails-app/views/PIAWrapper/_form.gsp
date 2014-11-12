@@ -1,4 +1,4 @@
-<%@ page import="webbluefinder.PIAWrapper" %>
+<%@ page import="webbluefinder.process.PIAWrapper" %>
 
 
 

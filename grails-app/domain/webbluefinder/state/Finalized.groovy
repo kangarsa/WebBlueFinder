@@ -1,18 +1,18 @@
-package webbluefinder
+package webbluefinder.state
 
-class Stopped extends ProcessState {
+class Finalized extends ProcessState {
 
     static constraints = {
     }
 	
 	def getName() {
-		return 'Stopped'
+		return 'Finalized'
 	}
 	def getStep() {
-		return -1
-	}	
+		return 2
+	}
 	def isStoped() {
-		return true
+		return false
 	}
 	def isNotStarted() {
 		return false
@@ -21,7 +21,7 @@ class Stopped extends ProcessState {
 		return false
 	}
 	def isFinalized() {
-		return false
+		return true
 	}
 	def getNextState() {
 		return this

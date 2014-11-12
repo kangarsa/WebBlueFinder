@@ -1,5 +1,5 @@
 
-<%@ page import="webbluefinder.BFRecommenderWrapper" %>
+<%@ page import="webbluefinder.process.BFRecommenderWrapper" %>
 <!DOCTYPE html>
 <html>
 

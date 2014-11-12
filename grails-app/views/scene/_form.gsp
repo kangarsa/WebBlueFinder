@@ -37,7 +37,7 @@
 			<div class="${hasErrors(bean: sceneInstance, field: 'process', 'error')} ">
 				<label for="process" class="control-label"><g:message code="scene.process.label" default="Process" /></label>
 				<div>
-					<g:select class="form-control" id="process" name="process.id" from="${webbluefinder.Process.list()}" optionKey="id" value="${sceneInstance?.process?.id}" class="many-to-one" noSelection="['null': '']"/>
+					<g:select class="form-control" id="process" name="process.id" from="${webbluefinder.process.Process.list()}" optionKey="id" value="${sceneInstance?.process?.id}" class="many-to-one" noSelection="['null': '']"/>
 					<span class="help-inline">${hasErrors(bean: sceneInstance, field: 'process', 'error')}</span>
 				</div>
 			</div>

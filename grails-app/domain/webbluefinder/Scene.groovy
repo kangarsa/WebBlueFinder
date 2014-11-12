@@ -2,6 +2,13 @@ package webbluefinder
 
 import java.util.Arrays
 
+import webbluefinder.process.BFEvaluationWrapper;
+import webbluefinder.process.BFPathFinderWrapper;
+import webbluefinder.process.BFRecommenderWrapper;
+import webbluefinder.process.DBRetrieverWrapper;
+import webbluefinder.process.PIAWrapper;
+import webbluefinder.process.Process;
+
 //import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor;
 
 class Scene {

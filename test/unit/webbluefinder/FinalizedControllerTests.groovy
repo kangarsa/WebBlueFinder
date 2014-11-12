@@ -3,6 +3,8 @@ package webbluefinder
 
 
 import org.junit.*
+
+import webbluefinder.state.Finalized;
 import grails.test.mixin.*
 
 @TestFor(FinalizedController)

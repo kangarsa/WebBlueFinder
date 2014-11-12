@@ -1,7 +1,9 @@
-package webbluefinder
+package webbluefinder.process
 
 import wbflisteners.ObservableProcess;
 import wbflisteners.ProcessesListener;
+import webbluefinder.Properties;
+import webbluefinder.Scene;
 import bflaunchers.BFEvaluationLauncher
 
 

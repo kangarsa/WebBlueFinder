@@ -1,5 +1,5 @@
 
-<%@ page import="webbluefinder.Process" %>
+<%@ page import="webbluefinder.process.Process" %>
 <!DOCTYPE html>
 <html>
 

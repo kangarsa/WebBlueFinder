@@ -3,6 +3,8 @@ package webbluefinder
 
 
 import org.junit.*
+
+import webbluefinder.process.DBRetrieverWrapper;
 import grails.test.mixin.*
 
 @TestFor(DBRetrieverWrapperController)

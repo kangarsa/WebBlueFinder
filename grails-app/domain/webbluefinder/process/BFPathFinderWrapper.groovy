@@ -1,8 +1,10 @@
-package webbluefinder
+package webbluefinder.process
 
 import bflaunchers.BFPathFinderLauncher
 import wbflisteners.ObservableProcess;
 import wbflisteners.ProcessesListener;
+import webbluefinder.Properties;
+import webbluefinder.Scene;
 
 /**
  * BFPathFinderWrapper

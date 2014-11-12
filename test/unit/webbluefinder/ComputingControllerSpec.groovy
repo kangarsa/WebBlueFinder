@@ -4,6 +4,7 @@ package webbluefinder
 
 import grails.test.mixin.*
 import spock.lang.*
+import webbluefinder.state.Computing;
 
 @TestFor(ComputingController)
 @Mock(Computing)

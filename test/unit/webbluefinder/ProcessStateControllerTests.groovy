@@ -3,6 +3,8 @@ package webbluefinder
 
 
 import org.junit.*
+
+import webbluefinder.state.ProcessState;
 import grails.test.mixin.*
 
 @TestFor(ProcessStateController)

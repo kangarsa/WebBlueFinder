@@ -1,15 +1,15 @@
-package webbluefinder
+package webbluefinder.state
 
-class Finalized extends ProcessState {
+class Computing extends ProcessState {
 
     static constraints = {
     }
 	
 	def getName() {
-		return 'Finalized'
+		return 'Computing'
 	}
 	def getStep() {
-		return 2
+		return 1
 	}
 	def isStoped() {
 		return false
@@ -18,12 +18,12 @@ class Finalized extends ProcessState {
 		return false
 	}
 	def isComputing() {
-		return false
-	}
-	def isFinalized() {
 		return true
 	}
+	def isFinalized() {
+		return false
+	}
 	def getNextState() {
-		return this
+		return new Finalized()
 	}
 }

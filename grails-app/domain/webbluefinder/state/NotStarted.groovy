@@ -1,4 +1,4 @@
-package webbluefinder
+package webbluefinder.state
 
 class NotStarted extends ProcessState {
 

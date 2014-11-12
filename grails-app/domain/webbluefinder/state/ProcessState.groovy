@@ -1,4 +1,7 @@
-package webbluefinder
+package webbluefinder.state
+
+import webbluefinder.Scene;
+import webbluefinder.process.Process;
 
 class ProcessState {
 //	Process process

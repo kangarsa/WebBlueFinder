@@ -1,4 +1,4 @@
-<%@ page import="webbluefinder.BFPathFinderWrapper" %>
+<%@ page import="webbluefinder.process.BFPathFinderWrapper" %>
 
 
 

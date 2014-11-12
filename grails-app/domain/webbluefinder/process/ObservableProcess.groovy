@@ -1,4 +1,6 @@
-package webbluefinder
+package webbluefinder.process
+
+import webbluefinder.Scene;
 
 
 class ObservableProcess {

@@ -1,5 +1,5 @@
 
-<%@ page import="webbluefinder.DBRetrieverWrapper" %>
+<%@ page import="webbluefinder.process.DBRetrieverWrapper" %>
 <!DOCTYPE html>
 <html>
 

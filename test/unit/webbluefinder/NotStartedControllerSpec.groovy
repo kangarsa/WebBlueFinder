@@ -4,6 +4,7 @@ package webbluefinder
 
 import grails.test.mixin.*
 import spock.lang.*
+import webbluefinder.state.NotStarted;
 
 @TestFor(NotStartedController)
 @Mock(NotStarted)

@@ -3,6 +3,8 @@ package webbluefinder
 
 
 import org.junit.*
+
+import webbluefinder.process.PIAWrapper;
 import grails.test.mixin.*
 
 @TestFor(PIAWrapperController)

@@ -1,7 +1,13 @@
 package webbluefinder
 
 import static org.junit.Assert.*
+
 import org.junit.*
+
+import webbluefinder.process.BFEvaluationWrapper;
+import webbluefinder.process.BFRecommenderWrapper;
+import webbluefinder.process.DBRetrieverWrapper;
+import webbluefinder.process.PIAWrapper;
 
 class AllTests {
 

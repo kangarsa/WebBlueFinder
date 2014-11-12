@@ -4,6 +4,7 @@ package webbluefinder
 
 import grails.test.mixin.*
 import spock.lang.*
+import webbluefinder.process.Process;
 
 @TestFor(ProcessController)
 @Mock(Process)

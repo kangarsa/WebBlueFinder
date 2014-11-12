@@ -1,5 +1,5 @@
 
-<%@ page import="webbluefinder.Computing" %>
+<%@ page import="webbluefinder.state.Computing" %>
 <!DOCTYPE html>
 <html>
 
