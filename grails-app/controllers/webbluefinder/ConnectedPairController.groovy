@@ -36,29 +36,6 @@ class ConnectedPairController {
 			else return "Infobox not available"
 	}
 	
-	def getInfoboxes(String from, String to) {
-		def infoboxes = new ArrayList<?>()
-		def fromPage = new URL( "http://es.wikipedia.org/wiki/"+from ).getText()
-		if (fromPage.contains("<table class=\"infobox")) {
-			def fromInfobox = fromPage[fromPage.indexOf("<table class=\"infobox")..fromPage.indexOf("</table>", fromPage.indexOf("<table class=\"infobox"))+7]
-			
-			/** Lo siguiente es para convertir los paths relativos en absolutos en los infobox**/
-			def fromInfoboxAbsolutePaths = fromInfobox.replaceAll("/wiki/", "http://es.wikipedia.org/wiki/")
-			infoboxes.add(fromInfoboxAbsolutePaths)
-			}
-			else infoboxes.add("Infobox not available")
-		
-		def toPage = new URL( "http://es.wikipedia.org/wiki/"+to ).getText()
-		if (toPage.contains("<table class=\"infobox")) {
-			def toInfobox = toPage[toPage.indexOf("<table class=\"infobox")..toPage.indexOf("</table>", toPage.indexOf("<table class=\"infobox"))+7]
-			def toInfoboxAbsolutePaths = toInfobox.replaceAll("/wiki/", "http://es.wikipedia.org/wiki/")
-			infoboxes.add(toInfoboxAbsolutePaths)
-			}
-			else infoboxes.add("Infobox not available")
-		
-		return infoboxes
-	}
-	
 	def show(int id) {
 		def st = new ShowStatistics()
 		ConnectedPair cp = st.fetchConnectedPair(id)
